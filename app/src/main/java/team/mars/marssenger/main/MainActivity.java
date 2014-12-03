@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -14,7 +15,7 @@ import android.widget.TextView;
 import team.mars.marssenger.R;
 
 
-public class MainActivity extends Activity implements MainView, RecyclerView.OnClickListener {
+public class MainActivity extends Activity implements MainView{
 
     //layout-attr
     private RecyclerView recyclerView;
@@ -36,7 +37,6 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
         mainPresenter=new MainPresenterImpl(this,this);
 
         recyclerView.setAdapter(mainPresenter.getAdapter());
-        recyclerView.setOnClickListener(this);
 
         layoutManager=new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -73,9 +73,4 @@ public class MainActivity extends Activity implements MainView, RecyclerView.OnC
         recyclerView.setVisibility(View.VISIBLE);
     }
 
-
-    @Override
-    public void onClick(View view) {
-        mainPresenter.onChatClick(view);
-    }
 }
