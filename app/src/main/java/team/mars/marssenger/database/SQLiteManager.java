@@ -16,13 +16,17 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String COLUMN_MESSAGES_MSG = "message";
     public static final String COLUMN_MESSAGES_TIME = "time";
     public static final String COLUMN_MESSAGES_SENDER= "isSender";
+    public static final String COLUMN_MESSAGES_READ= "read";
+
+
     public static final String TABLE_MESSAGES_PREFIX= "messagesforchat";
 
 
     public static final String TABLE_CHAT = "chats";
     public static final String COLUMN_CHAT_ID = "_id";
     public static final String COLUMN_CHAT_NAME = "name";
-    public static final String COLUMN_CHAT_NUMBER = "number";
+    public static final String COLUMN_CHAT_MESSAGENUMBER = "number";
+    public static final String COLUMN_CHAT_RECEIVER = "receiver";
 
     private static final String DATABASE_NAME = "chats.db";
     private static final int DATABASE_VERSION = 2;
@@ -34,8 +38,11 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + " integer primary key autoincrement, "
             + COLUMN_CHAT_NAME
             + " text not null,"
-            + COLUMN_CHAT_NUMBER
-            + " text not null);";
+            + COLUMN_CHAT_MESSAGENUMBER
+            + " text not null"
+            + COLUMN_CHAT_RECEIVER
+            + " text not null"
+            + ");";
     private static final String DATABASE_CREATE_TABLE_MESSAGE_COLUMS =
              COLUMN_MESSAGES_ID
             + " integer primary key autoincrement, "
@@ -44,7 +51,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + COLUMN_MESSAGES_SENDER
             + " INTEGER, "
             + COLUMN_MESSAGES_TIME
-            + " text not null);";
+            + " text not null);"
+            + COLUMN_MESSAGES_READ
+            + " integer";
 
     public SQLiteManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

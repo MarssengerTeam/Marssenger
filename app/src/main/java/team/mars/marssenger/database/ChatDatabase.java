@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.datatype.Message;
 
 
 /**
@@ -20,10 +21,12 @@ public class ChatDatabase {
     // Database fields
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID,SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_NUMBER };
+    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID,SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_MESSAGENUMBER };
+    private MessageDatabase messageDatabase;
 
-    public ChatDatabase(Context context) {
+    public ChatDatabase(Context context,MessageDatabase messageDatabase) {
         dbHelper = new SQLiteManager(context);
+        this.messageDatabase=messageDatabase;
     }
 
     public void open() throws SQLException {
@@ -37,7 +40,7 @@ public class ChatDatabase {
     public Chat createChat(String name,String number) {
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_CHAT_NAME, name);
-        values.put(SQLiteManager.COLUMN_CHAT_NUMBER, number);
+        values.put(SQLiteManager.COLUMN_CHAT_MESSAGENUMBER, number);
         long insertId = database.insert(SQLiteManager.TABLE_CHAT, null,values);
         Cursor cursor = database.query(SQLiteManager.TABLE_CHAT,
                 allColumnsChat, SQLiteManager.COLUMN_CHAT_NAME + " = " + insertId, null,
@@ -46,8 +49,23 @@ public class ChatDatabase {
         cursor.moveToFirst();
         Chat newChat = cursorToChat(cursor);
         cursor.close();
-        //TODO UPDATE CHATS !
         return newChat;
+    }
+
+    public Message getLastMessage(Chat chat){
+        ArrayList<Message> messages =  messageDatabase.getAllMessageFromChat(chat);
+        Message m = messages.get(messages.size()-1);
+        return m;
+    }
+
+    public int getUnreadMessages(Chat chat){
+        int i= 0;
+        for(Message m: messageDatabase.getAllMessageFromChat(chat)) {
+            if(!m.isRead()){
+                i++;
+            }
+        }
+        return i;
     }
 
     public void deleteChat(long chatID) {
@@ -90,7 +108,7 @@ public class ChatDatabase {
         try{
             chat.setId(cursor.getLong(0));
             chat.setName(cursor.getString(1));
-            chat.setNumber(cursor.getString(2));
+            chat.setMessageTableID(cursor.getLong(2));
         }catch (Exception ex){
             ex.printStackTrace();//TODO FIXEN
         }
