@@ -12,9 +12,9 @@ public interface MainInteractor {
 
     //Methoden für den Zugriff auf die Daten
     public ArrayList<Chat> getChatsList();
-    public ChatDatabase getChatDatabase();
-    public boolean connectionEstablished();
 
+    public boolean connectionEstablished();
+    public ChatDatabase getChatDatabase();
     public void buildConnection();
 
     public void openChatDB();
