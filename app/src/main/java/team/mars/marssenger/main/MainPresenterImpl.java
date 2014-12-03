@@ -26,7 +26,7 @@ public class MainPresenterImpl implements MainPresenter {
         this.context=context;
         this.mainView=mainView;
         this.mainInteractor=new MainInteractorImpl(context);
-        checkConnection();
+        //checkConnection();
     }
 
     @Override

@@ -23,6 +23,10 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     private Context context;
     private ChatDatabase chats;
     private ArrayList<Chat> chatlist;
+
+    //layout-attr
+    private RelativeLayout relativeLayout;
+
     public CListAdapter (Context context, ChatDatabase list){
         this.context=context;
         this.chats=list;
@@ -32,15 +36,16 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
-        RelativeLayout r =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
+        relativeLayout =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.mars_list_item, viewGroup, false);
 
-        return new ViewHolder(r);
+        return new ViewHolder(relativeLayout);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
         //TODO set text and image and counter
+        holder=new ViewHolder(relativeLayout);
         holder.name.setText(chatlist.get(i).getName());
         holder.text.setText(chats.getLastMessage(chatlist.get(i)).getMessage());
         holder.counter.setText(chats.getUnreadMessages(chatlist.get(i)));
@@ -68,7 +73,10 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
         public ViewHolder(RelativeLayout relativeLayout) {
             super(relativeLayout);
-
+            this.name=(TextView) relativeLayout.findViewById(R.id.listitem_name);
+            this.text=(TextView) relativeLayout.findViewById(R.id.listitem_text);
+            this.counter=(TextView) relativeLayout.findViewById(R.id.listitem_counter);
+            this.image=(ImageView) relativeLayout.findViewById(R.id.listitem_image);
         }
     }
 
