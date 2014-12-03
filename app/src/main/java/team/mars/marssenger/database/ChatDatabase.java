@@ -37,10 +37,11 @@ public class ChatDatabase {
         dbHelper.close();
     }
 
-    public Chat createChat(String name,String number) {
+    public Chat createChat(String name,String receiver) {
+        int messageDBID= this.getAllChat().size();
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_CHAT_NAME, name);
-        values.put(SQLiteManager.COLUMN_CHAT_MESSAGENUMBER, number);
+        values.put(SQLiteManager.COLUMN_CHAT_MESSAGENUMBER, messageDBID);
         long insertId = database.insert(SQLiteManager.TABLE_CHAT, null,values);
         Cursor cursor = database.query(SQLiteManager.TABLE_CHAT,
                 allColumnsChat, SQLiteManager.COLUMN_CHAT_NAME + " = " + insertId, null,
@@ -49,6 +50,7 @@ public class ChatDatabase {
         cursor.moveToFirst();
         Chat newChat = cursorToChat(cursor);
         cursor.close();
+        dbHelper.newMessageDatabase(messageDBID);
         return newChat;
     }
 

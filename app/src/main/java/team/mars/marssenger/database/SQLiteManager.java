@@ -10,7 +10,7 @@ import android.util.Log;
  */
 public class SQLiteManager extends SQLiteOpenHelper {
 
-
+   SQLiteDatabase database;
 
     public static final String COLUMN_MESSAGES_ID ="_id";
     public static final String COLUMN_MESSAGES_MSG = "message";
@@ -29,7 +29,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String COLUMN_CHAT_RECEIVER = "receiver";
 
     private static final String DATABASE_NAME = "chats.db";
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE_TABLE_CHAT = "create table "
@@ -39,21 +39,21 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + COLUMN_CHAT_NAME
             + " text not null,"
             + COLUMN_CHAT_MESSAGENUMBER
-            + " text not null"
+            + " text not null, "
             + COLUMN_CHAT_RECEIVER
             + " text not null"
             + ");";
     private static final String DATABASE_CREATE_TABLE_MESSAGE_COLUMS =
              COLUMN_MESSAGES_ID
-            + " integer primary key autoincrement, "
+            + "( integer primary key autoincrement, "
             + COLUMN_MESSAGES_MSG
             + " text not null,"
             + COLUMN_MESSAGES_SENDER
             + " INTEGER, "
             + COLUMN_MESSAGES_TIME
-            + " text not null);"
+            + " text not null, "
             + COLUMN_MESSAGES_READ
-            + " integer";
+            + " integer);";
 
     public SQLiteManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -61,10 +61,13 @@ public class SQLiteManager extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        database.execSQL(DATABASE_CREATE_TABLE_CHAT);
+        this.database=database;
+        this.database.execSQL(DATABASE_CREATE_TABLE_CHAT);
     }
-    public void newMessageDatabase(SQLiteDatabase database,int messageDatabaseID){
-        database.execSQL("create table messagesforchat"+messageDatabaseID+" "+DATABASE_CREATE_TABLE_MESSAGE_COLUMS);
+    public void newMessageDatabase(int messageDatabaseID){
+        if(database!=null) {
+            database.execSQL("create table messagesforchat" + messageDatabaseID + " " + DATABASE_CREATE_TABLE_MESSAGE_COLUMS);
+        }
     }
 
     @Override

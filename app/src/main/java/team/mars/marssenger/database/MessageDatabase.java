@@ -33,7 +33,7 @@ public class MessageDatabase {
         dbHelper.close();
     }
 
-    public Message createMessage(String sender,String message,String timestamp,int chatID,int read) {
+    public Message createMessage(String message,String sender,String timestamp,int chatID,int read) {
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_MESSAGES_MSG, message);
         values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, sender);

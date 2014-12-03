@@ -26,6 +26,8 @@ public class MainInteractorImpl implements MainInteractor {
         chatDatabase = new ChatDatabase(context,messageDatabase);
         openChatDB();
         openMessageDB();
+
+        chatDatabase.createChat("NAME", "RECIVER");
     }
 
     @Override
