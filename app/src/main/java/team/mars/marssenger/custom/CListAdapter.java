@@ -1,11 +1,11 @@
 package team.mars.marssenger.custom;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -16,33 +16,32 @@ import team.mars.marssenger.datatype.Chat;
 /**
  * Created by root on 03.12.14.
  */
-public class CListAdapter extends BaseAdapter {
+public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> {
 
     private Context context;
     private ArrayList<Chat> chats;
 
-    private LayoutInflater layoutInflater;
 
     public CListAdapter (Context context, ArrayList<Chat> list){
         this.context=context;
         this.chats=list;
-        this.layoutInflater=(LayoutInflater) context.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-    }
-
-
-    @Override
-    public int getCount() {
-        return chats.size();
     }
 
     @Override
-    public Chat getItem(int i) {
-        if (i<chats.size() && i>=0) {
-            return chats.get(i);
-        } else {
-            return null;
-        }
+    public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+
+        RelativeLayout r =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.mars_list_item, viewGroup, false);
+
+        return new ViewHolder(r);
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int i) {
+        //TODO set text and image and counter
+        holder.name.setText(chats.get(i).getName());
+        holder.text.setText(String.valueOf(chats.get(i).getId()));
+
     }
 
     @Override
@@ -55,35 +54,20 @@ public class CListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
-        ViewHolder holder;
-
-        if (view==null){
-
-            holder=new ViewHolder();
-
-            view=layoutInflater.inflate(R.layout.mars_list_item,null);
-
-            holder.name=(TextView) view.findViewById(R.id.listitem_name);
-            holder.lastMessage=(TextView) view.findViewById(R.id.listitem_text);
-            holder.image=(ImageView) view.findViewById(R.id.listitem_image);
-
-            view.setTag(holder);
-        } else {
-            holder=(ViewHolder) view.getTag();
-        }
-
-        holder.name.setText(chats.get(position).getName());
-        //TODO set image and set last message
-
-        return view;
+    public int getItemCount() {
+        return chats.size();
     }
 
-    public class ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView name;
-        public TextView lastMessage;
+        public TextView text;
         public ImageView image;
         public TextView counter;
+
+        public ViewHolder(RelativeLayout relativeLayout) {
+            super(relativeLayout);
+
+        }
     }
 
 }

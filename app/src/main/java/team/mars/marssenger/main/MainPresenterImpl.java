@@ -35,7 +35,7 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void onChatClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public void onChatClick(View view) {
         //check which chat it is and start chatactivity
     }
 

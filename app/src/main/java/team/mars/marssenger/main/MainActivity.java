@@ -2,6 +2,8 @@ package team.mars.marssenger.main;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,11 +14,12 @@ import android.widget.TextView;
 import team.mars.marssenger.R;
 
 
-public class MainActivity extends Activity implements MainView, ListView.OnItemClickListener {
+public class MainActivity extends Activity implements MainView, RecyclerView.OnClickListener {
 
     //layout-attr
-    private ListView listView;
+    private RecyclerView recyclerView;
     private TextView textView;
+    private RecyclerView.LayoutManager layoutManager;
 
     //attr
     private MainPresenter mainPresenter;
@@ -27,13 +30,16 @@ public class MainActivity extends Activity implements MainView, ListView.OnItemC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        listView=(ListView) findViewById(R.id.main_listview);
+        recyclerView=(RecyclerView) findViewById(R.id.main_listview);
         textView=(TextView) findViewById(R.id.main_textview);
 
         mainPresenter=new MainPresenterImpl(this,this);
 
-        listView.setAdapter(mainPresenter.getAdapter());
-        listView.setOnItemClickListener(this);
+        recyclerView.setAdapter(mainPresenter.getAdapter());
+        recyclerView.setOnClickListener(this);
+
+        layoutManager=new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
 
@@ -54,7 +60,7 @@ public class MainActivity extends Activity implements MainView, ListView.OnItemC
     @Override
     public void setConnectionFail() {
         textView.setVisibility(View.VISIBLE);
-        listView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
 
         textView.setText(getResources().getString(R.string.main_connection_failed));
         textView.setTextSize(getResources().getDimension(R.dimen.textview_textsize));
@@ -64,11 +70,12 @@ public class MainActivity extends Activity implements MainView, ListView.OnItemC
     @Override
     public void setConnectionEstablished() {
         textView.setVisibility(View.GONE);
-        listView.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
     }
 
+
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-        mainPresenter.onChatClick(adapterView,view,position,id);
+    public void onClick(View view) {
+        mainPresenter.onChatClick(view);
     }
 }
