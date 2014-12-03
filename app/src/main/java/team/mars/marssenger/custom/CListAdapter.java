@@ -1,20 +1,19 @@
 package team.mars.marssenger.custom;
 
-import android.content.Context;
-import android.database.DataSetObserver;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-
-import java.util.ArrayList;
-import java.util.List;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * Created by root on 03.12.14.
  */
 public class CListAdapter extends BaseAdapter {
+
+    public CListAdapter (){
+
+    }
 
 
     @Override
@@ -36,4 +35,12 @@ public class CListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         return null;
     }
+
+    public class ViewHolder{
+        private TextView name;
+        private TextView lastMessage;
+        private ImageView image;
+        private TextView counter;
+    }
+
 }

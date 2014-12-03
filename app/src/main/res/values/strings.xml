@@ -7,6 +7,9 @@
 
     <!-- Activities / Fragments -->
     <string name="main_connection_failed">Connection failed</string>
+    
+    <!-- layout -->
+    <string name="list_image_description">Contact image</string>
 
     <!-- actionBar -->
     <string name="action_settings">Settings</string>
