@@ -27,7 +27,7 @@ public class MainInteractorImpl implements MainInteractor {
         openChatDB();
         openMessageDB();
 
-        chatDatabase.createChat("NAME", "RECIVER");
+        chatDatabase.createChat("NAME", "RECEIVER");
     }
 
     @Override
@@ -35,6 +35,7 @@ public class MainInteractorImpl implements MainInteractor {
        return chatDatabase.getAllChat();
     }
 
+    public ChatDatabase getChatDatabase(){return chatDatabase;}
     @Override
     public boolean connectionEstablished() {
         return connected;

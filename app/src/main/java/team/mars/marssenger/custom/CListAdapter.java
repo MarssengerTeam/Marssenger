@@ -11,6 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.database.ChatDatabase;
+import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
 
 /**
@@ -19,12 +21,12 @@ import team.mars.marssenger.datatype.Chat;
 public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<Chat> chats;
-
-
-    public CListAdapter (Context context, ArrayList<Chat> list){
+    private ChatDatabase chats;
+    private ArrayList<Chat> chatlist;
+    public CListAdapter (Context context, ChatDatabase list){
         this.context=context;
         this.chats=list;
+        chatlist = list.getAllChat();
     }
 
     @Override
@@ -39,15 +41,15 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
         //TODO set text and image and counter
-        holder.name.setText(chats.get(i).getName());
-        holder.text.setText(String.valueOf(chats.get(i).getId()));
-
+        holder.name.setText(chatlist.get(i).getName());
+        holder.text.setText(chats.getLastMessage(chatlist.get(i)).getMessage());
+        holder.counter.setText(chats.getUnreadMessages(chatlist.get(i)));
     }
 
     @Override
     public long getItemId(int i) {
-        if (i<chats.size() && i>=0){
-            return chats.get(i).getId();
+        if (i<chatlist.size() && i>=0){
+            return chatlist.get(i).getId();
         } else {
             return 0;
         }
@@ -55,7 +57,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
     @Override
     public int getItemCount() {
-        return chats.size();
+        return chatlist.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

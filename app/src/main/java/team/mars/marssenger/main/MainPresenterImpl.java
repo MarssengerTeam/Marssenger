@@ -22,6 +22,7 @@ public class MainPresenterImpl implements MainPresenter {
     private MainInteractor mainInteractor;
     private Context context;
 
+
     public MainPresenterImpl (MainView mainView,Context context){
         this.context=context;
         this.mainView=mainView;
@@ -31,7 +32,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public CListAdapter getAdapter(){
-        return new CListAdapter(context, mainInteractor.getChatsList());
+        return new CListAdapter(context, mainInteractor.getChatDatabase());
     }
 
     @Override
