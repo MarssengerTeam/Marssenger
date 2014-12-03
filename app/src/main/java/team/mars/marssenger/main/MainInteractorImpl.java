@@ -21,8 +21,9 @@ public class MainInteractorImpl implements MainInteractor {
 
     public MainInteractorImpl(Context context){
         this.context= context;
-        chatDatabase = new ChatDatabase(context);
+
         messageDatabase = new MessageDatabase(context);
+        chatDatabase = new ChatDatabase(context,messageDatabase);
         openChatDB();
         openMessageDB();
     }
