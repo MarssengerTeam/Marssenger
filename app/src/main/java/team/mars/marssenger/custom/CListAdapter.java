@@ -1,6 +1,7 @@
 package team.mars.marssenger.custom;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import team.mars.marssenger.R;
 import team.mars.marssenger.datatype.Chat;
 
 /**
@@ -19,9 +21,14 @@ public class CListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Chat> chats;
 
+    private LayoutInflater layoutInflater;
+
     public CListAdapter (Context context, ArrayList<Chat> list){
         this.context=context;
         this.chats=list;
+        this.layoutInflater=(LayoutInflater) context.getSystemService(
+                Context.LAYOUT_INFLATER_SERVICE
+        );
     }
 
 
@@ -50,15 +57,34 @@ public class CListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        //Listenelement erstellen
-        return null;
+        ViewHolder holder;
+
+        if (view==null){
+
+            holder=new ViewHolder();
+
+            view=layoutInflater.inflate(R.layout.mars_list_item,null);
+
+            holder.name=(TextView) view.findViewById(R.id.listitem_name);
+            holder.lastMessage=(TextView) view.findViewById(R.id.listitem_text);
+            holder.image=(ImageView) view.findViewById(R.id.listitem_image);
+
+            view.setTag(holder);
+        } else {
+            holder=(ViewHolder) view.getTag();
+        }
+
+        holder.name.setText(chats.get(position).getName());
+        //TODO set image and set last message
+
+        return view;
     }
 
     public class ViewHolder{
-        private TextView name;
-        private TextView lastMessage;
-        private ImageView image;
-        private TextView counter;
+        public TextView name;
+        public TextView lastMessage;
+        public ImageView image;
+        public TextView counter;
     }
 
 }

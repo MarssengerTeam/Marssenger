@@ -3,20 +3,22 @@
     android:layout_width="fill_parent"
     android:padding="6dip" android:layout_height="?android:attr/listPreferredItemHeight">
     <ImageView
-        android:id="@+id/result_icon"
+        android:id="@+id/listitem_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_marginRight="6dip"
         android:layout_marginEnd="6dip"
-        android:contentDescription="@string/list_image_description" />
+        android:contentDescription="@string/list_image_description"
+        android:src="@drawable/ic_launcher"
+        />
     <TextView
-        android:id="@+id/result_name"
+        android:id="@+id/listitem_name"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/result_icon"
-        android:layout_toEndOf="@id/result_icon"
+        android:layout_toRightOf="@id/listitem_image"
+        android:layout_toEndOf="@id/listitem_image"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
@@ -24,12 +26,12 @@
         android:gravity="center_vertical"
         />
     <TextView
-        android:id="@+id/result_second_line"
+        android:id="@+id/listitem_text"
         android:layout_width="fill_parent"
         android:layout_height="26dip"
-        android:layout_toRightOf="@id/result_icon"
-        android:layout_toEndOf="@id/result_icon"
-        android:layout_below="@id/result_name"
+        android:layout_toRightOf="@id/listitem_image"
+        android:layout_toEndOf="@id/listitem_image"
+        android:layout_below="@id/listitem_name"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
