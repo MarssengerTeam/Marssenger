@@ -6,6 +6,7 @@
     <string name="hello_world">Hello world!</string>
 
     <!-- Activities / Fragments -->
+    <string name="main_connection_failed">Connection failed</string>
 
     <!-- actionBar -->
     <string name="action_settings">Settings</string>
