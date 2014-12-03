@@ -27,8 +27,7 @@ public class CListAdapter extends BaseAdapter {
         this.context=context;
         this.chats=list;
         this.layoutInflater=(LayoutInflater) context.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE
-        );
+                Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
