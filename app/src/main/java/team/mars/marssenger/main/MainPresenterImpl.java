@@ -54,10 +54,10 @@ public class MainPresenterImpl implements MainPresenter {
         switch (item.getItemId()){
             case R.id.action_settings:
 
-                break;
+                return true;
             case R.id.action_new_message:
 
-                break;
+                return true;
         }
 
         return false;

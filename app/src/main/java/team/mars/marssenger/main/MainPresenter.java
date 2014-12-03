@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 public interface MainPresenter {
 
     //Methoden zur Steuerung des Interactors und der View
+
     public ArrayAdapter<String> getAdapter(Context context);
     public void onChatClick(AdapterView<?> adapterView, View view, int position, long id);
     public void checkConnection();

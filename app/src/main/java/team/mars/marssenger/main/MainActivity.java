@@ -69,6 +69,6 @@ public class MainActivity extends Activity implements MainView, ListView.OnItemC
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
+        mainPresenter.onChatClick(adapterView,view,position,id);
     }
 }

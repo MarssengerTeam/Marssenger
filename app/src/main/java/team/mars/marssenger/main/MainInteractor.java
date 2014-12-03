@@ -13,4 +13,6 @@ public interface MainInteractor {
     public boolean connectionEstablished();
 
     public void buildConnection();
+
+    public void openDB();
 }

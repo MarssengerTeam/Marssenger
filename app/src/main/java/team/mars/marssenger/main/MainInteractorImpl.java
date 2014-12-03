@@ -12,6 +12,7 @@ public class MainInteractorImpl implements MainInteractor {
 
     public MainInteractorImpl(){
         //build connection to server?
+        //open DB?
     }
 
     @Override
@@ -28,5 +29,10 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void buildConnection() {
         connected=false;
+    }
+
+    @Override
+    public void openDB() {
+
     }
 }
