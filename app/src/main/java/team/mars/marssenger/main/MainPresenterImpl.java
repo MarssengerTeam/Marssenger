@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.custom.CListAdapter;
+import team.mars.marssenger.datatype.Chat;
 
 /**
  * Created by root on 03.12.14.
@@ -26,12 +28,8 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public ArrayAdapter<String> getAdapter(Context context){
-        return new ArrayAdapter<String>(
-                context,
-                android.R.layout.simple_list_item_1,
-                mainInteractor.getChatsList()
-        );
+    public CListAdapter getAdapter(Context context){
+        return new CListAdapter();
     }//TODO ADAPTER MIT CHATS NICHT STRINGS
 
     @Override
