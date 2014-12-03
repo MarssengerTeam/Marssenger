@@ -15,6 +15,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <LinearLayout
+        android:layout_below="@id/chat_listview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
+        <Button
+            android:id="@+id/chat_emoji_button"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@color/blue"
+            />
+
+        <EditText
+            android:id="@+id/chat_input_edittext"
+            android:layout_weight="5"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:inputType="textAutoCorrect" />
+
+        <Button
+            android:id="@+id/chat_send_button"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_action_send_now"
+            />
+
+        </LinearLayout>
 
 </RelativeLayout>
