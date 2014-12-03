@@ -42,6 +42,7 @@ public class ChatDatabase {
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_CHAT_NAME, name);
         values.put(SQLiteManager.COLUMN_CHAT_MESSAGENUMBER, messageDBID);
+        values.put(SQLiteManager.COLUMN_CHAT_RECEIVER, receiver);
         long insertId = database.insert(SQLiteManager.TABLE_CHAT, null,values);
         Cursor cursor = database.query(SQLiteManager.TABLE_CHAT,
                 allColumnsChat, SQLiteManager.COLUMN_CHAT_NAME + " = " + insertId, null,
