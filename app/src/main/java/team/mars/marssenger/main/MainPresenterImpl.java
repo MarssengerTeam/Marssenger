@@ -31,7 +31,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public CListAdapter getAdapter(){
-        return new CListAdapter(context, mainInteractor.getChatsList());
+        return new CListAdapter(mainInteractor.getChatsList());
     }
 
     @Override
