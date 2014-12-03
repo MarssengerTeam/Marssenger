@@ -41,6 +41,7 @@ public class ComSending {
     //end Attributes
 
 
+
     //Constructor
     public ComSending(String URL){
         this.URL=URL;
