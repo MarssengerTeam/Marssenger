@@ -7,7 +7,7 @@ import android.view.MenuItem;
 
 import team.mars.marssenger.R;
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends Activity implements ChatView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
