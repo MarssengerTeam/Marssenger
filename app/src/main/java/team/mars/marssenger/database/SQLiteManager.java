@@ -11,12 +11,13 @@ import android.util.Log;
 public class SQLiteManager extends SQLiteOpenHelper {
 
 
-    public static final String TABLE_MESSAGES = "messages";
+
     public static final String COLUMN_MESSAGES_ID ="_id";
     public static final String COLUMN_MESSAGES_MSG = "message";
     public static final String COLUMN_MESSAGES_TIME = "time";
-    public static final String COLUMN_MESSAGES_RECEIVER = "receiver";
-    public static final String COLUMN_MESSAGES_SENDER = "sender";
+    public static final String COLUMN_MESSAGES_SENDER= "isSender";
+    public static final String TABLE_MESSAGES_PREFIX= "messagesforchat";
+
 
     public static final String TABLE_CHAT = "chats";
     public static final String COLUMN_CHAT_ID = "_id";
@@ -24,7 +25,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String COLUMN_CHAT_NUMBER = "number";
 
     private static final String DATABASE_NAME = "chats.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE_TABLE_CHAT = "create table "
@@ -35,16 +36,13 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + " text not null,"
             + COLUMN_CHAT_NUMBER
             + " text not null);";
-    private static final String DATABASE_CREATE_TABLE_MESSAGE = "create table "
-            + TABLE_MESSAGES +"("
-            + COLUMN_MESSAGES_ID
+    private static final String DATABASE_CREATE_TABLE_MESSAGE_COLUMS =
+             COLUMN_MESSAGES_ID
             + " integer primary key autoincrement, "
-            + COLUMN_MESSAGES_SENDER
-            + " text not null, "
             + COLUMN_MESSAGES_MSG
             + " text not null,"
-            + COLUMN_MESSAGES_RECEIVER
-            + " text not null, "
+            + COLUMN_MESSAGES_SENDER
+            + " INTEGER, "
             + COLUMN_MESSAGES_TIME
             + " text not null);";
 
@@ -55,7 +53,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase database) {
         database.execSQL(DATABASE_CREATE_TABLE_CHAT);
-        database.execSQL(DATABASE_CREATE_TABLE_MESSAGE);
+    }
+    public void newMessageDatabase(SQLiteDatabase database,int messageDatabaseID){
+        database.execSQL("create table messagesforchat"+messageDatabaseID+" "+DATABASE_CREATE_TABLE_MESSAGE_COLUMS);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
                 "Upgrading database from version " + oldVersion + " to "
                         + newVersion + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAT);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES); TODO ALLE LÖSCHEN
         onCreate(db);
     }
 

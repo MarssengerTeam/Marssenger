@@ -51,7 +51,6 @@ public class ChatDatabase {
     }
 
     public void deleteChat(long chatID) {
-
         System.out.println("Chat deleted with id: " + chatID);
         database.delete(SQLiteManager.TABLE_CHAT, SQLiteManager.COLUMN_CHAT_ID
                 + " = " + chatID, null);

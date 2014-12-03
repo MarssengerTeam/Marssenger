@@ -5,6 +5,7 @@ public class Chat {
     private long id;
     private String name;
     private String number;
+    private long messageTableID;
 
     public long getId() {
         return id;
@@ -22,6 +23,13 @@ public class Chat {
         this.name = name;
     }
 
+    public void setMessageTableID(long id){
+      this.messageTableID=id;
+    }
+
+    public long getMessageTableID() {
+        return messageTableID;
+    }
 
     public String getNumber() {
         return number;

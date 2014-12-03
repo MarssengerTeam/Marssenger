@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
 
+import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
 
 /**
@@ -18,7 +19,7 @@ public class MessageDatabase {
     // Database fields
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID,SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_MSG,SQLiteManager.COLUMN_MESSAGES_RECEIVER, SQLiteManager.COLUMN_MESSAGES_TIME };
+    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID,SQLiteManager.COLUMN_MESSAGES_MSG, SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_TIME };
 
     public MessageDatabase(Context context) {
         dbHelper = new SQLiteManager(context);
@@ -32,15 +33,14 @@ public class MessageDatabase {
         dbHelper.close();
     }
 
-    public Message createMessage(String sender,String message,String reciver,String timestamp) {
+    public Message createMessage(String sender,String message,String timestamp,int chatID) {
         ContentValues values = new ContentValues();
-        values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, sender);
-        values.put(SQLiteManager.COLUMN_MESSAGES_MSG, message);
-        values.put(SQLiteManager.COLUMN_MESSAGES_RECEIVER, reciver);
+        values.put(SQLiteManager.COLUMN_MESSAGES_MSG, sender);
+        values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, message);
         values.put(SQLiteManager.COLUMN_MESSAGES_TIME, timestamp);
-        long insertId = database.insert(SQLiteManager.TABLE_MESSAGES, null, values);
-        System.out.println(insertId);
-        Cursor cursor = database.query(SQLiteManager.TABLE_MESSAGES,
+        long insertId = database.insert(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID, null, values);
+
+        Cursor cursor = database.query(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID,
                 allColumnsMessage, SQLiteManager.COLUMN_MESSAGES_ID + " = " + insertId, null,
                 null, null, null);
 
@@ -52,24 +52,20 @@ public class MessageDatabase {
 
 
 
-    public void deleteMessage(Message message) {
-        long id = message.getId();
-        System.out.println("Message deleted with id: " + id);
-        database.delete(SQLiteManager.TABLE_MESSAGES, SQLiteManager.COLUMN_MESSAGES_ID
-                + " = " + id, null);
-    }
-    public void deleteMessage(long messageID) {
-        System.out.println("Message deleted with id: " + messageID);
-        database.delete(SQLiteManager.TABLE_MESSAGES, SQLiteManager.COLUMN_MESSAGES_ID
-                + " = " + messageID, null);
+    public void deleteMessage(Chat chat) {
+
+        System.out.println("Message deleted with id: " + chat.getMessageTableID());
+        database.delete(SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableID(), SQLiteManager.COLUMN_MESSAGES_ID
+                + " = " +chat.getMessageTableID(), null);
     }
 
-    public ArrayList<Message> getAllMessage() {
+
+    public ArrayList<Message> getAllMessageFromChat(Chat chat) {
         ArrayList<Message> messages = new ArrayList<Message>();
 
         Cursor cursor =
                 database.query(
-                        SQLiteManager.TABLE_MESSAGES,
+                        SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableID(),
                         allColumnsMessage,
                         null, null, null, null, null);
 
@@ -93,7 +89,7 @@ public class MessageDatabase {
             message.setReciver(cursor.getString(3));
             message.setTime(cursor.getString(4));
         }catch (Exception ex){
-            ex.printStackTrace();//TODO FIXEN
+            ex.printStackTrace();
         }
 
 
