@@ -19,9 +19,9 @@ public class MainPresenterImpl implements MainPresenter {
     private MainView mainView;
     private MainInteractor mainInteractor;
 
-    public MainPresenterImpl (MainView mainView){
+    public MainPresenterImpl (MainView mainView,Context context){
         this.mainView=mainView;
-        this.mainInteractor=new MainInteractorImpl();
+        this.mainInteractor=new MainInteractorImpl(context);
         checkConnection();
     }
 
@@ -32,7 +32,7 @@ public class MainPresenterImpl implements MainPresenter {
                 android.R.layout.simple_list_item_1,
                 mainInteractor.getChatsList()
         );
-    }
+    }//TODO ADAPTER MIT CHATS NICHT STRINGS
 
     @Override
     public void onChatClick(AdapterView<?> adapterView, View view, int position, long id) {

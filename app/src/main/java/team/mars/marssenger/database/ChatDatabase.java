@@ -47,7 +47,6 @@ public class ChatDatabase {
         Chat newChat = cursorToChat(cursor);
         cursor.close();
         //TODO UPDATE CHATS !
-        System.out.println("updated!!!!!!!");
         return newChat;
     }
 
@@ -61,8 +60,8 @@ public class ChatDatabase {
         //TODO UPDATE CHATS
     }
 
-    public List<Chat> getAllChat() {
-        List<Chat> chats = new ArrayList<Chat>();
+    public ArrayList<Chat> getAllChat() {
+        ArrayList<Chat> chats = new ArrayList<Chat>();
 
         Cursor cursor =
                 database.query(

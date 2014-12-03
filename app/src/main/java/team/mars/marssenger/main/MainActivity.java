@@ -20,7 +20,7 @@ public class MainActivity extends Activity implements MainView, ListView.OnItemC
 
     //attr
     private MainPresenter mainPresenter;
-
+    private MainInteractor mainInteractor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +30,7 @@ public class MainActivity extends Activity implements MainView, ListView.OnItemC
         listView=(ListView) findViewById(R.id.main_listview);
         textView=(TextView) findViewById(R.id.main_textview);
 
-        mainPresenter=new MainPresenterImpl(this);
+        mainPresenter=new MainPresenterImpl(this,this);
 
         listView.setAdapter(mainPresenter.getAdapter(this));
         listView.setOnItemClickListener(this);
