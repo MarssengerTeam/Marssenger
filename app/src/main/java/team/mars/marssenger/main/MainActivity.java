@@ -32,7 +32,7 @@ public class MainActivity extends Activity implements MainView, ListView.OnItemC
 
         mainPresenter=new MainPresenterImpl(this,this);
 
-        listView.setAdapter(mainPresenter.getAdapter(this));
+        listView.setAdapter(mainPresenter.getAdapter());
         listView.setOnItemClickListener(this);
     }
 

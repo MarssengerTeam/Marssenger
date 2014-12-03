@@ -20,6 +20,7 @@ public class MainPresenterImpl implements MainPresenter {
     //attr
     private MainView mainView;
     private MainInteractor mainInteractor;
+    private Context context;
 
     public MainPresenterImpl (MainView mainView,Context context){
         this.mainView=mainView;
@@ -28,8 +29,8 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public CListAdapter getAdapter(Context context){
-        return new CListAdapter();
+    public CListAdapter getAdapter(){
+        return new CListAdapter(context, mainInteractor.getChatsList());
     }//TODO ADAPTER MIT CHATS NICHT STRINGS
 
     @Override

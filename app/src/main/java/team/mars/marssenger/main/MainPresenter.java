@@ -7,7 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
+
 import team.mars.marssenger.custom.CListAdapter;
+import team.mars.marssenger.datatype.Chat;
 
 /**
  * Created by root on 03.12.14.
@@ -16,7 +19,7 @@ public interface MainPresenter {
 
     //Methoden zur Steuerung des Interactors und der View
 
-    public CListAdapter getAdapter(Context context);
+    public CListAdapter getAdapter();
     public void onChatClick(AdapterView<?> adapterView, View view, int position, long id);
     public void checkConnection();
     public boolean menuItemSelected(MenuItem item);
