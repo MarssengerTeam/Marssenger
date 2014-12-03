@@ -31,7 +31,7 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public CListAdapter getAdapter(){
         return new CListAdapter(context, mainInteractor.getChatsList());
-    }//TODO ADAPTER MIT CHATS NICHT STRINGS
+    }
 
     @Override
     public void onChatClick(AdapterView<?> adapterView, View view, int position, long id) {
