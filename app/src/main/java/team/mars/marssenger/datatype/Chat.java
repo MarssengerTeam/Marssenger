@@ -4,7 +4,6 @@ package team.mars.marssenger.datatype;
 public class Chat {
     private long id;
     private String name;
-    private String number;
     private long messageTableID;
 
     public long getId() {
@@ -31,13 +30,7 @@ public class Chat {
         return messageTableID;
     }
 
-    public String getNumber() {
-        return number;
-    }
 
-    public void setNumber(String number) {
-        this.number = number;
-    }
 
     // Will be used by the ArrayAdapter in the ListView
     @Override

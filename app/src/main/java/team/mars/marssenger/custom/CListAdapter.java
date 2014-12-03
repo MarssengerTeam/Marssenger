@@ -18,10 +18,12 @@ import team.mars.marssenger.datatype.Chat;
  */
 public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> {
 
+    private Context context;
     private ArrayList<Chat> chats;
 
 
-    public CListAdapter (ArrayList<Chat> list){
+    public CListAdapter (Context context, ArrayList<Chat> list){
+        this.context=context;
         this.chats=list;
     }
 

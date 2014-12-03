@@ -21,10 +21,13 @@ public class MainInteractorImpl implements MainInteractor {
 
     public MainInteractorImpl(Context context){
         this.context= context;
-        chatDatabase = new ChatDatabase(context);
+
         messageDatabase = new MessageDatabase(context);
+        chatDatabase = new ChatDatabase(context,messageDatabase);
         openChatDB();
         openMessageDB();
+
+        chatDatabase.createChat("NAME", "RECEIVER");
     }
 
     @Override
@@ -32,6 +35,7 @@ public class MainInteractorImpl implements MainInteractor {
        return chatDatabase.getAllChat();
     }
 
+    public ChatDatabase getChatDatabase(){return chatDatabase;}
     @Override
     public boolean connectionEstablished() {
         return connected;

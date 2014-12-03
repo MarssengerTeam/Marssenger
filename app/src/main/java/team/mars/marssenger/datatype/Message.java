@@ -11,6 +11,7 @@ public class Message {
     private String receiver;
     private String timestamp;
     private String sender;
+    private boolean read;
 
 
 
@@ -22,6 +23,18 @@ public class Message {
         this.id = id;
     }
 
+    public boolean isRead(){
+        return read;
+    }
+    public void setRead(int read){
+        if(read==1){
+            this.read=true;
+        }
+        else {
+            this.read=false;
+        }
+
+    }
     public String getMessage() {
         return message;
     }

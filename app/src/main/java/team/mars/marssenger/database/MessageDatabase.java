@@ -33,11 +33,12 @@ public class MessageDatabase {
         dbHelper.close();
     }
 
-    public Message createMessage(String sender,String message,String timestamp,int chatID) {
+    public Message createMessage(String message,String sender,String timestamp,int chatID,int read) {
         ContentValues values = new ContentValues();
-        values.put(SQLiteManager.COLUMN_MESSAGES_MSG, sender);
-        values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, message);
+        values.put(SQLiteManager.COLUMN_MESSAGES_MSG, message);
+        values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, sender);
         values.put(SQLiteManager.COLUMN_MESSAGES_TIME, timestamp);
+        values.put(SQLiteManager.COLUMN_MESSAGES_TIME, read);
         long insertId = database.insert(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID, null, values);
 
         Cursor cursor = database.query(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID,
@@ -84,10 +85,11 @@ public class MessageDatabase {
         Message message = new Message();
         try{
             message.setId(cursor.getLong(0));
-            message.setSender(cursor.getString(1));
-            message.setMessage(cursor.getString(2));
+            message.setMessage(cursor.getString(1));
+            message.setSender(cursor.getString(2));
             message.setReciver(cursor.getString(3));
             message.setTime(cursor.getString(4));
+            message.setRead(cursor.getInt(5));
         }catch (Exception ex){
             ex.printStackTrace();
         }
