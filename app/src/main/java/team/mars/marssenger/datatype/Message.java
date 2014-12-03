@@ -8,7 +8,7 @@ package team.mars.marssenger.datatype;
 public class Message {
     private long id;
     private String message;
-    private String reciver;
+    private String receiver;
     private String timestamp;
     private String sender;
 
@@ -26,7 +26,7 @@ public class Message {
         return message;
     }
 
-    public String getReciver() {return reciver;}
+    public String getReciver() {return receiver;}
 
     public String getTimestamp(){return timestamp;}
 
@@ -43,8 +43,8 @@ public class Message {
 
     public void setSender(String sender){this.sender = sender;}
 
-    public void setReciver(String reciver) {
-        this.reciver = reciver;
+    public void setReciver(String receiver) {
+        this.receiver = receiver;
     }
 
     public void setTime(String time) {
