@@ -50,14 +50,20 @@ public class ChatDatabase {
         return newChat;
     }
 
+    public void deleteChat(long chatID) {
 
+        System.out.println("Chat deleted with id: " + chatID);
+        database.delete(SQLiteManager.TABLE_CHAT, SQLiteManager.COLUMN_CHAT_ID
+                + " = " + chatID, null);
+        //TODO UPDATE CHATS !
+    }
 
     public void deleteChat(Chat chat) {
         long id = chat.getId();
         System.out.println("Chat deleted with id: " + id);
         database.delete(SQLiteManager.TABLE_CHAT, SQLiteManager.COLUMN_CHAT_ID
                 + " = " + id, null);
-        //TODO UPDATE CHATS
+        //TODO UPDATE CHATS !
     }
 
     public ArrayList<Chat> getAllChat() {

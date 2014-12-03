@@ -23,6 +23,8 @@ public class MainInteractorImpl implements MainInteractor {
         this.context= context;
         chatDatabase = new ChatDatabase(context);
         messageDatabase = new MessageDatabase(context);
+        openChatDB();
+        openMessageDB();
     }
 
     @Override

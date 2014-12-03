@@ -58,6 +58,11 @@ public class MessageDatabase {
         database.delete(SQLiteManager.TABLE_MESSAGES, SQLiteManager.COLUMN_MESSAGES_ID
                 + " = " + id, null);
     }
+    public void deleteMessage(long messageID) {
+        System.out.println("Message deleted with id: " + messageID);
+        database.delete(SQLiteManager.TABLE_MESSAGES, SQLiteManager.COLUMN_MESSAGES_ID
+                + " = " + messageID, null);
+    }
 
     public ArrayList<Message> getAllMessage() {
         ArrayList<Message> messages = new ArrayList<Message>();
