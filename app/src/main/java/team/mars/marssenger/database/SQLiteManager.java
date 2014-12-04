@@ -10,7 +10,6 @@ import android.util.Log;
  */
 public class SQLiteManager extends SQLiteOpenHelper {
 
-   SQLiteDatabase database;
 
     public static final String COLUMN_MESSAGES_ID ="_id";
     public static final String COLUMN_MESSAGES_MSG = "message";
@@ -29,7 +28,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String COLUMN_CHAT_RECEIVER = "receiver";
 
     private static final String DATABASE_NAME = "chats.db";
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 9;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE_TABLE_CHAT = "create table "
@@ -44,8 +43,9 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + " text not null"
             + ");";
     private static final String DATABASE_CREATE_TABLE_MESSAGE_COLUMS =
+            "("+
              COLUMN_MESSAGES_ID
-            + "( integer primary key autoincrement, "
+            + " integer primary key autoincrement, "
             + COLUMN_MESSAGES_MSG
             + " text not null,"
             + COLUMN_MESSAGES_SENDER
@@ -54,30 +54,28 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + " text not null, "
             + COLUMN_MESSAGES_READ
             + " integer);";
+    private final Context context;
 
     public SQLiteManager(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        this.context=context;
     }
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        this.database=database;
-        this.database.execSQL(DATABASE_CREATE_TABLE_CHAT);
+        database.execSQL(DATABASE_CREATE_TABLE_CHAT);
     }
     public void newMessageDatabase(int messageDatabaseID){
-        if(database!=null) {
-            database.execSQL("create table messagesforchat" + messageDatabaseID + " " + DATABASE_CREATE_TABLE_MESSAGE_COLUMS);
-        }
+
+        SQLiteDatabase db = context.getApplicationContext().openOrCreateDatabase(DATABASE_NAME, SQLiteDatabase.OPEN_READWRITE, null);
+        db.execSQL("create table messagesforchat" + messageDatabaseID + " " + DATABASE_CREATE_TABLE_MESSAGE_COLUMS);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(SQLiteManager.class.getName(),
-                "Upgrading database from version " + oldVersion + " to "
-                        + newVersion + ", which will destroy all old data");
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CHAT);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_MESSAGES); TODO ALLE LÖSCHEN
-        onCreate(db);
+        //TODO onUpgrade
+
     }
 
 }

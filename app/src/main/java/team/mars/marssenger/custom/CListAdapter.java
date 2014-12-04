@@ -48,7 +48,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
         holder=new ViewHolder(relativeLayout);
         holder.name.setText(chatlist.get(i).getName());
         holder.text.setText(chats.getLastMessage(chatlist.get(i)).getMessage());
-        holder.counter.setText(chats.getUnreadMessages(chatlist.get(i)));
+        holder.counter.setText(chats.getUnreadMessages(chatlist.get(i))+"");
     }
 
     @Override

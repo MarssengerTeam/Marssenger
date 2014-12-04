@@ -28,6 +28,7 @@ public class MainInteractorImpl implements MainInteractor {
         openMessageDB();
 
         chatDatabase.createChat("NAME", "RECEIVER");
+        messageDatabase.createMessage("message","1","jetzt",0,0);
 
 
     }

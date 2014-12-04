@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
@@ -21,7 +20,7 @@ public class ChatDatabase {
     // Database fields
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID,SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_MESSAGENUMBER };
+    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID, SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_MESSAGENUMBER };
     private MessageDatabase messageDatabase;
 
     public ChatDatabase(Context context,MessageDatabase messageDatabase) {
@@ -39,6 +38,7 @@ public class ChatDatabase {
 
     public Chat createChat(String name,String receiver) {
         int messageDBID= this.getAllChat().size();
+        dbHelper.newMessageDatabase(messageDBID);
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_CHAT_NAME, name);
         values.put(SQLiteManager.COLUMN_CHAT_MESSAGENUMBER, messageDBID);
@@ -47,18 +47,21 @@ public class ChatDatabase {
         Cursor cursor = database.query(SQLiteManager.TABLE_CHAT,
                 allColumnsChat, SQLiteManager.COLUMN_CHAT_NAME + " = " + insertId, null,
                 null, null, null);
-
         cursor.moveToFirst();
         Chat newChat = cursorToChat(cursor);
         cursor.close();
-        dbHelper.newMessageDatabase(messageDBID);
+
         return newChat;
     }
 
     public Message getLastMessage(Chat chat){
         ArrayList<Message> messages =  messageDatabase.getAllMessageFromChat(chat);
-        Message m = messages.get(messages.size()-1);
-        return m;
+        if(messages.size()!=0) {
+            Message m = messages.get(messages.size()-1);
+            return m;
+        } else{
+            return new Message();
+        }
     }
 
     public int getUnreadMessages(Chat chat){
@@ -88,33 +91,31 @@ public class ChatDatabase {
 
     public ArrayList<Chat> getAllChat() {
         ArrayList<Chat> chats = new ArrayList<Chat>();
-
         Cursor cursor =
                 database.query(
                         SQLiteManager.TABLE_CHAT,
                         allColumnsChat,
                         null, null, null, null, null);
-
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             Chat chat = cursorToChat(cursor);
             chats.add(chat);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
         cursor.close();
         return chats;
     }
 
     private Chat cursorToChat(Cursor cursor) {
         Chat chat = new Chat();
-        try{
-            chat.setId(cursor.getLong(0));
-            chat.setName(cursor.getString(1));
-            chat.setMessageTableID(cursor.getLong(2));
-        }catch (Exception ex){
-            ex.printStackTrace();//TODO FIXEN
-        }
+
+            try {
+                chat.setId(cursor.getLong(0));
+                chat.setName(cursor.getString(1));
+                chat.setMessageTableID(cursor.getLong(2));
+            } catch (Exception ex) {
+                ex.printStackTrace();//TODO FIXEN
+            }
 
 
         return chat;

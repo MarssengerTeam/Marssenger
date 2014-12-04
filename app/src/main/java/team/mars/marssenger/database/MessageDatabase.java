@@ -16,10 +16,9 @@ import team.mars.marssenger.datatype.Message;
  */
 public class MessageDatabase {
 
-    // Database fields
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID,SQLiteManager.COLUMN_MESSAGES_MSG, SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_TIME };
+    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID, SQLiteManager.COLUMN_MESSAGES_MSG, SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_TIME };
 
     public MessageDatabase(Context context) {
         dbHelper = new SQLiteManager(context);
@@ -34,27 +33,23 @@ public class MessageDatabase {
     }
 
     public Message createMessage(String message,String sender,String timestamp,int chatID,int read) {
+
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_MESSAGES_MSG, message);
         values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, sender);
         values.put(SQLiteManager.COLUMN_MESSAGES_TIME, timestamp);
         values.put(SQLiteManager.COLUMN_MESSAGES_TIME, read);
         long insertId = database.insert(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID, null, values);
-
         Cursor cursor = database.query(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID,
                 allColumnsMessage, SQLiteManager.COLUMN_MESSAGES_ID + " = " + insertId, null,
                 null, null, null);
-
         cursor.moveToFirst();
         Message newMessage = cursorToMessage(cursor);
         cursor.close();
         return newMessage;
     }
 
-
-
     public void deleteMessage(Chat chat) {
-
         System.out.println("Message deleted with id: " + chat.getMessageTableID());
         database.delete(SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableID(), SQLiteManager.COLUMN_MESSAGES_ID
                 + " = " +chat.getMessageTableID(), null);
@@ -63,7 +58,6 @@ public class MessageDatabase {
 
     public ArrayList<Message> getAllMessageFromChat(Chat chat) {
         ArrayList<Message> messages = new ArrayList<Message>();
-
         Cursor cursor =
                 database.query(
                         SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableID(),
