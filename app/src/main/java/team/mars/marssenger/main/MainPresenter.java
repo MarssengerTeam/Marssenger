@@ -24,4 +24,5 @@ public interface MainPresenter {
     public void checkConnection();
     public boolean menuItemSelected(MenuItem item);
 
+
 }

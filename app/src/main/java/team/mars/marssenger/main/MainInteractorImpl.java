@@ -28,6 +28,8 @@ public class MainInteractorImpl implements MainInteractor {
         openMessageDB();
 
         chatDatabase.createChat("NAME", "RECEIVER");
+
+
     }
 
     @Override

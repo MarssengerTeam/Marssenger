@@ -22,12 +22,11 @@ public class MainPresenterImpl implements MainPresenter {
     private MainInteractor mainInteractor;
     private Context context;
 
-
     public MainPresenterImpl (MainView mainView,Context context){
         this.context=context;
         this.mainView=mainView;
         this.mainInteractor=new MainInteractorImpl(context);
-        checkConnection();
+        //checkConnection();
     }
 
     @Override
