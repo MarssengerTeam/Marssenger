@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -18,7 +19,7 @@ public class MessageDatabase {
 
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID, SQLiteManager.COLUMN_MESSAGES_MSG, SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_TIME };
+    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID, SQLiteManager.COLUMN_MESSAGES_MSG, SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_TIME, SQLiteManager.COLUMN_MESSAGES_READ};
 
     public MessageDatabase(Context context) {
         dbHelper = new SQLiteManager(context);
@@ -38,7 +39,7 @@ public class MessageDatabase {
         values.put(SQLiteManager.COLUMN_MESSAGES_MSG, message);
         values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, sender);
         values.put(SQLiteManager.COLUMN_MESSAGES_TIME, timestamp);
-        values.put(SQLiteManager.COLUMN_MESSAGES_TIME, read);
+        values.put(SQLiteManager.COLUMN_MESSAGES_READ, read);
         long insertId = database.insert(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID, null, values);
         Cursor cursor = database.query(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID,
                 allColumnsMessage, SQLiteManager.COLUMN_MESSAGES_ID + " = " + insertId, null,
@@ -81,9 +82,8 @@ public class MessageDatabase {
             message.setId(cursor.getLong(0));
             message.setMessage(cursor.getString(1));
             message.setSender(cursor.getString(2));
-            message.setReciver(cursor.getString(3));
-            message.setTime(cursor.getString(4));
-            message.setRead(cursor.getInt(5));
+            message.setTime(cursor.getString(3));
+            message.setRead(cursor.getInt(4));
         }catch (Exception ex){
             ex.printStackTrace();
         }
