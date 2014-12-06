@@ -89,18 +89,4 @@ public class MainPresenterImpl implements MainPresenter {
         return false;
     }
 
-
-
-
-
-
-    /**
-     * Registers the application with GCM servers asynchronously.
-     * <p>
-     * Stores the registration ID and app versionCode in the application's
-     * shared preferences.
-     */
-
-
-
 }

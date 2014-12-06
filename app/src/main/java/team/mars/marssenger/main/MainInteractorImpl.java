@@ -14,6 +14,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import team.mars.marssenger.database.ChatDatabase;
@@ -81,8 +82,10 @@ public class MainInteractorImpl implements MainInteractor {
     public void registerInBackground() { //TODO Complete this codesection
         AsyncTask at = new AsyncTask(){
 
-            protected void onPostExecute(String msg) {
-                mDisplay.append(msg + "\n");
+            @Override
+            protected void onPostExecute(Object msg) {
+                String message=String.valueOf(msg);
+                mDisplay.append(message + "\n");
             }
 
             @Override
@@ -149,6 +152,7 @@ public class MainInteractorImpl implements MainInteractor {
         return registrationId;
     }
 
+    @Override
     public SharedPreferences getGCMPreferences(Context context) {
         // This sample app persists the registration ID in shared preferences, but
         // how you store the regID in your app is up to you.
