@@ -186,7 +186,7 @@ public class MainActivity extends Activity implements MainView{
 
     private void registerInBackground() { //TODO Complete this codesection
         AsyncTask at = new AsyncTask(){
-            @Override
+            //TODO hier war @Override, aber nicht richtig oder?
             protected void onPostExecute(String msg) {
                 mDisplay.append(msg + "\n");
             }
@@ -205,14 +205,14 @@ public class MainActivity extends Activity implements MainView{
                     // so it can use GCM/HTTP or CCS to send messages to your app.
                     // The request to your server should be authenticated if your app
                     // is using accounts.
-                    sendRegistrationIdToBackend();
+                    //TODO sendRegistrationIdToBackend();
 
                     // For this demo: we don't need to send it because the device
                     // will send upstream messages to a server that echo back the
                     // message using the 'from' address in the message.
 
                     // Persist the regID - no need to register again.
-                    storeRegistrationId(context, regid);
+                    //TODO storeRegistrationId(context, regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
