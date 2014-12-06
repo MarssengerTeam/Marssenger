@@ -1,10 +1,23 @@
 package team.mars.marssenger.main;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CListAdapter;
@@ -14,6 +27,11 @@ import team.mars.marssenger.datatype.Chat;
  * Created by root on 03.12.14.
  */
 public class MainPresenterImpl implements MainPresenter {
+
+
+
+
+
 
     //layout-attr
 
@@ -27,7 +45,15 @@ public class MainPresenterImpl implements MainPresenter {
         this.mainView=mainView;
         this.mainInteractor=new MainInteractorImpl(context);
         //checkConnection();
+        if(mainInteractor.checkPlayServices()){
+
+            if (mainInteractor.getRegid().isEmpty()) {
+                mainInteractor.registerInBackground();
+            }
+        }
     }
+
+
 
     @Override
     public CListAdapter getAdapter(){
@@ -62,5 +88,19 @@ public class MainPresenterImpl implements MainPresenter {
 
         return false;
     }
+
+
+
+
+
+
+    /**
+     * Registers the application with GCM servers asynchronously.
+     * <p>
+     * Stores the registration ID and app versionCode in the application's
+     * shared preferences.
+     */
+
+
 
 }

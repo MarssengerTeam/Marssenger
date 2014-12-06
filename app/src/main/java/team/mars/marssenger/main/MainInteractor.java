@@ -1,5 +1,8 @@
 package team.mars.marssenger.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import java.util.ArrayList;
 
 import team.mars.marssenger.database.ChatDatabase;
@@ -22,4 +25,13 @@ public interface MainInteractor {
     public void openMessageDB();
     public void closeMessageDB();
     public void closeChatDB();
+
+    public boolean checkPlayServices();
+    public void registerInBackground();
+    public String getRegistrationId(Context context);
+    public SharedPreferences getGCMPreferences(Context context);
+    public int getAppVersion(Context context);
+    public String getRegid();
+    public void sendRegistrationIdToBackend();
+    public void storeRegistrationId(Context context, String regid);
 }
