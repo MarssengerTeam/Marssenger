@@ -54,6 +54,8 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
         if (toolbar!=null){
             setSupportActionBar(toolbar);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+            toolbar.setLogo(R.drawable.ic_launcher);
+            toolbar.setTitle(R.string.app_name);
         } else {
             test("toolbar null");
         }
