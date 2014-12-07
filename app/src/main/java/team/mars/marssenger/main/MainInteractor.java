@@ -34,4 +34,5 @@ public interface MainInteractor {
     public String getRegid();
     public void sendRegistrationIdToBackend();
     public void storeRegistrationId(Context context, String regid);
+
 }

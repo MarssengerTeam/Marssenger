@@ -1,5 +1,6 @@
 package team.mars.marssenger.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,10 +11,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.digits.sdk.android.AuthCallback;
+import com.digits.sdk.android.DigitsAuthButton;
+import com.digits.sdk.android.DigitsException;
+import com.digits.sdk.android.DigitsSession;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import io.fabric.sdk.android.Fabric;
 import team.mars.marssenger.R;
+import team.mars.marssenger.register.RegisterActivity;
 
 
 public class MainActivity extends ActionBarActivity implements MainView, RecyclerView.OnClickListener {
+
+
 
     //layout-attr
 
@@ -35,9 +46,17 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+
 
         mainPresenter=new MainPresenterImpl(this,this); //this - context, this - mainView
+
+
+        setContentView(R.layout.activity_main);
+
+
+
+
 
         recyclerView=(RecyclerView) findViewById(R.id.main_listview);
         if (recyclerView!=null) {
@@ -97,5 +116,13 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
 
     private void test(CharSequence charSequence) {
         Toast.makeText(this, charSequence, Toast.LENGTH_SHORT).show();
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+        mainPresenter.onRegsiterReturn(requestCode,resultCode,data);
+    }
+    public void startRegisterationIntent(int REQUESTCODE){
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivityForResult(intent,REQUESTCODE);
     }
 }

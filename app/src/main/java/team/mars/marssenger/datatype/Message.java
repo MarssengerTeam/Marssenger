@@ -9,10 +9,10 @@ public class Message {
     private long id;
     private String message;
     private String receiver;
-    private String timestamp;
-    private String sender;
+    private long timestamp;
+    private boolean sender;
     private boolean read;
-
+    private long chatID;
 
 
     public long getId() {
@@ -22,7 +22,12 @@ public class Message {
     public void setId(long id) {
         this.id = id;
     }
-
+    public void setChatID(long id){
+        this.chatID=id;
+    }
+    public long getChatID(){
+        return chatID;
+    }
     public boolean isRead(){
         return read;
     }
@@ -35,15 +40,14 @@ public class Message {
         }
 
     }
+
     public String getMessage() {
         return message;
     }
 
-    public String getReciver() {return receiver;}
+    public long getTimestamp(){return timestamp;}
 
-    public String getTimestamp(){return timestamp;}
-
-    public String getSender(){return  sender;}
+    public boolean isSender(){return  sender;}
     public void setMessage(String message) {
         this.message = message;
     }
@@ -54,13 +58,15 @@ public class Message {
         return message;
     }
 
-    public void setSender(String sender){this.sender = sender;}
-
-    public void setReciver(String receiver) {
-        this.receiver = receiver;
+    public void setSender(int sender){
+        if(sender ==1){
+        this.sender=true;}else{
+        this.sender=false;
+        }
     }
 
-    public void setTime(String time) {
+
+    public void setTime(long time) {
         this.timestamp = time;
     }
 }

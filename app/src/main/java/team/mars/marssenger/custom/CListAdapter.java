@@ -2,6 +2,7 @@ package team.mars.marssenger.custom;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,7 +31,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     public CListAdapter (Context context, ChatDatabase list){
         this.context=context;
         this.chats=list;
-        chatlist = list.getAllChat();
+        chatlist = list.getAllChatByTime();
     }
 
     public Chat getItem(int position){
@@ -48,7 +49,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
-        //TODO set text and image and counter
+
         holder=new ViewHolder(relativeLayout);
         holder.name.setText(chatlist.get(i).getName());
         holder.text.setText(chats.getLastMessage(chatlist.get(i)).getMessage());

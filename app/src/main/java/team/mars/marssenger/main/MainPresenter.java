@@ -1,6 +1,7 @@
 package team.mars.marssenger.main;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,5 +23,7 @@ public interface MainPresenter {
     public CListAdapter getAdapter();
     public void onChatClick(int position);
     public boolean menuItemSelected(MenuItem item);
+    public void onRegsiterReturn(int requestCode, int resultCode,
+                                 Intent data);
 
 }

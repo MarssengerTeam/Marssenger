@@ -14,4 +14,5 @@ public interface MainView {
 
     public void setConnectionEstablished();
 
+    public void startRegisterationIntent(int REQUESTCODE);
 }

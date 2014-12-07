@@ -53,8 +53,8 @@ public class MainInteractorImpl implements MainInteractor {
         openChatDB();
         openMessageDB();
 
-        chatDatabase.createChat("NAME", "RECEIVER");
-        messageDatabase.createMessage("message","1","jetzt",0,0);
+
+
 
         //TODO GooglePlay active
         gcm = GoogleCloudMessaging.getInstance(context);
@@ -85,7 +85,7 @@ public class MainInteractorImpl implements MainInteractor {
             @Override
             protected void onPostExecute(Object msg) {
                 String message=String.valueOf(msg);
-                mDisplay.append(message + "\n");
+               //TODO mDisplay.append(message + "\n");
             }
 
             @Override
@@ -130,6 +130,7 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void storeRegistrationId(Context context, String regid){
         //TODO complete
+        Log.e(TAG,"NOT STORING REG ID BECAUSE NOT IMPLEMENTED"+ regid);
     }
 
     @Override

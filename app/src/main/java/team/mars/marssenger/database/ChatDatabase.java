@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
+import team.mars.marssenger.util.QuicksortMessages;
 
 
 /**
@@ -60,7 +63,7 @@ public class ChatDatabase {
             Message m = messages.get(messages.size()-1);
             return m;
         } else{
-            return new Message();
+            return null;
         }
     }
 
@@ -104,6 +107,22 @@ public class ChatDatabase {
         }
         cursor.close();
         return chats;
+    }
+    public ArrayList<Chat> getAllChatByTime() {
+        ArrayList<Chat> chats =  getAllChat();
+        ArrayList<Message> lastMessages= new ArrayList<>();
+        for(Chat chat:chats){
+            if(getLastMessage(chat)!=null){
+                lastMessages.add(getLastMessage(chat));}
+        }
+        QuicksortMessages qsm = new QuicksortMessages();
+        ArrayList<Chat> csorted = new ArrayList<>();
+        ArrayList<Message>  msorted=  qsm.sortMessages(lastMessages);
+        for(Message m:msorted){
+            csorted.add(0,chats.get((int)m.getChatID()-1));
+        }
+
+        return csorted;
     }
 
     private Chat cursorToChat(Cursor cursor) {

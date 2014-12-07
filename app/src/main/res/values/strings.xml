@@ -17,5 +17,6 @@
     <string name="action_new_message">New message</string>
     <string name="action_search">Search</string>
     <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_register">Register</string>
 
 </resources>
