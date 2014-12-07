@@ -1,40 +1,25 @@
 package team.mars.marssenger.main;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.TextView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
+import android.widget.Toast;
 
 import team.mars.marssenger.R;
 
 
-public class MainActivity extends Activity implements MainView{
+public class MainActivity extends ActionBarActivity implements MainView, RecyclerView.OnClickListener {
 
     //layout-attr
 
     private RecyclerView recyclerView;
-    private TextView textView;
     private RecyclerView.LayoutManager layoutManager;
+    private Toolbar toolbar;
 
 
 
@@ -52,16 +37,26 @@ public class MainActivity extends Activity implements MainView{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        mainPresenter=new MainPresenterImpl(this,this); //this - context, this - mainView
+
         recyclerView=(RecyclerView) findViewById(R.id.main_listview);
-        textView=(TextView) findViewById(R.id.main_textview);
+        if (recyclerView!=null) {
 
-        mainPresenter=new MainPresenterImpl(this,this);
+            recyclerView.setAdapter(mainPresenter.getAdapter());
 
-        recyclerView.setAdapter(mainPresenter.getAdapter());
+            layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
+        } else {
+            test("recyclerview null");
+        }
 
-        layoutManager=new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
+        toolbar=(Toolbar) findViewById(R.id.toolbar);
+        if (toolbar!=null){
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        } else {
+            test("toolbar null");
+        }
 
     }
 
@@ -73,6 +68,8 @@ public class MainActivity extends Activity implements MainView{
         return true;
     }
 
+
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -80,20 +77,23 @@ public class MainActivity extends Activity implements MainView{
 
     }
 
+
     @Override
     public void setConnectionFail() {
-        textView.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
-
-        textView.setText(getResources().getString(R.string.main_connection_failed));
-        textView.setTextSize(getResources().getDimension(R.dimen.textview_textsize));
-        textView.setTextColor(getResources().getColor(R.color.error));
+        test(getString(R.string.main_connection_failed));
     }
 
     @Override
     public void setConnectionEstablished() {
-        textView.setVisibility(View.GONE);
-        recyclerView.setVisibility(View.VISIBLE);
+        test(getString(R.string.main_connection_established));
     }
 
+    @Override
+    public void onClick(View v) {
+        mainPresenter.onChatClick(recyclerView.getChildPosition(v));
+    }
+
+    private void test(CharSequence charSequence) {
+        Toast.makeText(this, charSequence, Toast.LENGTH_SHORT).show();
+    }
 }

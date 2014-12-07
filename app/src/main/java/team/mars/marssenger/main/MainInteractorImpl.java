@@ -124,12 +124,12 @@ public class MainInteractorImpl implements MainInteractor {
 
     @Override
     public void sendRegistrationIdToBackend(){
-        //TODO
+        //TODO complete
     }
 
     @Override
     public void storeRegistrationId(Context context, String regid){
-        //TODO
+        //TODO complete
     }
 
     @Override

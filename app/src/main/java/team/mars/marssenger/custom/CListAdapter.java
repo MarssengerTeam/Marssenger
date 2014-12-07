@@ -33,6 +33,10 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
         chatlist = list.getAllChat();
     }
 
+    public Chat getItem(int position){
+        return chatlist.get(position);
+    }
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 

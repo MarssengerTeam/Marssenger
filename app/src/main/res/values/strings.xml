@@ -7,6 +7,7 @@
 
     <!-- Activities / Fragments -->
     <string name="main_connection_failed">Connection failed</string>
+    <string name="main_connection_established">Connection established</string>
     
     <!-- layout -->
     <string name="list_image_description">Contact image</string>

@@ -20,8 +20,7 @@ public interface MainPresenter {
     //Methoden zur Steuerung des Interactors und der View
 
     public CListAdapter getAdapter();
-    public void onChatClick(View view);
-    public void checkConnection();
+    public void onChatClick(int position);
     public boolean menuItemSelected(MenuItem item);
 
 }

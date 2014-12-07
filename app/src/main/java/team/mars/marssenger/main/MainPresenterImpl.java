@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -39,12 +40,12 @@ public class MainPresenterImpl implements MainPresenter {
     private MainView mainView;
     private MainInteractor mainInteractor;
     private Context context;
+    private CListAdapter cListAdapter;
 
     public MainPresenterImpl (MainView mainView,Context context){
         this.context=context;
         this.mainView=mainView;
         this.mainInteractor=new MainInteractorImpl(context);
-        //checkConnection();
         if(mainInteractor.checkPlayServices()){
 
             if (mainInteractor.getRegid().isEmpty()) {
@@ -57,22 +58,14 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public CListAdapter getAdapter(){
-        return new CListAdapter(context, mainInteractor.getChatDatabase());
+        cListAdapter=new CListAdapter(context, mainInteractor.getChatDatabase());
+        return cListAdapter;
     }
 
     @Override
-    public void onChatClick(View view) {
-        //check which chat it is and start chatactivity
-    }
-
-    @Override
-    public void checkConnection() {
-        mainInteractor.buildConnection();
-        if (mainInteractor.connectionEstablished()){
-            mainView.setConnectionEstablished();
-        } else {
-            mainView.setConnectionFail();
-        }
+    public void onChatClick(int position) {
+        //TODO check which chat it is and start chatactivity
+        test(String.valueOf(cListAdapter.getItemId(position)));
     }
 
     @Override
@@ -87,6 +80,11 @@ public class MainPresenterImpl implements MainPresenter {
         }
 
         return false;
+    }
+
+    //displays toast with given text
+    private void test(CharSequence charSequence) {
+        Toast.makeText(context, charSequence, Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -1,18 +1,29 @@
 package team.mars.marssenger.chat;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import team.mars.marssenger.R;
 
-public class ChatActivity extends Activity implements ChatView {
+public class ChatActivity extends ActionBarActivity implements ChatView {
+
+    //layout-attr
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        toolbar=(Toolbar) findViewById(R.id.toolbar);
+
+        if (toolbar!=null){
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
 
