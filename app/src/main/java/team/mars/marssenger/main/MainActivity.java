@@ -83,6 +83,7 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
 
     @Override
     public void onClick(View v) {
+        test("dont touch me");
         mainPresenter.onChatClick(recyclerView.getChildPosition(v));
     }
 

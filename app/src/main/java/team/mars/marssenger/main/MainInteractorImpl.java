@@ -52,12 +52,23 @@ public class MainInteractorImpl implements MainInteractor {
         openChatDB();
         openMessageDB();
 
-
-
+        //create test chats
+        createTestChats();
 
         //TODO GooglePlay active
         gcm = GoogleCloudMessaging.getInstance(context);
         regid =getRegistrationId(context);
+    }
+
+    private void createTestChats(){
+        chatDatabase.createChat("DER chat", "Der Empfänger");
+        messageDatabase.createMessage("Alarm Alarm!", 1, 0, 0);
+        chatDatabase.createChat("Noch ein chat", "empf");
+        messageDatabase.createMessage("hier steht eine Nachricht",1,1,0);
+        chatDatabase.createChat("adsvkdjhj", "lfindjh");
+        messageDatabase.createMessage("jhdhjuswzjdh",1,2,0);
+        chatDatabase.createChat("qwerty", "qewertz");
+        messageDatabase.createMessage("azerty", 1,3,0);
     }
 
     @Override
