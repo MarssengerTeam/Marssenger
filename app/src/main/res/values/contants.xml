@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="project_id">insert projectID here</string>
-    <string name="project_name">insert projectname here</string>
+    <string name="project_id">313647842789</string>
+    <string name="project_name">abstract-key-783</string>
 
-    <string name="twitter_key">insert twitter-key here</string>
-    <string name="twitter_secret">insert twitter-secret here</string>
+    <string name="twitter_key">zxwqT1otoe8laDFDDpZE0S94z</string>
+    <string name="twitter_secret">2qOfUJbdnBwOyylRGBYTNBML0opCe2DeUR0YGdVMpOr4Ra1GR8</string>
 </resources>

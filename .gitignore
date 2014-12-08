@@ -6,9 +6,3 @@
 /build
 
 app/src/main/res/values/contants.xml
-.idea
-Marssenger.iml
-Marssenger5.iml
-.gitignore
-gradle
-build
