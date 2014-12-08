@@ -1,7 +1,17 @@
 package team.mars.marssenger.communication;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -13,87 +23,176 @@ import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * Created by root on 03.12.14.
  */
 public class ComSending {
-    /*Explanation
-        0. Param: URL
-        1. POST = 0, GET = 1
-        2. REQTYPE 3. DATA
-        n. REQTYPE n+1. DATA
-     */
+    //for LOG
+    private static final String TAG = "ComSending";
+
+    //Important Values
+    public static final String PROPERTY_APP_VERSION = "appVersion";
+    public static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
+    //wtf don't know
+    String SENDER_ID = "Your-Sender-ID";
 
 
-    //Log
-    public static final String TAG = "ComSending";
+    private GoogleCloudMessaging gcm;
+    private AtomicInteger msgId = new AtomicInteger();
+    private SharedPreferences prefs;
 
-    //Attributes
-    private String URL;
-    //end Attributes
+    private Activity myActivityContext;
 
-
-
-    //Constructor
-    public ComSending(String URL){
-        this.URL=URL;
+    public ComSending(Activity activityContext){
+        this.myActivityContext = myActivityContext;
     }
 
-    public AsyncTask sendTextMessage(String receiver, String message){
-        return new SendingTask().execute(this.URL, "0", receiver, message);
-    }
 
-    public AsyncTask getNewMessages(){
-        return new SendingTask().execute(this.URL, "1");
-    }
-
-    private class SendingTask extends AsyncTask<String, Integer, JSONArray> {
-        @Override
-        protected JSONArray doInBackground(String... definitions) {
-            try {
-                HttpClient httpclient = new DefaultHttpClient();
-                                                    //URL
-                HttpPost httppost = new HttpPost(definitions[0]);
-
-                // Add your data
-                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(definitions.length-2);
-                for(int i=1;i<definitions.length;i=i+2){
-                    nameValuePairs.add(new BasicNameValuePair(definitions[i], definitions[i+1]));
-                    Log.d(TAG, definitions[i]+", "+definitions[i+1]);
-                }
-                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                // Execute HTTP Post Request
-                HttpResponse response = httpclient.execute(httppost);
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
-                StringBuilder sb = new StringBuilder();
-                sb.append(reader.readLine() + "\n");
-                String line = "0";
-                while ((line = reader.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                reader.close();
-                String result11 = sb.toString();
-
-                // parsing data
-                return new JSONArray(result11);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
+    public boolean checkPlayServices(){
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(myActivityContext);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, myActivityContext,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                myActivityContext.finish();
             }
+            return false;
         }
+        return true;
+    }
 
-        protected void onProgressUpdate(Integer... progress) {
-            //setProgressPercent(progress[0]);
-        }
+    public boolean GCMRegistration(Context applicationContext, String regID){
+        gcm = GoogleCloudMessaging.getInstance(applicationContext);
+        String regid = getRegistrationId(applicationContext, regID);
 
-        @Override
-        protected void onPostExecute(JSONArray result) {
-
+        if (regid.isEmpty()) {
+            registerInBackground(applicationContext);
+            return false;
+        }else{
+            return true;
         }
     }
+
+    public String getRegistrationId(Context context, String regID){
+        if (regID.isEmpty()) {
+            Log.i(TAG, "Registration not found.");
+            return "";
+        }
+        // Check if app was updated; if so, it must clear the registration ID
+        // since the existing regID is not guaranteed to work with the new
+        // app version.
+        int registeredVersion = prefs.getInt(PROPERTY_APP_VERSION, Integer.MIN_VALUE);
+        int currentVersion = getAppVersion(context);
+        if (registeredVersion != currentVersion) {
+            Log.i(TAG, "App version changed.");
+            return "";
+        }
+        return regID;
+    }
+
+    private SharedPreferences getGCMPreferences(Context context) {
+        // This sample app persists the registration ID in shared preferences, but
+        // how you store the regID in your app is up to you.
+        return null;
+    }
+
+    private static int getAppVersion(Context context) {
+        try {
+            PackageInfo packageInfo = context.getPackageManager()
+                    .getPackageInfo(context.getPackageName(), 0);
+            return packageInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            // should never happen
+            throw new RuntimeException("Could not get package name: " + e);
+        }
+    }
+
+    private void registerInBackground(Context applicationContext) {
+        new AsyncTask<Context, String, String>() {
+            @Override
+            protected String doInBackground(Context... params) {
+                String msg = "";
+                try {
+                    if (gcm == null) {
+                        gcm = GoogleCloudMessaging.getInstance(params[0]);
+                    }
+                    String regid = gcm.register(SENDER_ID);
+                    msg = "Device registered, registration ID=" + regid;
+
+                    // You should send the registration ID to your server over HTTP,
+                    // so it can use GCM/HTTP or CCS to send messages to your app.
+                    // The request to your server should be authenticated if your app
+                    // is using accounts.
+                    sendRegistrationIdToBackend();
+
+                    // For this demo: we don't need to send it because the device
+                    // will send upstream messages to a server that echo back the
+                    // message using the 'from' address in the message.
+
+                    // Persist the regID - no need to register again.
+                    storeRegistrationId(params[0], regid);
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                    // If there is an error, don't just keep trying to register.
+                    // Require the user to click a button again, or perform
+                    // exponential back-off.
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                Log.i(TAG, msg);
+            }
+
+
+        }.execute(applicationContext);
+
+    }
+
+    private void sendRegistrationIdToBackend() {
+
+    }
+
+    private void storeRegistrationId(Context param, String regid) {
+
+    }
+
+
+    public void sendMessage(String regID, String message){
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String msg = "";
+                try {
+                    Bundle data = new Bundle();
+                    data.putString("my_message", "Hello World");
+                    data.putString("my_action",
+                            "com.google.android.gcm.demo.app.ECHO_NOW");
+                    String id = Integer.toString(msgId.incrementAndGet());
+                    gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
+                    msg = "Sent message";
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                Log.i(TAG, msg);
+            }
+        }.execute(null, null, null);
+
+    }
+
 }
