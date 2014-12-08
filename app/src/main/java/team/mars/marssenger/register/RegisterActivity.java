@@ -27,8 +27,8 @@ import team.mars.marssenger.R;
 public class RegisterActivity extends ActionBarActivity {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private String TWITTER_KEY ="1234";
-    private String TWITTER_SECRET ="4567";
+    private String TWITTER_KEY ="zxwqT1otoe8laDFDDpZE0S94z";
+    private String TWITTER_SECRET ="2qOfUJbdnBwOyylRGBYTNBML0opCe2DeUR0YGdVMpOr4Ra1GR8";
 
     //layout-attr
     private Toolbar toolbar;
