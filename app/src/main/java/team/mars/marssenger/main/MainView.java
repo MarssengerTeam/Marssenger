@@ -15,4 +15,6 @@ public interface MainView {
     public void startRegisterationIntent(int REQUESTCODE);
 
     public void onActivityResult(int requestCode, int resultCode,Intent data);
+
+    public void openChat(int chatID);
 }

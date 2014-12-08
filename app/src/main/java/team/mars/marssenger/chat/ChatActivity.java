@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import team.mars.marssenger.R;
 
@@ -19,7 +20,6 @@ public class ChatActivity extends ActionBarActivity implements ChatView {
         setContentView(R.layout.activity_chat);
 
         toolbar=(Toolbar) findViewById(R.id.toolbar);
-
         if (toolbar!=null){
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -47,5 +47,8 @@ public class ChatActivity extends ActionBarActivity implements ChatView {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    private void test(CharSequence charSequence) {
+        Toast.makeText(this, charSequence, Toast.LENGTH_SHORT).show();
     }
 }

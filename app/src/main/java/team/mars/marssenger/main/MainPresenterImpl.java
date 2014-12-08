@@ -3,11 +3,15 @@ package team.mars.marssenger.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.transition.Transition;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.custom.CListAdapter;
 
 /**
@@ -51,7 +55,12 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void onChatClick(View view, int position) {
         //TODO check which chat it is and start chatactivity
-        test(String.valueOf(cListAdapter.getItemId(position)));
+        openChat(position);
+        //test(String.valueOf(cListAdapter.getItemId(position)));
+    }
+
+    private void openChat(int chatID) {
+        mainView.openChat(chatID);
     }
 
     @Override

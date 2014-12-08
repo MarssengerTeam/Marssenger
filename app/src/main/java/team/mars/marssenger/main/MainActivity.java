@@ -8,12 +8,16 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.AutoTransition;
+import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.custom.CItemClickListener;
 import team.mars.marssenger.register.RegisterActivity;
 
@@ -41,9 +45,13 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.LOLLIPOP) {
             colorActionBar();
         }
+
+
 
         mainPresenter=new MainPresenterImpl(this,this); //this - context, this - mainView
 
@@ -124,6 +132,20 @@ public class MainActivity extends ActionBarActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mainPresenter.onRegsiterReturn(requestCode,resultCode,data);
     }
+
+    @Override
+    public void openChat(int chatID) {
+        recyclerView = null;
+        Intent chatIntent = new Intent(this, ChatActivity.class);
+        chatIntent.putExtra("CHAT_ID",chatID);
+        try{
+              startActivity(chatIntent);
+        }catch(Exception e){
+
+        }
+
+    }
+
 
     @Override
     public void startRegisterationIntent(int REQUESTCODE){
