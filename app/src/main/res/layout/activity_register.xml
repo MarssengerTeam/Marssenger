@@ -4,12 +4,19 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
+    <include
+        layout="@layout/toolbar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_height"
+        />
+
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="300dp"
         android:id="@+id/imageView"
         android:layout_gravity="center_horizontal"
-        android:background="@color/primary500" />
+        android:background="@color/accent200"
+        android:contentDescription="@string/just_color" />
 
     <com.digits.sdk.android.DigitsAuthButton
         android:id="@+id/auth_button"

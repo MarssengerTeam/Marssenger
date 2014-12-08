@@ -3,8 +3,11 @@ package team.mars.marssenger.register;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.digits.sdk.android.AuthCallback;
 import com.digits.sdk.android.DigitsAuthButton;
@@ -21,21 +24,33 @@ import team.mars.marssenger.R;
  */
 
 
-public class RegisterActivity extends Activity {
+public class RegisterActivity extends ActionBarActivity {
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "1234";
     private static final String TWITTER_SECRET = "4567";
 
-
+    //layout-attr
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_register);
+
+        toolbar=(Toolbar) findViewById(R.id.toolbar);
+        if (toolbar!=null){
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            toolbar.setTitle(R.string.title_activity_register);
+        } else {
+            test("toolbar reg null");
+        }
+
         final TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
 
         Fabric.with(this, new Twitter(authConfig));
-        setContentView(R.layout.activity_register);
+
         Button skip = (Button)findViewById(R.id.btn_skip);
         final Intent resultData = new Intent();
         skip.setOnClickListener(new View.OnClickListener() {
@@ -47,12 +62,6 @@ public class RegisterActivity extends Activity {
             }
         });
         DigitsAuthButton digitsButton = (DigitsAuthButton) findViewById(R.id.auth_button);
-
-
-
-
-
-
 
         digitsButton.setCallback(new AuthCallback() {
             @Override
@@ -70,6 +79,9 @@ public class RegisterActivity extends Activity {
             }
         });
 
+    } //end of OnCreate
 
+    private void test(CharSequence charSequence){
+        Toast.makeText(this,charSequence,Toast.LENGTH_SHORT).show();
     }
 }

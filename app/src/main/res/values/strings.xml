@@ -8,15 +8,16 @@
     <!-- Activities / Fragments -->
     <string name="main_connection_failed">Connection failed</string>
     <string name="main_connection_established">Connection established</string>
-    
+    <string name="title_activity_chat">ChatActivity</string>
+    <string name="title_activity_register">Register</string>
+
     <!-- layout -->
     <string name="list_image_description">Contact image</string>
+    <string name="just_color">dude…</string>
 
     <!-- actionBar -->
     <string name="action_settings">Settings</string>
     <string name="action_new_message">New message</string>
     <string name="action_search">Search</string>
-    <string name="title_activity_chat">ChatActivity</string>
-    <string name="title_activity_register">Register</string>
 
 </resources>
