@@ -1,14 +1,15 @@
 package team.mars.marssenger.main;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
@@ -37,6 +38,10 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.LOLLIPOP) {
+            colorActionBar();
+        }
 
         mainPresenter=new MainPresenterImpl(this,this); //this - context, this - mainView
 
@@ -73,6 +78,19 @@ public class MainActivity extends ActionBarActivity implements
 
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void colorActionBar() {getWindow().setStatusBarColor(getResources().getColor(R.color.primary700));}
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        return mainPresenter.menuItemSelected(item) || super.onOptionsItemSelected(item);
+    }
 
     @Override
     public void setConnectionFail() {
@@ -101,6 +119,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
+        test("click");
         return mainPresenter.menuItemSelected(menuItem);
     }
 }
