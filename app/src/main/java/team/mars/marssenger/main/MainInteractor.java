@@ -31,6 +31,7 @@ public interface MainInteractor {
     public String getRegistrationId(Context context);
     public SharedPreferences getGCMPreferences(Context context);
     public int getAppVersion(Context context);
+    public void sendMessage(String message);
     public String getRegid();
     public void sendRegistrationIdToBackend();
     public void storeRegistrationId(Context context, String regid);
