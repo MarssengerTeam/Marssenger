@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="project_id">"insert projectID here"</string>
-    <string name="project-name">"insert projectname here"</string>
+    <string name="project_id">insert projectID here</string>
+    <string name="project_name">insert projectname here</string>
 
-    <string name="twitter_key">"insert twitter-key here"</string>
-    <string name="twitter_secret">"insert twitter-secret here"</string>
+    <string name="twitter_key">insert twitter-key here</string>
+    <string name="twitter_secret">insert twitter-secret here</string>
 </resources>
