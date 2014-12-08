@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
@@ -48,7 +49,7 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     @Override
-    public void onChatClick(int position) {
+    public void onChatClick(View view, int position) {
         //TODO check which chat it is and start chatactivity
         test(String.valueOf(cListAdapter.getItemId(position)));
     }
