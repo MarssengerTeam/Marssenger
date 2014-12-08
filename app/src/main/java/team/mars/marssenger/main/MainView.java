@@ -1,9 +1,6 @@
 package team.mars.marssenger.main;
 
 import android.content.Intent;
-import android.widget.ArrayAdapter;
-
-import java.util.ArrayList;
 
 /**
  * Created by root on 03.12.14.

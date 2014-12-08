@@ -2,7 +2,6 @@ package team.mars.marssenger.custom;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -13,7 +12,6 @@ import java.util.ArrayList;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.database.ChatDatabase;
-import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
 
 /**

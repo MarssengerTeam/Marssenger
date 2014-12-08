@@ -3,29 +3,11 @@ package team.mars.marssenger.main;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CListAdapter;
-import team.mars.marssenger.datatype.Chat;
-import team.mars.marssenger.register.RegisterActivity;
 
 /**
  * Created by root on 03.12.14.
@@ -80,6 +62,11 @@ public class MainPresenterImpl implements MainPresenter {
             case R.id.action_new_message:
 
                 return true;
+            case R.id.action_search:
+
+                return true;
+
+            default:break;
         }
 
         return false;

@@ -1,7 +1,5 @@
 package team.mars.marssenger.util;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 
 import team.mars.marssenger.datatype.Message;
