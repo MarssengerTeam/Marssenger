@@ -18,16 +18,11 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
                                                                 Toolbar.OnMenuItemClickListener
 {
 
-
-
     //layout-attr
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private Toolbar toolbar;
-
-
-
 
     @Override
     protected void onResume() {
