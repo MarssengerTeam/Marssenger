@@ -1,14 +1,13 @@
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context=".main.MainActivity"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".main.MainActivity">
 
     <item
         android:id="@+id/action_search"
         android:title="@string/action_search"
         android:orderInCategory="1"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_search"
         />
 
@@ -16,7 +15,7 @@
         android:id="@+id/action_new_message"
         android:title="@string/action_new_message"
         android:orderInCategory="2"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_chat"
         />
 
@@ -24,7 +23,7 @@
         android:id="@+id/action_settings"
         android:title="@string/action_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         />
 
 </menu>

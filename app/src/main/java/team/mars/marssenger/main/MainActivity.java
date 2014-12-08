@@ -22,7 +22,9 @@ import team.mars.marssenger.R;
 import team.mars.marssenger.register.RegisterActivity;
 
 
-public class MainActivity extends ActionBarActivity implements MainView, RecyclerView.OnClickListener {
+public class MainActivity extends ActionBarActivity implements MainView, RecyclerView.OnClickListener,
+                                                                Toolbar.OnMenuItemClickListener
+{
 
 
 
@@ -47,16 +49,9 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         mainPresenter=new MainPresenterImpl(this,this); //this - context, this - mainView
 
-
         setContentView(R.layout.activity_main);
-
-
-
-
 
         recyclerView=(RecyclerView) findViewById(R.id.main_listview);
         if (recyclerView!=null) {
@@ -65,36 +60,26 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
 
             layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
+
+            recyclerView.setOnClickListener(this);
         } else {
             test("recyclerview null");
         }
 
         toolbar=(Toolbar) findViewById(R.id.toolbar);
         if (toolbar!=null){
+
             setSupportActionBar(toolbar);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-            toolbar.setLogo(R.drawable.ic_launcher);
+
             toolbar.setTitle(R.string.app_name);
+
+            //menu
+            toolbar.inflateMenu(R.menu.menu_main);
+            toolbar.setOnMenuItemClickListener(this);
         } else {
             test("toolbar null");
         }
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return mainPresenter.menuItemSelected(item) || super.onOptionsItemSelected(item);
 
     }
 
@@ -118,11 +103,19 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
         Toast.makeText(this, charSequence, Toast.LENGTH_SHORT).show();
     }
 
-    protected void onActivityResult(int requestCode, int resultCode,Intent data) {
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         mainPresenter.onRegsiterReturn(requestCode,resultCode,data);
     }
+
+    @Override
     public void startRegisterationIntent(int REQUESTCODE){
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivityForResult(intent,REQUESTCODE);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        return mainPresenter.menuItemSelected(menuItem);
     }
 }

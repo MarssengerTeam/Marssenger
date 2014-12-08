@@ -1,10 +1,20 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".main.MainActivity"
-    >
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary500"
+        tools:context=".main"
+        app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/main_listview"
@@ -14,4 +24,4 @@
         />
 
 
-</RelativeLayout>
+</LinearLayout>

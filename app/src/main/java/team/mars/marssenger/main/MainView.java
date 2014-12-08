@@ -1,5 +1,6 @@
 package team.mars.marssenger.main;
 
+import android.content.Intent;
 import android.widget.ArrayAdapter;
 
 import java.util.ArrayList;
@@ -15,4 +16,6 @@ public interface MainView {
     public void setConnectionEstablished();
 
     public void startRegisterationIntent(int REQUESTCODE);
+
+    public void onActivityResult(int requestCode, int resultCode,Intent data);
 }
