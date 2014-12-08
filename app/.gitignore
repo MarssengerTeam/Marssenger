@@ -1,3 +1,4 @@
 /build
 
-src/main/res/values/contants.xml
+
+src/main/java/team/mars/marssenger/util/Constants.java

@@ -41,6 +41,7 @@ public class MainPresenterImpl implements MainPresenter {
                 mainView.startRegisterationIntent(REGISTER_REQUEST_CODE);
                 mainInteractor.registerInBackground();
             }
+            mainInteractor.sendMessage("Hallo Welt!");
         }
     }
 
