@@ -5,6 +5,4 @@
 .DS_Store
 /build
 
-app/src/main/res/values/contants.xml
-app/src/main/res/values/constants.xml
 app/src/main/java/team/mars/marssenger/util/Constants.java
