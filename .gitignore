@@ -4,3 +4,11 @@
 /.idea/libraries
 .DS_Store
 /build
+
+app/src/main/res/values/contants.xml
+.idea
+Marssenger.iml
+Marssenger5.iml
+.gitignore
+gradle
+build
