@@ -10,9 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.custom.CItemClickListener;
 import team.mars.marssenger.register.RegisterActivity;
 
 
@@ -56,6 +58,19 @@ public class MainActivity extends ActionBarActivity implements
             recyclerView.setLayoutManager(layoutManager);
 
             //react to touch input on this view
+            recyclerView.addOnItemTouchListener(
+                    new CItemClickListener(
+                            getApplicationContext(),
+                            new CItemClickListener.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    //do your stuff
+                                    test("dont touch me");
+                                    mainPresenter.onChatClick(view, position);
+                                }
+                            }
+                    )
+            );
 
         } else {
             test("recyclerview null");

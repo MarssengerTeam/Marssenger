@@ -2,6 +2,7 @@ package team.mars.marssenger.main;
 
 import android.content.Intent;
 import android.view.MenuItem;
+import android.view.View;
 
 import team.mars.marssenger.custom.CListAdapter;
 
@@ -13,7 +14,7 @@ public interface MainPresenter {
     //Methoden zur Steuerung des Interactors und der View
 
     public CListAdapter getAdapter();
-    public void onChatClick(int position);
+    public void onChatClick(View view,int position);
     public boolean menuItemSelected(MenuItem item);
     public void onRegsiterReturn(int requestCode, int resultCode,
                                  Intent data);
