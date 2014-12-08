@@ -65,7 +65,6 @@ public class MainActivity extends ActionBarActivity implements
                                 @Override
                                 public void onItemClick(View view, int position) {
                                     //do your stuff
-                                    test("dont touch me");
                                     mainPresenter.onChatClick(view, position);
                                 }
                             }
