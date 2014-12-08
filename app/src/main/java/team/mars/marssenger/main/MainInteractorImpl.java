@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import team.mars.marssenger.R;
 import team.mars.marssenger.database.ChatDatabase;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
@@ -30,7 +32,7 @@ public class MainInteractorImpl implements MainInteractor {
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    String SENDER_ID = "Your-Sender-ID";
+    String SENDER_ID;
 
     TextView mDisplay;
     GoogleCloudMessaging gcm;
@@ -56,6 +58,7 @@ public class MainInteractorImpl implements MainInteractor {
         createTestChats();
 
         //TODO GooglePlay active
+        SENDER_ID = context.getResources().getString(R.string.project_id);
         gcm = GoogleCloudMessaging.getInstance(context);
         regid =getRegistrationId(context);
     }
@@ -129,7 +132,7 @@ public class MainInteractorImpl implements MainInteractor {
                 return msg;
             }
         };
-        at.execute(null,null,null);
+        at.execute();
     }
 
     @Override
@@ -140,7 +143,7 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void storeRegistrationId(Context context, String regid){
         //TODO complete
-        Log.e(TAG,"NOT STORING REG ID BECAUSE NOT IMPLEMENTED"+ regid);
+        Log.e(TAG,"NOT STORING REG ID BECAUSE NOT IMPLEMENTED "+ regid);
     }
 
     @Override
@@ -180,6 +183,34 @@ public class MainInteractorImpl implements MainInteractor {
             // should never happen
             throw new RuntimeException("Could not get package name: " + e);
         }
+    }
+
+    @Override
+    public void sendMessage(String message){
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String msg = "";
+                try {
+                    Bundle data = new Bundle();
+                    data.putString("my_message", params[0]);
+                    data.putString("my_action",
+                            "com.google.android.gcm.demo.app.ECHO_NOW");
+                    String id = Integer.toString(msgId.incrementAndGet());
+                    gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
+                    msg = "Sent message";
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                Log.i(TAG, msg);
+            }
+        }.execute(message);
+
     }
 
     @Override
