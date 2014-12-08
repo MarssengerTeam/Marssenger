@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,8 +15,9 @@ import team.mars.marssenger.R;
 import team.mars.marssenger.register.RegisterActivity;
 
 
-public class MainActivity extends ActionBarActivity implements MainView, RecyclerView.OnClickListener,
-                                                                Toolbar.OnMenuItemClickListener
+public class MainActivity extends ActionBarActivity implements
+            MainView,
+            Toolbar.OnMenuItemClickListener
 {
 
     //layout-attr
@@ -48,7 +50,8 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
             layoutManager = new LinearLayoutManager(this);
             recyclerView.setLayoutManager(layoutManager);
 
-            recyclerView.setOnClickListener(this);
+            //react to touch input on this view
+
         } else {
             test("recyclerview null");
         }
@@ -79,12 +82,6 @@ public class MainActivity extends ActionBarActivity implements MainView, Recycle
     @Override
     public void setConnectionEstablished() {
         test(getString(R.string.main_connection_established));
-    }
-
-    @Override
-    public void onClick(View v) {
-        test("dont touch me");
-        mainPresenter.onChatClick(recyclerView.getChildPosition(v));
     }
 
     private void test(CharSequence charSequence) {
