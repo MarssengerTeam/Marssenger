@@ -12,7 +12,7 @@
         android:layout_height="@dimen/toolbar_height"
         />
 
-    <android.support.v7.widget.RecyclerView
+    <ListView
         android:id="@+id/chat_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -13,12 +13,6 @@ import team.mars.marssenger.R;
  */
 public class ChatFragment extends Fragment {
 
-        ChatFragment
-
-
-
-
-
         @Override
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {

@@ -4,29 +4,31 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.transition.AutoTransition;
-import android.transition.Transition;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
-import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.custom.CItemClickListener;
 import team.mars.marssenger.register.RegisterActivity;
 
 
-public class MainActivity extends ActionBarActivity implements MainView{
+public class MainActivity extends ActionBarActivity implements
+            MainView,
+            Toolbar.OnMenuItemClickListener
+{
 
     //layout-attr
 
-
+    private RecyclerView recyclerView;
+    private RecyclerView.LayoutManager layoutManager;
+    private Toolbar toolbar;
 
     @Override
     protected void onResume() {
@@ -52,6 +54,46 @@ public class MainActivity extends ActionBarActivity implements MainView{
 
         setContentView(R.layout.activity_main);
 
+        recyclerView=(RecyclerView) findViewById(R.id.main_listview);
+        if (recyclerView!=null) {
+
+            recyclerView.setAdapter(mainPresenter.getAdapter());
+
+            layoutManager = new LinearLayoutManager(this);
+            recyclerView.setLayoutManager(layoutManager);
+
+            //react to touch input on this view
+            recyclerView.addOnItemTouchListener(
+                    new CItemClickListener(
+                            getApplicationContext(),
+                            new CItemClickListener.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    //do your stuff
+                                    mainPresenter.onChatClick(view, position);
+                                }
+                            }
+                    )
+            );
+
+        } else {
+            test("recyclerview null");
+        }
+
+        toolbar=(Toolbar) findViewById(R.id.toolbar);
+        if (toolbar!=null){
+
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
+            toolbar.setTitle(R.string.app_name);
+
+            //menu
+            toolbar.inflateMenu(R.menu.menu_main);
+            toolbar.setOnMenuItemClickListener(this);
+        } else {
+            test("toolbar null");
+        }
 
     }
 
@@ -91,13 +133,10 @@ public class MainActivity extends ActionBarActivity implements MainView{
     @Override
     public void openChat(int chatID) {
 
-        Intent chatIntent = new Intent(this, RegisterActivity.class);
-        chatIntent.putExtra("CHAT_ID",chatID);
-        try{
-              startActivity(chatIntent);
-        }catch(Exception e){
+    }
 
-        }
+    @Override
+    public void replaceContainer(Fragment fragment) {
 
     }
 
