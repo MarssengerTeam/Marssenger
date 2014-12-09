@@ -11,7 +11,7 @@ import team.mars.marssenger.R;
 /**
  * Created by Kern on 09.12.2014.
  */
-public class ChatFragment extends Fragment {
+public class ChatFragment extends Fragment implements ChatView {
 
         @Override
         public View onCreateView(LayoutInflater inflater,

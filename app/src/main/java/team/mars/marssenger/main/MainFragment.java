@@ -5,9 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -18,7 +16,7 @@ import team.mars.marssenger.custom.CItemClickListener;
 /**
  * Created by Kern on 09.12.2014.
  */
-public class MainFragment extends Fragment implements MainView, Toolbar.OnMenuItemClickListener{
+public class MainFragment extends Fragment implements MainView{
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private Context context;
@@ -87,10 +85,5 @@ public class MainFragment extends Fragment implements MainView, Toolbar.OnMenuIt
     @Override
     public void replaceContainer(android.support.v4.app.Fragment fragment) {
 
-    }
-
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        return false;
     }
 }
