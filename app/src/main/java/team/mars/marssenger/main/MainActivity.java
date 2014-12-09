@@ -42,13 +42,9 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
-
         if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.LOLLIPOP) {
             colorActionBar();
         }
-
-
 
         mainPresenter=new MainPresenterImpl(this,this); //this - context, this - mainView
 

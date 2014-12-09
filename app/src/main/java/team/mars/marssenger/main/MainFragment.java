@@ -15,25 +15,27 @@ import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CItemClickListener;
 
 
-
 /**
  * Created by Kern on 09.12.2014.
  */
 public class MainFragment extends Fragment implements MainView, Toolbar.OnMenuItemClickListener{
     private RecyclerView recyclerView;
-    private LayoutManager layoutManager;
-    private Toolbar toolbar;
+    private RecyclerView.LayoutManager layoutManager;
     private Context context;
-    private MainInteractor mainInteractor;
     private MainPresenter mainPresenter;
-    MainFragment(Context context, MainInteractor mainInteractor, MainPresenter mainPresenter){
-        this.context=context;
-        this.mainInteractor=mainInteractor;
-        this.mainPresenter=mainPresenter;
 
+    public MainFragment getInstance(Context context, MainPresenter mainPresenter){
+        MainFragment m=new MainFragment();
+        m.setContext(context);
+        m.setMainPresenter(mainPresenter);
+        return m;
     }
 
+    public void setContext(Context context){this.context=context;}
 
+    public void setMainPresenter(MainPresenter mainPresenter){this.mainPresenter=mainPresenter;}
+
+    @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
 
     recyclerView=(RecyclerView) container.findViewById(R.id.main_listview);
@@ -41,7 +43,7 @@ public class MainFragment extends Fragment implements MainView, Toolbar.OnMenuIt
 
         recyclerView.setAdapter(mainPresenter.getAdapter());
 
-        layoutManager = new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
 
         //react to touch input on this view
@@ -58,23 +60,6 @@ public class MainFragment extends Fragment implements MainView, Toolbar.OnMenuIt
                 )
         );
 
-    } else {
-        test("recyclerview null");
-    }
-
-    toolbar=(Toolbar) findViewById(R.id.toolbar);
-    if (toolbar!=null){
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-
-        toolbar.setTitle(R.string.app_name);
-
-        //menu
-        toolbar.inflateMenu(R.menu.menu_main);
-        toolbar.setOnMenuItemClickListener(this);
-    } else {
-        test("toolbar null");
     }
         return inflater.inflate(
                 R.layout.fragment_main, container, false);
@@ -100,12 +85,12 @@ public class MainFragment extends Fragment implements MainView, Toolbar.OnMenuIt
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        return false;
+    public void replaceContainer(android.support.v4.app.Fragment fragment) {
+
     }
 
     @Override
-    public RecyclerView.LayoutParams generateDefaultLayoutParams() {
-        return null;
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        return false;
     }
 }
