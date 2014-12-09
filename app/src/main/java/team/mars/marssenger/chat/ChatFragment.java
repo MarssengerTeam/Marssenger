@@ -13,6 +13,12 @@ import team.mars.marssenger.R;
  */
 public class ChatFragment extends Fragment implements ChatView {
 
+    public static ChatFragment getInstance(){
+        ChatFragment c=new ChatFragment();
+        //set stuff
+        return c;
+    }
+
         @Override
         public View onCreateView(LayoutInflater inflater,
                                  ViewGroup container, Bundle savedInstanceState) {

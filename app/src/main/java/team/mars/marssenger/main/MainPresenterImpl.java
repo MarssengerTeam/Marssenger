@@ -9,6 +9,7 @@ import android.widget.Toast;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CListAdapter;
+import team.mars.marssenger.datatype.Chat;
 
 /**
  * Created by root on 03.12.14.
@@ -29,8 +30,12 @@ public class MainPresenterImpl implements MainPresenter {
     private final int REGISTER_REQUEST_CODE = 01000;
 
     public MainPresenterImpl (MainView mainView,Context context){
+
         this.context=context;
+
         this.mainView=mainView;
+        this.mainView.setMainPresenter(this);
+
         this.mainInteractor=new MainInteractorImpl(context);
         if(mainInteractor.checkPlayServices()){
             if (mainInteractor.getRegid().isEmpty()) {
@@ -52,12 +57,12 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void onChatClick(View view, int position) {
         //TODO check which chat it is and start chatactivity
-        openChat(position);
+        openChat(cListAdapter.getItem(position));
         //test(String.valueOf(cListAdapter.getItemId(position)));
     }
 
-    private void openChat(int chatID) {
-        mainView.openChat(chatID);
+    private void openChat(Chat chat) {
+        mainView.openChat(chat);
     }
 
     @Override

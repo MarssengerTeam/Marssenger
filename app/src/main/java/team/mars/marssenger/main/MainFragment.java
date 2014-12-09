@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CItemClickListener;
+import team.mars.marssenger.datatype.Chat;
 
 
 /**
@@ -21,16 +22,22 @@ public class MainFragment extends Fragment implements MainView{
     private RecyclerView.LayoutManager layoutManager;
     private Context context;
     private MainPresenter mainPresenter;
+    private mainFragmentCallbacks listener;
 
-    public MainFragment getInstance(Context context, MainPresenter mainPresenter){
+    public static MainFragment getInstance(Context context, mainFragmentCallbacks listener){
         MainFragment m=new MainFragment();
         m.setContext(context);
-        m.setMainPresenter(mainPresenter);
+        m.setListener(listener);
         return m;
     }
 
+    @Override
+    public void setListener(mainFragmentCallbacks listener){this.listener=listener;}
+
+    @Override
     public void setContext(Context context){this.context=context;}
 
+    @Override
     public void setMainPresenter(MainPresenter mainPresenter){this.mainPresenter=mainPresenter;}
 
     @Override
@@ -52,7 +59,9 @@ public class MainFragment extends Fragment implements MainView{
                             @Override
                             public void onItemClick(View view, int position) {
                                 //do your stuff
-                                mainPresenter.onChatClick(view, position);
+                                if (mainPresenter!=null) {
+                                    mainPresenter.onChatClick(view, position);
+                                }
                             }
                         }
                 )
@@ -78,12 +87,12 @@ public class MainFragment extends Fragment implements MainView{
     }
 
     @Override
-    public void openChat(int chatID) {
-
+    public void openChat(Chat chat) {
+        listener.openChat(chat);
     }
 
-    @Override
-    public void replaceContainer(android.support.v4.app.Fragment fragment) {
-
+    public interface mainFragmentCallbacks{
+        public void openChat(Chat chat);
     }
+
 }
