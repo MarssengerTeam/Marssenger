@@ -22,8 +22,6 @@ public interface MainView {
 
     public void openChat(Chat chat);
 
-    public void setMainPresenter(MainPresenter mainPresenter);
-
     public void setContext(Context context);
 
     public void setListener(MainFragment.mainFragmentCallbacks listener);

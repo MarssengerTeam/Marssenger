@@ -34,7 +34,6 @@ public class MainPresenterImpl implements MainPresenter {
         this.context=context;
 
         this.mainView=mainView;
-        this.mainView.setMainPresenter(this);
 
         this.mainInteractor=new MainInteractorImpl(context);
         if(mainInteractor.checkPlayServices()){

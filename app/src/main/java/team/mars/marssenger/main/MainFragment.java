@@ -31,14 +31,15 @@ public class MainFragment extends Fragment implements MainView{
         return m;
     }
 
+    public MainFragment (){
+        this.mainPresenter=new MainPresenterImpl(this, context);
+    }
+
     @Override
     public void setListener(mainFragmentCallbacks listener){this.listener=listener;}
 
     @Override
     public void setContext(Context context){this.context=context;}
-
-    @Override
-    public void setMainPresenter(MainPresenter mainPresenter){this.mainPresenter=mainPresenter;}
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
