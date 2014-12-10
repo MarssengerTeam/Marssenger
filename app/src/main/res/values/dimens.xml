@@ -6,4 +6,8 @@
     <dimen name="textview_textsize">15dp</dimen>
 
     <dimen name="toolbar_height">56dp</dimen>
+
+    <dimen name="message_text_size">18sp</dimen>
+
+    <dimen name="time_text_size">3sp</dimen>
 </resources>
