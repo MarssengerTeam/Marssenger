@@ -108,6 +108,7 @@ public class MainInteractorImpl implements MainInteractor {
                     if (gcm == null) {
                         gcm = GoogleCloudMessaging.getInstance(context);
                     }
+                    Log.d(TAG, "trying to register at gcm");
                     regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
 
@@ -137,13 +138,44 @@ public class MainInteractorImpl implements MainInteractor {
 
     @Override
     public void sendRegistrationIdToBackend(){
-        //TODO complete
+        if(gcm !=null) {
+            gcm = GoogleCloudMessaging.getInstance(context);
+        }
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String msg = "";
+                try {
+                    Bundle data = new Bundle();
+                    //Information for the Server
+                    data.putString("", params[0]);
+                    data.putString("my_action","register");
+
+                    Log.d(TAG, "Sending regId to server");
+                    gcm.send(SENDER_ID + "@gcm.googleapis.com", "0", data);
+                    msg = "Sent message";
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                Log.i(TAG, s);
+            }
+        }.execute(regid);
     }
 
     @Override
     public void storeRegistrationId(Context context, String regid){
-        //TODO complete
-        Log.e(TAG,"NOT STORING REG ID BECAUSE NOT IMPLEMENTED "+ regid);
+        final SharedPreferences prefs = getGCMPreferences(context);
+        int appVersion = getAppVersion(context);
+        Log.i(TAG, "Saving regId on app version " + appVersion);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_REG_ID, regid);
+        editor.putInt(PROPERTY_APP_VERSION, appVersion);
+        editor.commit();
     }
 
     @Override
@@ -192,12 +224,11 @@ public class MainInteractorImpl implements MainInteractor {
             protected String doInBackground(String... params) {
                 String msg = "";
                 try {
+                    Log.d(TAG, "Trying to write a message to Server");
                     Bundle data = new Bundle();
                     data.putString("my_message", params[0]);
-                    data.putString("my_action",
-                            "com.google.android.gcm.demo.app.ECHO_NOW");
-                    String id = Integer.toString(msgId.incrementAndGet());
-                    gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
+                    data.putString("my_action", "SEND");
+                    gcm.send(SENDER_ID + "@gcm.googleapis.com", regid, data);
                     msg = "Sent message";
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();

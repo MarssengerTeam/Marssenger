@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -60,7 +61,17 @@ public class MainActivity extends ActionBarActivity implements
             test("toolbar null");
         }
 
+
         mainInteractor=new MainInteractorImpl(this);
+        if(mainInteractor.checkPlayServices()){
+            if (mainInteractor.getRegid().isEmpty()) {
+                mainInteractor.registerInBackground();
+            }else{
+                mainInteractor.sendMessage("Hallo Welt!");
+            }
+        }else{
+            Log.d("GCMundso", "Cry a lot!");
+        }
 
         MainFragment mainFragment=MainFragment.getInstance(this);//context and presenter
 
