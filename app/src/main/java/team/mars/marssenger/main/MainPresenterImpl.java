@@ -29,23 +29,22 @@ public class MainPresenterImpl implements MainPresenter {
     private CListAdapter cListAdapter;
     private final int REGISTER_REQUEST_CODE = 01000;
 
-    public MainPresenterImpl (MainView mainView,Context context){
+    public MainPresenterImpl (MainView mainView, MainInteractor mainInteractor,Context context){
 
         this.context=context;
 
         this.mainView=mainView;
 
-        this.mainInteractor=new MainInteractorImpl(context);
-        if(mainInteractor.checkPlayServices()){
-            if (mainInteractor.getRegid().isEmpty()) {
-                mainView.startRegisterationIntent(REGISTER_REQUEST_CODE);
-                mainInteractor.registerInBackground();
+        this.mainInteractor=mainInteractor;
+
+        if(this.mainInteractor.checkPlayServices()){
+            if (this.mainInteractor.getRegid().isEmpty()) {
+                this.mainView.startRegisterationIntent(REGISTER_REQUEST_CODE);
+                this.mainInteractor.registerInBackground();
             }
-            mainInteractor.sendMessage("Hallo Welt!");
+            this.mainInteractor.sendMessage("Hallo Welt!");
         }
     }
-
-
 
     @Override
     public CListAdapter getAdapter(){

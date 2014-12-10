@@ -32,7 +32,7 @@ public class MainFragment extends Fragment implements MainView{
     }
 
     public MainFragment (){
-        this.mainPresenter=new MainPresenterImpl(this, context);
+
     }
 
     @Override

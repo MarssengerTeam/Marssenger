@@ -21,6 +21,7 @@ import team.mars.marssenger.R;
 import team.mars.marssenger.database.ChatDatabase;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.util.Constants;
 
 /**
  * Created by root on 03.12.14.
@@ -58,7 +59,7 @@ public class MainInteractorImpl implements MainInteractor {
         createTestChats();
 
         //TODO GooglePlay active
-        SENDER_ID = context.getString(R.string.project_id);
+        SENDER_ID = Constants.PROJECT_ID;
         gcm = GoogleCloudMessaging.getInstance(context);
         regid =getRegistrationId(context);
     }

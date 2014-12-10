@@ -18,6 +18,7 @@ import com.twitter.sdk.android.core.TwitterAuthConfig;
 
 import io.fabric.sdk.android.Fabric;
 import team.mars.marssenger.R;
+import team.mars.marssenger.util.Constants;
 
 /**
  * Created by Kern on 07.12.2014.
@@ -43,7 +44,7 @@ public class RegisterActivity extends ActionBarActivity {
             test("toolbar reg null");
         }
 
-        final TwitterAuthConfig authConfig = new TwitterAuthConfig(getString(R.string.twitter_key), getString(R.string.twitter_secret));
+        final TwitterAuthConfig authConfig = new TwitterAuthConfig(Constants.TWITTER_KEY, Constants.TWITTER_SECRET);
 
         Fabric.with(this, new Twitter(authConfig));
 

@@ -26,6 +26,9 @@ public class MainActivity extends ActionBarActivity implements
 
     private Toolbar toolbar;
 
+    //mvc
+    private MainInteractor mainInteractor;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -59,9 +62,11 @@ public class MainActivity extends ActionBarActivity implements
             test("toolbar null");
         }
 
-        MainFragment mainFragment=MainFragment.getInstance(this, this);
+        MainFragment mainFragment=MainFragment.getInstance(this, this);//context and callbacks
 
-        mainPresenter=new MainPresenterImpl(mainFragment,this);
+        MainInteractor mainInteractor=new MainInteractorImpl(this);
+
+        mainPresenter=new MainPresenterImpl(mainFragment,mainInteractor,this);
 
         replaceContainer(mainFragment,true);
 
