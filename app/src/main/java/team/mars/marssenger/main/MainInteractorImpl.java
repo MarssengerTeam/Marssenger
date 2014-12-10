@@ -34,7 +34,6 @@ public class MainInteractorImpl implements MainInteractor {
     private static final String PROPERTY_APP_VERSION = "appVersion";
     String SENDER_ID;
 
-    TextView mDisplay;
     GoogleCloudMessaging gcm;
     AtomicInteger msgId = new AtomicInteger();
     SharedPreferences prefs;

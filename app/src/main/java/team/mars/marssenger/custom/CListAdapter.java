@@ -27,7 +27,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     private RelativeLayout relativeLayout;
 
     public CListAdapter (Context context, ChatDatabase list){
-        this.context=context;
+        this.context = context;
         this.chats=list;
         chatlist = list.getAllChatByTime();
     }
