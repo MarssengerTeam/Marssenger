@@ -60,9 +60,9 @@ public class MainActivity extends ActionBarActivity implements
             test("toolbar null");
         }
 
-        MainFragment mainFragment=MainFragment.getInstance(this);//context and presenter
+        mainInteractor=new MainInteractorImpl(this);
 
-        MainInteractor mainInteractor=new MainInteractorImpl(this);
+        MainFragment mainFragment=MainFragment.getInstance(this);//context and presenter
 
         replaceContainer(mainFragment,true);
 
