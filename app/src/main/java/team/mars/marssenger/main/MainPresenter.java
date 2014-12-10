@@ -1,7 +1,6 @@
 package team.mars.marssenger.main;
 
 import android.content.Intent;
-import android.view.MenuItem;
 import android.view.View;
 
 import team.mars.marssenger.custom.CListAdapter;

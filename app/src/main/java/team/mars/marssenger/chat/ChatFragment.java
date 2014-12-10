@@ -7,8 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import team.mars.marssenger.R;
-import team.mars.marssenger.datatype.Chat;
-import team.mars.marssenger.main.MainInteractor;
 
 /**
  * Created by Kern on 09.12.2014.

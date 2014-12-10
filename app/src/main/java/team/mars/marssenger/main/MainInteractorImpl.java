@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import team.mars.marssenger.R;
 import team.mars.marssenger.database.ChatDatabase;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;

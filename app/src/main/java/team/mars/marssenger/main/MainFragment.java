@@ -1,7 +1,6 @@
 package team.mars.marssenger.main;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,7 +12,6 @@ import android.widget.Toast;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CItemClickListener;
-import team.mars.marssenger.datatype.Chat;
 
 
 /**
