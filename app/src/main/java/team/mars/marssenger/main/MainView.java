@@ -25,4 +25,6 @@ public interface MainView {
     public void setContext(Context context);
 
     public void setListener(MainFragment.mainFragmentCallbacks listener);
+
+    public void setMainPresenter(MainPresenter mainPresenter);
 }

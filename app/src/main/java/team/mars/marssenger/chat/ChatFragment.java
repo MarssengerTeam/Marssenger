@@ -38,6 +38,11 @@ public class ChatFragment extends Fragment implements ChatView {
         return inflater.inflate(R.layout.fragment_chat, container, false);
     }
 
+    @Override
+    public void setChatPresenter(ChatPresenter chatPresenter) {
+        this.chatPresenter=chatPresenter;
+    }
+
     public interface chatFragmentCallbacks{
 
     }

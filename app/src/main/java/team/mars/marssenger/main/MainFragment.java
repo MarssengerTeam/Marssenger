@@ -39,6 +39,11 @@ public class MainFragment extends Fragment implements MainView{
     public void setListener(mainFragmentCallbacks listener){this.listener=listener;}
 
     @Override
+    public void setMainPresenter(MainPresenter mainPresenter) {
+        this.mainPresenter=mainPresenter;
+    }
+
+    @Override
     public void setContext(Context context){this.context=context;}
 
     @Override
