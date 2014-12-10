@@ -5,6 +5,4 @@ package team.mars.marssenger.chat;
  */
 public interface ChatView {
 
-    public void setChatPresenter(ChatPresenter chatPresenter);
-
 }

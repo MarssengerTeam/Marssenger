@@ -20,14 +20,11 @@ import team.mars.marssenger.datatype.Chat;
 public class MainFragment extends Fragment implements MainView{
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
-    private Context context;
     private MainPresenter mainPresenter;
-    private mainFragmentCallbacks listener;
 
-    public static MainFragment getInstance(Context context, mainFragmentCallbacks listener){
+    public static MainFragment getInstance(MainPresenter mainPresenter){
         MainFragment m=new MainFragment();
-        m.setContext(context);
-        m.setListener(listener);
+        m.setPresenter(mainPresenter);
         return m;
     }
 
@@ -35,16 +32,7 @@ public class MainFragment extends Fragment implements MainView{
 
     }
 
-    @Override
-    public void setListener(mainFragmentCallbacks listener){this.listener=listener;}
-
-    @Override
-    public void setMainPresenter(MainPresenter mainPresenter) {
-        this.mainPresenter=mainPresenter;
-    }
-
-    @Override
-    public void setContext(Context context){this.context=context;}
+    public void setPresenter(MainPresenter mainPresenter){this.mainPresenter=mainPresenter;}
 
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
@@ -60,7 +48,7 @@ public class MainFragment extends Fragment implements MainView{
         //react to touch input on this view
         recyclerView.addOnItemTouchListener(
                 new CItemClickListener(
-                        context.getApplicationContext(),
+                        getActivity().getApplicationContext(),
                         new CItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
@@ -77,28 +65,10 @@ public class MainFragment extends Fragment implements MainView{
         return inflater.inflate(
                 R.layout.fragment_main, container, false);
     }
-    @Override
-    public void setConnectionFail() {
-
-    }
-
-    @Override
-    public void setConnectionEstablished() {
-
-    }
 
     @Override
     public void startRegisterationIntent(int REQUESTCODE) {
 
-    }
-
-    @Override
-    public void openChat(long chatid) {
-        listener.openChat(chatid);
-    }
-
-    public interface mainFragmentCallbacks{
-        public void openChat(long chatid);
     }
 
 }

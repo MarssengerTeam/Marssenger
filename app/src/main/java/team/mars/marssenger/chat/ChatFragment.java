@@ -15,19 +15,6 @@ import team.mars.marssenger.main.MainInteractor;
  */
 public class ChatFragment extends Fragment implements ChatView {
 
-    private ChatPresenter chatPresenter;
-    private chatFragmentCallbacks listener;
-
-    public static ChatFragment getInstance(long chatId, chatFragmentCallbacks listener){
-        ChatFragment c=new ChatFragment();
-        c.setChat(chatId);
-        return c;
-    }
-
-    public void setListener(chatFragmentCallbacks listener){this.listener=listener;}
-
-    public void setChat(long chatId){this.chatPresenter.setChat(chatId);}
-
     public ChatFragment (){
     }
 
@@ -36,15 +23,6 @@ public class ChatFragment extends Fragment implements ChatView {
                              ViewGroup container, Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_chat, container, false);
-    }
-
-    @Override
-    public void setChatPresenter(ChatPresenter chatPresenter) {
-        this.chatPresenter=chatPresenter;
-    }
-
-    public interface chatFragmentCallbacks{
-
     }
 }
 

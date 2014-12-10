@@ -1,31 +1,31 @@
 package team.mars.marssenger.main;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
-import team.mars.marssenger.chat.ChatFragment;
-import team.mars.marssenger.chat.ChatPresenter;
-import team.mars.marssenger.chat.ChatPresenterImpl;
-import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.custom.CListAdapter;
 
 
 public class MainActivity extends ActionBarActivity implements
             Toolbar.OnMenuItemClickListener,
-            MainFragment.mainFragmentCallbacks,
-            ChatFragment.chatFragmentCallbacks
+            MainPresenter
 {
     private Toolbar toolbar;
+
+    private CListAdapter cListAdapter;
+    private final int REGISTER_REQUEST_CODE = 01000;
 
     //mvc
     private MainInteractor mainInteractor;
@@ -34,9 +34,6 @@ public class MainActivity extends ActionBarActivity implements
     protected void onResume() {
         super.onResume();
     }
-
-    //attr
-    private MainPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +60,9 @@ public class MainActivity extends ActionBarActivity implements
             test("toolbar null");
         }
 
-        MainFragment mainFragment=MainFragment.getInstance(this, this);//context and callbacks
+        MainFragment mainFragment=MainFragment.getInstance(this);//context and presenter
 
         MainInteractor mainInteractor=new MainInteractorImpl(this);
-
-        mainPresenter=new MainPresenterImpl(mainFragment,mainInteractor,this);
 
         replaceContainer(mainFragment,true);
 
@@ -93,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        return mainPresenter.menuItemSelected(item) || super.onOptionsItemSelected(item);
+        return onMenuItemClick(item) || super.onOptionsItemSelected(item);
     }
 
     private void test(CharSequence charSequence) {
@@ -102,22 +97,46 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mainPresenter.onRegsiterReturn(requestCode,resultCode,data);
+        onRegsiterReturn(requestCode, resultCode, data);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         test("click");
-        return mainPresenter.menuItemSelected(menuItem);
+        switch (menuItem.getItemId()){
+            case R.id.action_search:
+
+                return true;
+            case R.id.action_settings:
+
+                return true;
+            case R.id.action_new_message:
+
+                return true;
+            default:break;
+        }
+        return false;
     }
 
     @Override
-    public void openChat(long chatid) {
-        //first create view
-        //theres no need to create interactor as it has already been created for main
-        //then create presenter
-        ChatFragment chatFragment=ChatFragment.getInstance(chatid,this);
-        ChatPresenter chatPresenter=new ChatPresenterImpl(chatFragment,mainInteractor);
-        replaceContainer(chatFragment,false);
+    public CListAdapter getAdapter(){
+        cListAdapter=new CListAdapter(this, mainInteractor.getChatDatabase());
+        return cListAdapter;
+    }
+
+    @Override
+    public void onChatClick(View view, int position) {
+        //TODO check which chat it is and start chatactivity
+        //test(String.valueOf(cListAdapter.getItemId(position)));
+    }
+
+    @Override
+    public void onRegsiterReturn(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REGISTER_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String number = data.getStringExtra("number");
+                mainInteractor.storeRegistrationId(this,number);
+            }
+        }
     }
 }

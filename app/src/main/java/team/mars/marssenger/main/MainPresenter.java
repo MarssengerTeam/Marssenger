@@ -15,7 +15,6 @@ public interface MainPresenter {
 
     public CListAdapter getAdapter();
     public void onChatClick(View view,int position);
-    public boolean menuItemSelected(MenuItem item);
     public void onRegsiterReturn(int requestCode, int resultCode,
                                  Intent data);
 
