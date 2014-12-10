@@ -167,6 +167,31 @@ public class MainInteractorImpl implements MainInteractor {
         }.execute(regid);
     }
 
+    public void registerAtServer(String phoneNumber, String email){
+        new AsyncTask<String, String, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+                String msg = "";
+                try {
+                    Log.d(TAG, "Trying to write a message to Server");
+                    Bundle data = new Bundle();
+                    data.putString("phoneNumber", params[0]);
+                    data.putString("my_action", params[1]);
+                    gcm.send(SENDER_ID + "@gcm.googleapis.com", regid, data);
+                    msg = "Sent message";
+                } catch (IOException ex) {
+                    msg = "Error :" + ex.getMessage();
+                }
+                return msg;
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                Log.i(TAG, msg);
+            }
+        }.execute(phoneNumber, email);
+    }
+
     @Override
     public void storeRegistrationId(Context context, String regid){
         final SharedPreferences prefs = getGCMPreferences(context);
@@ -218,7 +243,7 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
     @Override
-    public void sendMessage(String message){
+    public void sendMessage(String receiver, String message){
         new AsyncTask<String, String, String>() {
             @Override
             protected String doInBackground(String... params) {
@@ -226,8 +251,9 @@ public class MainInteractorImpl implements MainInteractor {
                 try {
                     Log.d(TAG, "Trying to write a message to Server");
                     Bundle data = new Bundle();
-                    data.putString("my_message", params[0]);
-                    data.putString("my_action", "SEND");
+                    data.putString("sender",regid);
+                    data.putString("receiver", params[0]);
+                    data.putString("data", params[1]);
                     gcm.send(SENDER_ID + "@gcm.googleapis.com", regid, data);
                     msg = "Sent message";
                 } catch (IOException ex) {
@@ -240,7 +266,7 @@ public class MainInteractorImpl implements MainInteractor {
             protected void onPostExecute(String msg) {
                 Log.i(TAG, msg);
             }
-        }.execute(message);
+        }.execute(receiver,message);
 
     }
 

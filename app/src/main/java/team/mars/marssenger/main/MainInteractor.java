@@ -29,9 +29,10 @@ public interface MainInteractor {
     public boolean checkPlayServices();
     public void registerInBackground();
     public String getRegistrationId(Context context);
+    public void registerAtServer(String phoneNumber, String email);
     public SharedPreferences getGCMPreferences(Context context);
     public int getAppVersion(Context context);
-    public void sendMessage(String message);
+    public void sendMessage(String receiver, String message);
     public String getRegid();
     public void sendRegistrationIdToBackend();
     public void storeRegistrationId(Context context, String regid);

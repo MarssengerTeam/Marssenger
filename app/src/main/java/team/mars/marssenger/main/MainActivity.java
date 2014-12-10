@@ -67,7 +67,7 @@ public class MainActivity extends ActionBarActivity implements
             if (mainInteractor.getRegid().isEmpty()) {
                 mainInteractor.registerInBackground();
             }else{
-                mainInteractor.sendMessage("Hallo Welt!");
+                mainInteractor.sendMessage("061832323", "Hallo Welt!");
             }
         }else{
             Log.d("GCMundso", "Cry a lot!");
