@@ -55,12 +55,12 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void onChatClick(View view, int position) {
         //TODO check which chat it is and start chatactivity
-        openChat(cListAdapter.getItem(position));
+        openChat(cListAdapter.getItemId(position));
         //test(String.valueOf(cListAdapter.getItemId(position)));
     }
 
-    private void openChat(Chat chat) {
-        mainView.openChat(chat);
+    private void openChat(long chatid) {
+        mainView.openChat(chatid);
     }
 
     @Override

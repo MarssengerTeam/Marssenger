@@ -14,16 +14,17 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.chat.ChatFragment;
+import team.mars.marssenger.chat.ChatPresenter;
+import team.mars.marssenger.chat.ChatPresenterImpl;
 import team.mars.marssenger.datatype.Chat;
 
 
 public class MainActivity extends ActionBarActivity implements
             Toolbar.OnMenuItemClickListener,
-            MainFragment.mainFragmentCallbacks
+            MainFragment.mainFragmentCallbacks,
+            ChatFragment.chatFragmentCallbacks
 {
-
-    //layout-attr
-
     private Toolbar toolbar;
 
     //mvc
@@ -111,7 +112,12 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void openChat(Chat chat) {
-        //TODO open Chat in ChatFragment
+    public void openChat(long chatid) {
+        //first create view
+        //theres no need to create interactor as it has already been created for main
+        //then create presenter
+        ChatFragment chatFragment=ChatFragment.getInstance(chatid,this);
+        ChatPresenter chatPresenter=new ChatPresenterImpl(chatFragment,mainInteractor);
+        replaceContainer(chatFragment,false);
     }
 }

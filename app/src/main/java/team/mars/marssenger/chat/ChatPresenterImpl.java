@@ -12,9 +12,9 @@ public class ChatPresenterImpl implements ChatPresenter {
 
     private long chatId;
 
-    public ChatPresenterImpl(ChatView chatView){
+    public ChatPresenterImpl(ChatView chatView, MainInteractor mainInteractor){
         this.chatView=chatView;
-
+        this.mainInteractor=mainInteractor;
     }
 
     @Override
@@ -23,8 +23,4 @@ public class ChatPresenterImpl implements ChatPresenter {
         //update content if necessary
     }
 
-    @Override
-    public void setInteractor(MainInteractor interactor) {
-        this.mainInteractor=interactor;
-    }
 }

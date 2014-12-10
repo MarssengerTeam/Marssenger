@@ -88,12 +88,12 @@ public class MainFragment extends Fragment implements MainView{
     }
 
     @Override
-    public void openChat(Chat chat) {
-        listener.openChat(chat);
+    public void openChat(long chatid) {
+        listener.openChat(chatid);
     }
 
     public interface mainFragmentCallbacks{
-        public void openChat(Chat chat);
+        public void openChat(long chatid);
     }
 
 }

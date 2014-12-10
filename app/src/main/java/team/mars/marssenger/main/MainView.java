@@ -20,7 +20,7 @@ public interface MainView {
 
     public void onActivityResult(int requestCode, int resultCode,Intent data);
 
-    public void openChat(Chat chat);
+    public void openChat(long chatid);
 
     public void setContext(Context context);
 

@@ -16,20 +16,19 @@ import team.mars.marssenger.main.MainInteractor;
 public class ChatFragment extends Fragment implements ChatView {
 
     private ChatPresenter chatPresenter;
+    private chatFragmentCallbacks listener;
 
-    public static ChatFragment getInstance(long chatId, MainInteractor mainInteractor){
+    public static ChatFragment getInstance(long chatId, chatFragmentCallbacks listener){
         ChatFragment c=new ChatFragment();
         c.setChat(chatId);
         return c;
     }
 
-    public void setInteractor(MainInteractor mainInteractor){this.chatPresenter.setInteractor(mainInteractor);}
+    public void setListener(chatFragmentCallbacks listener){this.listener=listener;}
 
     public void setChat(long chatId){this.chatPresenter.setChat(chatId);}
 
     public ChatFragment (){
-        //create presenter which in turn creates the interactor
-        chatPresenter=new ChatPresenterImpl(this);
     }
 
     @Override
