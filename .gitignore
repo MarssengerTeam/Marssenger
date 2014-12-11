@@ -6,4 +6,5 @@
 /build
 
 app/src/main/java/team/mars/marssenger/util/Constants.java
-app/src/main/res/values/constants.xml
+
+.gitignore
