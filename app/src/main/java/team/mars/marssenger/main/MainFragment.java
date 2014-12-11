@@ -21,7 +21,6 @@ public class MainFragment extends Fragment implements MainView{
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private MainPresenter mainPresenter;
-    private LinearLayout linearLayout;
 
     public static MainFragment getInstance(MainPresenter mainPresenter){
         MainFragment m=new MainFragment();
@@ -38,47 +37,44 @@ public class MainFragment extends Fragment implements MainView{
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
 
-        linearLayout= (LinearLayout) inflater.inflate(
+        recyclerView= (RecyclerView) inflater.inflate(
                 R.layout.fragment_main, container, false);
 
+        if (recyclerView != null) {
 
-        return linearLayout;
+            recyclerView.setAdapter(mainPresenter.getAdapter());
+
+            layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
+            recyclerView.setLayoutManager(layoutManager);
+
+            //react to touch input on this view
+            recyclerView.addOnItemTouchListener(
+                    new CItemClickListener(
+                            getActivity().getApplicationContext(),
+                            new CItemClickListener.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(View view, int position) {
+                                    //do your stuff
+                                    if (mainPresenter != null) {
+                                        mainPresenter.onChatClick(view, position);
+                                    } else {
+                                        test("mainPresenter null");
+                                    }
+                                }
+                            }
+                    )
+            );
+        }else {
+            test("recyclerview null");
+        }
+
+        return recyclerView;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        if (linearLayout!=null) {
-            recyclerView = (RecyclerView) getActivity().findViewById(R.id.main_listview);
-            if (recyclerView != null) {
 
-                recyclerView.setAdapter(mainPresenter.getAdapter());
-
-                layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-                recyclerView.setLayoutManager(layoutManager);
-
-                //react to touch input on this view
-                recyclerView.addOnItemTouchListener(
-                        new CItemClickListener(
-                                getActivity().getApplicationContext(),
-                                new CItemClickListener.OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(View view, int position) {
-                                        //do your stuff
-                                        if (mainPresenter != null) {
-                                            mainPresenter.onChatClick(view, position);
-                                        }
-                                    }
-                                }
-                        )
-                );
-
-            }else {
-                test("recyclerview null");
-            }
-        } else {
-            test("linearlayout null");
-        }
     }
 
     @Override

@@ -53,6 +53,7 @@ public class MainActivity extends ActionBarActivity implements
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
 
             toolbar.setTitle(R.string.app_name);
+            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
             //menu
             toolbar.inflateMenu(R.menu.menu_main);
@@ -73,7 +74,7 @@ public class MainActivity extends ActionBarActivity implements
             Log.d("GCMundso", "Cry a lot!");
         }
 
-        MainFragment mainFragment=MainFragment.getInstance(this);//context and presenter
+        MainFragment mainFragment=MainFragment.getInstance(this);//mainPresenter
 
         replaceContainer(mainFragment,true);
 
@@ -113,7 +114,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        test("click");
         switch (menuItem.getItemId()){
             case R.id.action_search:
 
@@ -131,7 +131,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public CListAdapter getAdapter(){
-        cListAdapter=new CListAdapter(this, mainInteractor.getChatDatabase());
+        cListAdapter=new CListAdapter(mainInteractor.getChatDatabase());
         return cListAdapter;
     }
 

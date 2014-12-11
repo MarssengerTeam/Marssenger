@@ -19,15 +19,13 @@ import team.mars.marssenger.datatype.Chat;
  */
 public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> {
 
-    private Context context;
     private ChatDatabase chats;
     private ArrayList<Chat> chatlist;
 
     //layout-attr
     private RelativeLayout relativeLayout;
 
-    public CListAdapter (Context context, ChatDatabase list){
-        this.context = context;
+    public CListAdapter (ChatDatabase list){
         this.chats=list;
         chatlist = list.getAllChatByTime();
     }

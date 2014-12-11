@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
@@ -69,7 +70,7 @@ public class MainInteractorImpl implements MainInteractor {
         messageDatabase.createMessage("hier steht eine Nachricht",1,1,0);
         chatDatabase.createChat("adsvkdjhj", "lfindjh");
         messageDatabase.createMessage("jhdhjuswzjdh",1,2,0);
-        chatDatabase.createChat("qwerty", "qewertz");
+        chatDatabase.createChat("qwerty", "qwertz");
         messageDatabase.createMessage("azerty", 1,3,0);
     }
 
@@ -303,6 +304,10 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public void closeChatDB() {
         chatDatabase.close();
+    }
+
+    private void test(CharSequence charSequence){
+        Toast.makeText(context,charSequence,Toast.LENGTH_SHORT).show();
     }
 
 
