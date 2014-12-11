@@ -19,7 +19,6 @@ import team.mars.marssenger.custom.CItemClickListener;
  */
 public class MainFragment extends Fragment implements MainView{
     private RecyclerView recyclerView;
-    private RecyclerView.LayoutManager layoutManager;
     private MainPresenter mainPresenter;
 
     public static MainFragment getInstance(MainPresenter mainPresenter){
@@ -37,44 +36,44 @@ public class MainFragment extends Fragment implements MainView{
     @Override
     public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState) {
 
-        recyclerView= (RecyclerView) inflater.inflate(
+        View root=inflater.inflate(
                 R.layout.fragment_main, container, false);
+        recyclerView=(RecyclerView) root.findViewById(R.id.main_listview);
 
-        if (recyclerView != null) {
+        return root;
+    }
 
-            recyclerView.setAdapter(mainPresenter.getAdapter());
-
-            layoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
-            recyclerView.setLayoutManager(layoutManager);
-
-            //react to touch input on this view
-            recyclerView.addOnItemTouchListener(
-                    new CItemClickListener(
-                            getActivity().getApplicationContext(),
-                            new CItemClickListener.OnItemClickListener() {
-                                @Override
-                                public void onItemClick(View view, int position) {
-                                    //do your stuff
-                                    if (mainPresenter != null) {
-                                        mainPresenter.onChatClick(view, position);
-                                    } else {
-                                        test("mainPresenter null");
-                                    }
-                                }
-                            }
-                    )
-            );
-        }else {
-            test("recyclerview null");
-        }
-
-        return recyclerView;
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState){
+        super.onViewCreated(view,savedInstanceState);
+        //set layoutmanager
+         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity().getApplicationContext());
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+        //set adapter
+        recyclerView.setAdapter(mainPresenter.getAdapter());
 
+        //set itemtouchlistener
+        recyclerView.addOnItemTouchListener(
+                new CItemClickListener(
+                        getActivity().getApplicationContext(),
+                        new CItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
+                                //do your stuff
+                                if (mainPresenter != null) {
+                                    mainPresenter.onChatClick(view, position);
+                                } else {
+                                    test("mainPresenter null");
+                                }
+                            }
+                        }
+                )
+        );
     }
 
     @Override
