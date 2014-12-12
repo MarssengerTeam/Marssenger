@@ -125,7 +125,6 @@ public class MainActivity extends ActionBarActivity implements
             replaceContainer(mainFragment);
             return true;
         }
-
         return super.onKeyDown(keyCode, event);
     }
 
