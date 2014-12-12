@@ -16,7 +16,8 @@ public interface MainPresenter {
     public CListAdapter getAdapter();
     public CChatListAdapter getChatAdapter();
     public void onChatClick(View view,int position);
-    public void onRegsiterReturn(int requestCode, int resultCode,
-                                 Intent data);
+    public void onRegsiterReturn(int requestCode, int resultCode,Intent data);
+    public void setToolbarText(String text);
 
+    public void resetToolbarText();
 }
