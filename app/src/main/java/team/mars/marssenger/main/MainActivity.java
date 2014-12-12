@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +34,8 @@ public class MainActivity extends ActionBarActivity implements
     private final int REGISTER_REQUEST_CODE = 01000;
 
     private Chat chat;
+
+    private MainFragment mainFragment;
 
     //mvc
     private MainInteractor mainInteractor;
@@ -80,18 +83,16 @@ public class MainActivity extends ActionBarActivity implements
             Log.d("GCMundso", "Cry a lot!");
         }
 
-        MainFragment mainFragment=MainFragment.getInstance(this);//mainPresenter
+        this.mainFragment=MainFragment.getInstance(this);//mainPresenter
 
-        replaceContainer(mainFragment,true);
+        replaceContainer(mainFragment);
 
     }
 
-    public void replaceContainer(Fragment fragment, boolean addToBackStack) {
+    public void replaceContainer(Fragment fragment) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
-        if (addToBackStack){
             transaction.addToBackStack(null);
-        }
         transaction.commit();
     }
 
@@ -116,6 +117,16 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         onRegsiterReturn(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            replaceContainer(mainFragment);
+            return true;
+        }
+
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
@@ -152,7 +163,7 @@ public class MainActivity extends ActionBarActivity implements
         chat=cListAdapter.getItem(position);
         //create fragment and initiate it
         ChatFragment chatFragment=ChatFragment.getInstance(this); //mainPresenter
-        replaceContainer(chatFragment,false);
+        replaceContainer(chatFragment);
     }
 
     @Override

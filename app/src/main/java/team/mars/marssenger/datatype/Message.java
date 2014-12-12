@@ -32,12 +32,7 @@ public class Message {
         return read;
     }
     public void setRead(int read){
-        if(read==1){
-            this.read=true;
-        }
-        else {
-            this.read=false;
-        }
+        this.read = read == 1;
 
     }
 
@@ -64,7 +59,6 @@ public class Message {
         this.sender=false;
         }
     }
-
 
     public void setTime(long time) {
         this.timestamp = time;
