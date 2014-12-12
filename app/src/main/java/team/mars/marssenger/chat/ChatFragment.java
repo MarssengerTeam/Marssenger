@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -30,6 +32,17 @@ public class ChatFragment extends Fragment implements ChatView {
     public ChatFragment (){}
 
     public void setMainPresenter(MainPresenter mainPresenter){this.mainPresenter=mainPresenter;}
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+        inflater.inflate(R.menu.menu_chat, menu);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater,
