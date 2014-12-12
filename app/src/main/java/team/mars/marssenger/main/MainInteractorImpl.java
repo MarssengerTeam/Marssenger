@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -282,7 +281,12 @@ public class MainInteractorImpl implements MainInteractor {
        return chatDatabase.getAllChat();
     }
 
+    @Override
     public ChatDatabase getChatDatabase(){return chatDatabase;}
+
+    @Override
+    public MessageDatabase getMessageDataBase(){return messageDatabase;}
+
     @Override
     public boolean connectionEstablished() {
         return connected;

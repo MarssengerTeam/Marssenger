@@ -2,15 +2,17 @@ package team.mars.marssenger.custom;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.TreeSet;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.database.MessageDatabase;
+import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
 
 /**
@@ -25,9 +27,20 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     private TreeSet <Integer> mSentIndex;
 
-    public CChatListAdapter(){
-        mData=new ArrayList<Message>();
-        mSentIndex=new TreeSet <Integer>();
+    private RelativeLayout relativeLayout;
+
+    private MessageDatabase database;
+
+    public CChatListAdapter(MessageDatabase database, Chat chat){
+        this.database=database;
+        mData=database.getAllMessageFromChat(chat);
+        mSentIndex=new TreeSet <>();
+
+        for (int i=0;i<mData.size();i++){
+            if (mData.get(i).isSender()){
+                mSentIndex.add(i);
+            }
+        }
     }
 
 
@@ -35,41 +48,30 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
     public CChatListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
             case TYPE_RECEIVED:
-                /* TODO
-                relativeLayout =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.received_message, viewGroup, false);
-                        */
+                relativeLayout =(RelativeLayout) LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.received_item, parent, false);
                 break;
             case TYPE_SENT:
-                /* TODO
-                relativeLayout =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
-                        .inflate(R.layout.sent_message, viewGroup, false);
-                 */
+                relativeLayout =(RelativeLayout) LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.sent_item, parent, false);
                 break;
             default:break;
         }
 
-        //return new ViewHolder(relativeLayout);
-        return null;
+        return new ViewHolder(relativeLayout);
     }
 
     @Override
     public void onBindViewHolder(CChatListAdapter.ViewHolder holder, int position) {
-        //holder=new ViewHolder(relativeLayout);
-        //holder.message.setText(mData.get(position).getMessage()?);
-        //holder.time.setText(mData.get(position).getTime()?);
+        holder=new ViewHolder(relativeLayout);
+        holder.message.setText(mData.get(position).getMessage());
+        holder.time.setText(getStringFromTime(mData.get(position).getTimestamp()));
     }
 
-    public void addReceivedItem(Message message){
-        mData.add(message);
-        notifyDataSetChanged();
-    }
-
-    public void addSentItem(Message message){
-        mData.add(message);
-        //set position in index
-        mSentIndex.add(mData.size()-1);
-        notifyDataSetChanged();
+    private String getStringFromTime(long time){
+        Calendar c= Calendar.getInstance();
+        c.setTimeInMillis(time);
+        return c.getTime().toString();
     }
 
     @Override
@@ -89,9 +91,8 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
         public ViewHolder(RelativeLayout relativeLayout) {
             super(relativeLayout);
-            //TODO create layout
-            //this.message=(TextView) relativeLayout.findViewById(id);
-            //this.time=(TextView) relativeLayout.findViewById(id);
+            this.message=(TextView) relativeLayout.findViewById(R.id.message);
+            this.time=(TextView) relativeLayout.findViewById(R.id.time);
         }
     }
 }

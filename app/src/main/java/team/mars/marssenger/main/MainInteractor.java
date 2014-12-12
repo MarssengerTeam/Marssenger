@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import java.util.ArrayList;
 
 import team.mars.marssenger.database.ChatDatabase;
+import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
 
 /**
@@ -36,5 +37,6 @@ public interface MainInteractor {
     public String getRegid();
     public void sendRegistrationIdToBackend();
     public void storeRegistrationId(Context context, String regid);
+    public MessageDatabase getMessageDataBase();
 
 }

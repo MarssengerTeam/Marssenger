@@ -30,8 +30,6 @@ public class Chat {
         return messageTableID;
     }
 
-
-
     // Will be used by the ArrayAdapter in the ListView
     @Override
     public String toString() {

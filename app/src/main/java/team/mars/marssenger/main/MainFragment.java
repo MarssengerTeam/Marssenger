@@ -7,7 +7,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
@@ -27,9 +26,7 @@ public class MainFragment extends Fragment implements MainView{
         return m;
     }
 
-    public MainFragment (){
-
-    }
+    public MainFragment (){}
 
     public void setPresenter(MainPresenter mainPresenter){this.mainPresenter=mainPresenter;}
 

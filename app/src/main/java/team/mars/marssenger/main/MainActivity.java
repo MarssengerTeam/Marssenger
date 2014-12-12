@@ -16,7 +16,10 @@ import android.view.View;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.chat.ChatFragment;
+import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.custom.CListAdapter;
+import team.mars.marssenger.datatype.Chat;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -26,7 +29,10 @@ public class MainActivity extends ActionBarActivity implements
     private Toolbar toolbar;
 
     private CListAdapter cListAdapter;
+    private CChatListAdapter cChatListAdapter;
     private final int REGISTER_REQUEST_CODE = 01000;
+
+    private Chat chat;
 
     //mvc
     private MainInteractor mainInteractor;
@@ -136,9 +142,17 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
+    public CChatListAdapter getChatAdapter(){
+        cChatListAdapter=new CChatListAdapter(mainInteractor.getMessageDataBase(),this.chat);
+        return cChatListAdapter;
+    }
+
+    @Override
     public void onChatClick(View view, int position) {
-        //TODO check which chat it is and start chatactivity
-        //test(String.valueOf(cListAdapter.getItemId(position)));
+        chat=cListAdapter.getItem(position);
+        //create fragment and initiate it
+        ChatFragment chatFragment=ChatFragment.getInstance(this); //mainPresenter
+        replaceContainer(chatFragment,false);
     }
 
     @Override
