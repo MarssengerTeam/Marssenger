@@ -159,6 +159,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onChatClick(View view, int position) {
         chat=cListAdapter.getItem(position);
+        setToolbarText(chat.getName());
         //create fragment and initiate it
         ChatFragment chatFragment=ChatFragment.getInstance(this); //mainPresenter
         replaceContainer(chatFragment);
@@ -172,5 +173,15 @@ public class MainActivity extends ActionBarActivity implements
                 mainInteractor.storeRegistrationId(this,number);
             }
         }
+    }
+
+    @Override
+    public void setToolbarText(String text) {
+        toolbar.setTitle(text);
+    }
+
+    @Override
+    public void resetToolbarText() {
+        toolbar.setTitle(R.string.app_name);
     }
 }

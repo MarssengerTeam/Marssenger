@@ -69,6 +69,7 @@ public class ChatFragment extends Fragment implements ChatView {
         super.onActivityCreated(savedInstanceState);
         //set adapter
         recyclerView.setAdapter(mainPresenter.getChatAdapter());
+
     }
 
     private void test(CharSequence charSequence){

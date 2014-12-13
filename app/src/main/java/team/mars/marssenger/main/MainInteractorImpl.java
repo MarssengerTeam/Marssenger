@@ -63,20 +63,21 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
     private void createTestChats(){
+        int sender =(int) Math.random()*2;
         if(chatDatabase.getAllChat().size()>3){
-            messageDatabase.createMessage("Alarm Alarm!", 1, 0, 0);
-            messageDatabase.createMessage("hier steht eine Nachricht",1,1,0);
-            messageDatabase.createMessage("jhdhjuswzjdh",1,2,0);
-            messageDatabase.createMessage("azerty", 1,3,0);
+            messageDatabase.createMessage("Alarm Alarm!", sender, 0, 0);
+            messageDatabase.createMessage("hier steht eine Nachricht",sender,1,0);
+            messageDatabase.createMessage("jhdhjuswzjdh",sender,2,0);
+            messageDatabase.createMessage("azerty", sender,3,0);
         }else{
-            chatDatabase.createChat("DER chat", "Der Empfänger");
-            messageDatabase.createMessage("Alarm Alarm!", 1, 0, 0);
-            chatDatabase.createChat("Noch ein chat", "empf");
-            messageDatabase.createMessage("hier steht eine Nachricht",1,1,0);
-            chatDatabase.createChat("adsvkdjhj", "lfindjh");
-            messageDatabase.createMessage("jhdhjuswzjdh",1,2,0);
-            chatDatabase.createChat("qwerty", "qewertz");
-            messageDatabase.createMessage("azerty", 1,3,0);
+            chatDatabase.createChat("DER chat", "<handynummer>");
+            messageDatabase.createMessage("Alarm Alarm!", sender, 0, 0);
+            chatDatabase.createChat("Noch ein chat", "<handynummer>");
+            messageDatabase.createMessage("hier steht eine Nachricht",sender,1,0);
+            chatDatabase.createChat("adsvkdjhj", "<handynummer>");
+            messageDatabase.createMessage("jhdhjuswzjdh",sender,2,0);
+            chatDatabase.createChat("qwerty", "<handynummer>");
+            messageDatabase.createMessage("azerty", sender,3,0);
         }
     }
 
