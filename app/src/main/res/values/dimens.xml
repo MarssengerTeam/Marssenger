@@ -10,4 +10,6 @@
     <dimen name="message_text_size">23sp</dimen>
 
     <dimen name="time_text_size">10sp</dimen>
+
+    <dimen name="bottom_bar_height">48dp</dimen>
 </resources>

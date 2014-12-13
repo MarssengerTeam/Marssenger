@@ -2,6 +2,7 @@ package team.mars.marssenger.chat;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,7 +10,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
@@ -47,10 +50,10 @@ public class ChatFragment extends Fragment implements ChatView {
     @Override
     public View onCreateView(LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        LinearLayout linearLayout = (LinearLayout) inflater.inflate(R.layout.fragment_chat, container, false);
+        RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.fragment_chat, container, false);
         //get reference to recyclerview
-        recyclerView = (RecyclerView) linearLayout.findViewById(R.id.chat_listview);
-        return linearLayout;
+        recyclerView = (RecyclerView) layout.findViewById(R.id.chat_listview);
+        return layout;
     }
 
     @Override
