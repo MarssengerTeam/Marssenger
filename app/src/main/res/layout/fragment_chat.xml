@@ -1,25 +1,26 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="team.mars.marssenger.chat.ChatActivity"
-    >
+    android:layout_height="match_parent">
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_listview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:paddingRight="@dimen/abc_action_bar_default_padding_material"
         android:paddingLeft="@dimen/abc_action_bar_default_padding_material"
+        android:paddingBottom="@dimen/bottom_bar_height"
+        android:scrollbars="vertical"
         />
 
 
     <LinearLayout
-        android:layout_below="@id/chat_listview"
+        android:background="@color/primary100"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_bar_height"
+        android:layout_gravity="bottom"
         android:orientation="horizontal"
+
         >
 
         <EditText
@@ -27,19 +28,16 @@
             android:layout_weight="7"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:inputType="textAutoCorrect"
-            />
+            android:inputType="textAutoCorrect"/>
 
         <Button
             android:id="@+id/chat_send_button"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:background="@drawable/ic_action_send_now"
-            />
+            android:background="@drawable/ic_action_send_now"/>
 
-        </LinearLayout>
-
-</RelativeLayout>
+    </LinearLayout>
+</FrameLayout>
 
 
