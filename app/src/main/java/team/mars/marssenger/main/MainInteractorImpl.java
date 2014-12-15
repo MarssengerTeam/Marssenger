@@ -13,8 +13,20 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import team.mars.marssenger.database.ChatDatabase;
@@ -174,29 +186,52 @@ public class MainInteractorImpl implements MainInteractor {
         }.execute(regid);
     }
 
-    public void registerAtServer(String phoneNumber, String email){
-        new AsyncTask<String, String, String>() {
+    public void registerAtServer(String phoneNumber, String email, String GCMCode, String digitCode){
+        new AsyncTask<String, String, JSONArray>() {
             @Override
-            protected String doInBackground(String... params) {
-                String msg = "";
+            protected JSONArray doInBackground(String... params) {
+                String result11;
                 try {
-                    Log.d(TAG, "Trying to write a message to Server");
-                    Bundle data = new Bundle();
-                    data.putString("phoneNumber", params[0]);
-                    data.putString("my_action", params[1]);
-                    gcm.send(SENDER_ID + "@gcm.googleapis.com", regid, data);
-                    msg = "Sent message";
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
+                    HttpClient httpclient = new DefaultHttpClient();
+                    HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/user/register");
+
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+                    nameValuePairs.add(new BasicNameValuePair("phoneNumber", params[0]));
+                    nameValuePairs.add(new BasicNameValuePair("GCMCode", params[1]));
+                    nameValuePairs.add(new BasicNameValuePair("digitCode", params[2]));
+                    nameValuePairs.add(new BasicNameValuePair("eMail", params[3]));
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    // Execute HTTP Post Request
+                    Log.d("SendingService", "Vor senden");
+                    HttpResponse response = httpclient.execute(httppost);
+                    Log.d("SendingService", "Nach senden");
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(reader.readLine() + "\n");
+                    String line = "0";
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    reader.close();
+                    Log.d("Sending", "Sendet daten!");
+                    result11 = sb.toString();
+                    return new JSONArray(result11);
+                    // parsing data
+                } catch (Exception e) {
+                    Log.d("SendingService", e.toString());
+                    e.printStackTrace();
+                    return null;
                 }
-                return msg;
             }
 
             @Override
-            protected void onPostExecute(String msg) {
-                Log.i(TAG, msg);
+            protected void onPostExecute(JSONArray result) {
+                Log.i(TAG, "Hi");
             }
-        }.execute(phoneNumber, email);
+        }.execute(phoneNumber, GCMCode,digitCode, email);
     }
 
     @Override
@@ -250,30 +285,51 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
     @Override
-    public void sendMessage(String receiver, String message){
-        new AsyncTask<String, String, String>() {
+    public void sendMessage(String myNumber, String receiver, String message){
+        new AsyncTask<String, String, JSONArray>() {
             @Override
-            protected String doInBackground(String... params) {
-                String msg = "";
+            protected JSONArray doInBackground(String... params) {
+                String result11;
                 try {
-                    Log.d(TAG, "Trying to write a message to Server");
-                    Bundle data = new Bundle();
-                    data.putString("sender",regid);
-                    data.putString("receiver", params[0]);
-                    data.putString("data", params[1]);
-                    gcm.send(SENDER_ID + "@gcm.googleapis.com", regid, data);
-                    msg = "Sent message";
-                } catch (IOException ex) {
-                    msg = "Error :" + ex.getMessage();
+                    HttpClient httpclient = new DefaultHttpClient();
+                    HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/messages/addMessage");
+
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(3);
+                    nameValuePairs.add(new BasicNameValuePair("sender",params[0]));
+                    nameValuePairs.add(new BasicNameValuePair("receiver", params[1]));
+                    nameValuePairs.add(new BasicNameValuePair("data", params[2]));
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    // Execute HTTP Post Request
+                    Log.d("SendingService", "Vor senden");
+                    HttpResponse response = httpclient.execute(httppost);
+                    Log.d("SendingService", "Nach senden");
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(reader.readLine() + "\n");
+                    String line = "0";
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    reader.close();
+                    Log.d("Sending", "Sendet daten!");
+                    result11 = sb.toString();
+                    return new JSONArray(result11);
+                    // parsing data
+                } catch (Exception e) {
+                    Log.d("SendingService", e.toString());
+                    e.printStackTrace();
+                    return null;
                 }
-                return msg;
             }
 
             @Override
-            protected void onPostExecute(String msg) {
-                Log.i(TAG, msg);
+            protected void onPostExecute(JSONArray result) {
+                Log.i(TAG, "Hi");
             }
-        }.execute(receiver,message);
+        }.execute(myNumber, receiver,message);
 
     }
 
