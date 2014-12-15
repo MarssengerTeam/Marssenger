@@ -1,6 +1,9 @@
 package team.mars.marssenger.main;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

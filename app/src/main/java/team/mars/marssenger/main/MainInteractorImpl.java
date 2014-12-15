@@ -75,21 +75,15 @@ public class MainInteractorImpl implements MainInteractor {
     }
 
     private void createTestChats(){
-        int sender =(int) Math.random()*2;
+        int sender =(int) (Math.random()*2);
         if(chatDatabase.getAllChat().size()>3){
-            messageDatabase.createMessage("Alarm Alarm!", sender, 0, 0);
-            messageDatabase.createMessage("hier steht eine Nachricht",sender,1,0);
-            messageDatabase.createMessage("jhdhjuswzjdh",sender,2,0);
-            messageDatabase.createMessage("azerty", sender,3,0);
+
         }else{
-            chatDatabase.createChat("DER chat", "<handynummer>");
-            messageDatabase.createMessage("Alarm Alarm!", sender, 0, 0);
-            chatDatabase.createChat("Noch ein chat", "<handynummer>");
-            messageDatabase.createMessage("hier steht eine Nachricht",sender,1,0);
-            chatDatabase.createChat("adsvkdjhj", "<handynummer>");
-            messageDatabase.createMessage("jhdhjuswzjdh",sender,2,0);
-            chatDatabase.createChat("qwerty", "<handynummer>");
-            messageDatabase.createMessage("azerty", sender,3,0);
+            chatDatabase.createChat("Timo", "0157700000");
+            messageDatabase.createMessage("1st Message", sender, 0, 0);
+            chatDatabase.createChat("Jan Niklas", "0157712345");
+            messageDatabase.createMessage("1st Message",sender,1,0);
+
         }
     }
 
@@ -329,7 +323,14 @@ public class MainInteractorImpl implements MainInteractor {
             protected void onPostExecute(JSONArray result) {
                 Log.i(TAG, "Hi");
             }
-        }.execute(myNumber, receiver,message);
+        }.execute(myNumber,receiver,message);
+        int intell = chatDatabase.isChatExisting(receiver);
+       if(intell>-1){
+           messageDatabase.createMessage(message,1,intell,1);
+       }else{
+           chatDatabase.createChat(receiver,receiver);
+           messageDatabase.createMessage(message,1,chatDatabase.getAllChat().size()-1,1);
+       }
 
     }
 

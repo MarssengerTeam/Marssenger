@@ -1,6 +1,9 @@
 package team.mars.marssenger.chat;
 
+import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,10 +12,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.main.MainInteractor;
 import team.mars.marssenger.main.MainPresenter;
 
 /**
@@ -22,7 +28,8 @@ public class ChatFragment extends Fragment implements ChatView {
 
     private RecyclerView recyclerView;
     private MainPresenter mainPresenter;
-
+    private EditText chat_input_edittext;
+    private Button sendButton;
     public static ChatFragment getInstance(MainPresenter mainPresenter){
         ChatFragment c=new ChatFragment();
         c.setMainPresenter(mainPresenter);
@@ -49,6 +56,8 @@ public class ChatFragment extends Fragment implements ChatView {
                              ViewGroup container, Bundle savedInstanceState) {
         FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.fragment_chat, container, false);
         //get reference to recyclerview
+        chat_input_edittext = (EditText) layout.findViewById(R.id.chat_input_edittext);
+        sendButton = (Button) layout.findViewById(R.id.chat_send_button);
         recyclerView = (RecyclerView) layout.findViewById(R.id.chat_listview);
         return layout;
     }
@@ -59,6 +68,15 @@ public class ChatFragment extends Fragment implements ChatView {
         //set layoutmanager
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(chat_input_edittext.getText().toString()!=""){
+                    mainPresenter.chatButtonSendPressed(mainPresenter.getChatAdapter().getChat(), chat_input_edittext.getText().toString());
+                    chat_input_edittext.setText("");
+                }
+            }
+        });
     }
 
     @Override

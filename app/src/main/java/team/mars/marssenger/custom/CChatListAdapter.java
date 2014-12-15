@@ -28,11 +28,12 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
     private TreeSet <Integer> mSentIndex;
 
     private RelativeLayout relativeLayout;
-
+    private Chat chat;
     private MessageDatabase database;
 
     public CChatListAdapter(MessageDatabase database, Chat chat){
         this.database=database;
+        this.chat=chat;
         mData=database.getAllMessageFromChat(chat);
         mSentIndex=new TreeSet <>();
 
@@ -77,6 +78,10 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
     @Override
     public int getItemViewType(int position){
         return mSentIndex.contains(position)?TYPE_SENT:TYPE_RECEIVED;
+    }
+
+    public Chat getChat() {
+        return chat;
     }
 
     @Override

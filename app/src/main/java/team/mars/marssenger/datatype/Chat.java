@@ -5,6 +5,7 @@ public class Chat {
     private long id;
     private String name;
     private long messageTableID;
+    private String reciever;
 
     public long getId() {
         return id;
@@ -34,5 +35,12 @@ public class Chat {
     @Override
     public String toString() {
         return name;
+    }
+
+    public void setReceiver(String reciever) {
+        this.reciever=reciever;
+    }
+    public String getReciever(){
+        return reciever;
     }
 }

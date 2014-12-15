@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 
@@ -21,7 +22,7 @@ public class ChatDatabase {
     // Database fields
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID, SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_MESSAGENUMBER };
+    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID, SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_MESSAGENUMBER,SQLiteManager.COLUMN_CHAT_RECEIVER };
     private MessageDatabase messageDatabase;
 
     public ChatDatabase(Context context,MessageDatabase messageDatabase) {
@@ -64,6 +65,36 @@ public class ChatDatabase {
             return null;
         }
     }
+    int getDatabaseChatSize(){
+
+        return 1;
+    }
+    public int isChatExisting(String reciever) {
+        String[] databasearray = {reciever};
+        String[] Collum = {SQLiteManager.COLUMN_CHAT_ID};
+
+
+        Cursor cursor = database.query(SQLiteManager.TABLE_CHAT, Collum, SQLiteManager.COLUMN_CHAT_RECEIVER + " = " + reciever, null, null, null, null);
+
+        try {
+            cursor.moveToFirst();
+            Chat newChat = cursorToChat(cursor);
+            cursor.close();
+
+
+            if (cursor.getColumnCount() == 0) {
+                Log.e("ChatDatabase", "Debug: kein chat von " + reciever);
+                return -1;
+            } else {
+                return (int) newChat.getId();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();//TODO FIXEN
+        }
+        return -2;
+    }
+
+
 
     public int getUnreadMessages(Chat chat){
         int i= 0;
@@ -130,6 +161,7 @@ public class ChatDatabase {
                 chat.setId(cursor.getLong(0));
                 chat.setName(cursor.getString(1));
                 chat.setMessageTableID(cursor.getLong(2));
+                chat.setReceiver(cursor.getString(3));
             } catch (Exception ex) {
                 ex.printStackTrace();//TODO FIXEN
             }

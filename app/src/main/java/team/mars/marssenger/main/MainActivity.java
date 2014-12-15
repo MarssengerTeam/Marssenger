@@ -49,7 +49,7 @@ public class MainActivity extends ActionBarActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (Build.VERSION.SDK_INT ==Build.VERSION_CODES.LOLLIPOP) {
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
             colorActionBar();
         }
 
@@ -77,9 +77,8 @@ public class MainActivity extends ActionBarActivity implements
             if (mainInteractor.getRegid().isEmpty()) {
                 mainInteractor.registerInBackground();
             }else{
-                //mainInteractor.registerAtServer("0157712345", "hurensohn@gmail.com", mainInteractor.getRegid(), "1234");
-                mainInteractor.sendMessage("0157712345", "0157712345", "Ich mache party auf deinem Grab");
-                Log.d("GCMSending", mainInteractor.getRegid() + "Hat registriert");
+                //TODO mainInteractor.registerAtServer("0157700003", "hurensohn@aufdeinem.grab", mainInteractor.getRegid(), "4321");
+                //Log.d("GCMSending", mainInteractor.getRegid() + "Hat registriert");
             }
         }else{
             Log.d("GCMundso", "Cry a lot!");
@@ -93,13 +92,39 @@ public class MainActivity extends ActionBarActivity implements
 
     public void replaceContainer(Fragment fragment) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+            FragmentTransaction lollioptransaction = getLollipopTransaction(transaction);
+            lollioptransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+            lollioptransaction.replace(R.id.container, fragment);
+            lollioptransaction.addToBackStack(null);
+            lollioptransaction.commit();
+        }else{
+            transaction.replace(R.id.container, fragment);
             transaction.addToBackStack(null);
-        transaction.commit();
+            transaction.commit();
+        }
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void colorActionBar() {getWindow().setStatusBarColor(getResources().getColor(R.color.primary700));}
+
+    public FragmentTransaction getFragmentTransition(FragmentTransaction transaction){
+
+        return transaction;
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private FragmentTransaction getLollipopTransaction(FragmentTransaction transaction){
+
+
+         //   transaction.addSharedElement(mainFragment.getView().findViewById(R.id.listitem_name), "listitem_name");
+
+        return transaction;
+    }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -180,6 +205,12 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void setToolbarText(String text) {
         toolbar.setTitle(text);
+    }
+
+    @Override
+    public void chatButtonSendPressed(Chat chat, String message) {
+        //TODO MY NUMBER HIER           vvv
+        mainInteractor.sendMessage("0157700000", chat.getReciever(), message);
     }
 
     @Override
