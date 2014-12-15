@@ -29,6 +29,8 @@ public class MainActivity extends ActionBarActivity implements
 {
     private Toolbar toolbar;
 
+    private boolean mainFragmentActive;
+
     private CListAdapter cListAdapter;
     private CChatListAdapter cChatListAdapter;
     private final int REGISTER_REQUEST_CODE = 01000;
@@ -87,14 +89,16 @@ public class MainActivity extends ActionBarActivity implements
 
         this.mainFragment=MainFragment.getInstance(this);//mainPresenter
 
-        replaceContainer(mainFragment);
-
+        replaceContainer(mainFragment,false);
+        mainFragmentActive=true;
     }
 
-    public void replaceContainer(Fragment fragment) {
+    public void replaceContainer(Fragment fragment,boolean addToBackStack) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
+        if (addToBackStack) {
             transaction.addToBackStack(null);
+        }
         transaction.commit();
     }
 
@@ -123,8 +127,11 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            replaceContainer(mainFragment);
-            return true;
+            if (!mainFragmentActive) {
+                replaceContainer(mainFragment, false);
+                mainFragmentActive = true;
+                return true;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -164,7 +171,8 @@ public class MainActivity extends ActionBarActivity implements
         setToolbarText(chat.getName());
         //create fragment and initiate it
         ChatFragment chatFragment=ChatFragment.getInstance(this); //mainPresenter
-        replaceContainer(chatFragment);
+        replaceContainer(chatFragment,true);
+        mainFragmentActive=false;
     }
 
     @Override
