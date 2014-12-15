@@ -78,7 +78,7 @@ public class MainActivity extends ActionBarActivity implements
                 mainInteractor.registerInBackground();
             }else{
                 //mainInteractor.registerAtServer("0157712345", "hurensohn@gmail.com", mainInteractor.getRegid(), "1234");
-                mainInteractor.sendMessage("0157712345", "0157712345", "Ich mache party auf deinem Grab");
+                mainInteractor.sendMessage("0157712345", "0157712345","tguhgtohutoht");
                 Log.d("GCMSending", mainInteractor.getRegid() + "Hat registriert");
             }
         }else{
