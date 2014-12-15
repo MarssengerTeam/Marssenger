@@ -15,12 +15,10 @@
 
 
     <LinearLayout
-        android:background="@color/primary100"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_bar_height"
         android:layout_gravity="bottom"
         android:orientation="horizontal"
-
         >
 
         <EditText

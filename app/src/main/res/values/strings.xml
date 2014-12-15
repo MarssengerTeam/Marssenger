@@ -22,5 +22,8 @@
     <string name="action_new_message">New message</string>
     <string name="action_search">Search</string>
     <string name="action_add_person">Add person</string>
+    <string name="action_view_all">All</string>
+    <string name="action_view_single">Chats</string>
+    <string name="action_view_groups">Groups</string>
 
 </resources>
