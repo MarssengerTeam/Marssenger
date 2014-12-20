@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -61,7 +62,7 @@ public class MainFragment extends Fragment implements MainView{
     public void onViewCreated(View view, Bundle savedInstanceState){
         super.onViewCreated(view,savedInstanceState);
         //set layoutmanager
-         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity().getApplicationContext());
+         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getActivity().getApplicationContext(),2,GridLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
