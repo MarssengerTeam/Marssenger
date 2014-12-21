@@ -226,6 +226,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public int getBottomPosition() {
-        return cChatListAdapter.getItemCount();
+        return cChatListAdapter.getItemCount()-1;
     }
 }

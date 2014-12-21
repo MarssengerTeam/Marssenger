@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.main.MainInteractor;
 import team.mars.marssenger.main.MainPresenter;
 
@@ -30,6 +31,11 @@ public class ChatFragment extends Fragment implements ChatView {
     private MainPresenter mainPresenter;
     private EditText chat_input_edittext;
     private Button sendButton;
+
+    //adapter and layoutmanager
+    private CChatListAdapter adapter;
+    private RecyclerView.LayoutManager manager;
+
     public static ChatFragment getInstance(MainPresenter mainPresenter){
         ChatFragment c=new ChatFragment();
         c.setMainPresenter(mainPresenter);
@@ -71,8 +77,8 @@ public class ChatFragment extends Fragment implements ChatView {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(chat_input_edittext.getText().toString()!=""){
-                    mainPresenter.chatButtonSendPressed(mainPresenter.getChatAdapter().getChat(), chat_input_edittext.getText().toString());
+                if (chat_input_edittext.getText().toString() != "") {
+                    mainPresenter.chatButtonSendPressed(adapter.getChat(), chat_input_edittext.getText().toString());
                     chat_input_edittext.setText("");
                 }
             }
@@ -83,8 +89,16 @@ public class ChatFragment extends Fragment implements ChatView {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         //set adapter
-        recyclerView.setAdapter(mainPresenter.getChatAdapter());
+        this.adapter=mainPresenter.getChatAdapter();
+        recyclerView.setAdapter(adapter);
+        scrollToBottom();
+    }
 
+    @Override
+    public void updateContent(CChatListAdapter adapter){
+        this.adapter=adapter;
+        recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     private void test(CharSequence charSequence){
@@ -98,7 +112,7 @@ public class ChatFragment extends Fragment implements ChatView {
 
     @Override
     public void smoothScrollToBottom() {
-
+        recyclerView.smoothScrollToPosition(mainPresenter.getBottomPosition());
     }
 }
 
