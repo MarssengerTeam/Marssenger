@@ -21,9 +21,9 @@
     <color name="primary900">#880e4f</color>
 
 
-    <color name="accent100">#ff8a80</color>
-    <color name="accent200">#ff5252</color>
-    <color name="accent400">#ff1744</color>
-    <color name="accent700">#d50000</color>
+    <color name="accent100">#ea80fc</color>
+    <color name="accent200">#e040fb</color>
+    <color name="accent400">#d500f9</color>
+    <color name="accent700">#aa00ff</color>
 
 </resources>
