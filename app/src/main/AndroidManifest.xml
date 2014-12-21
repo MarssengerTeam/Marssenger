@@ -26,14 +26,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="team.mars.marssenger.chat.ChatActivity"
-            android:label="@string/title_activity_chat"
-            android:parentActivityName="team.mars.marssenger.main.MainActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="team.mars.marssenger.main.MainActivity" />
-        </activity>
 
         <activity
             android:name="team.mars.marssenger.register.RegisterActivity"

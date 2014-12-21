@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="193dp"
-    android:layout_height="193dp">
+    android:layout_width="@dimen/chat_width"
+    android:layout_height="@dimen/chat_height"
+    android:padding="@dimen/chat_padding"
+    >
     <ImageView
         android:id="@+id/listitem_image"
-        android:layout_width="193dp"
+        android:layout_width="@dimen/chat_width"
         android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/list_image_description"
@@ -15,43 +17,45 @@
 
         android:id="@+id/listitem_name"
         android:textSize="22sp"
-        android:layout_width="193dp"
+        android:layout_width="@dimen/chat_width"
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
-        android:text="name"
-        android:background="#96000000"
+        android:background="@color/accent400"
         android:layout_alignTop="@+id/listitem_image"
         android:layout_alignLeft="@+id/listitem_image"
         android:layout_alignStart="@+id/listitem_image"
-        android:textColor="#ffe6e4e4"
+        android:textColor="@color/chat_text_color"
         android:layout_alignRight="@+id/listitem_image"
         android:layout_alignEnd="@+id/listitem_image"
         android:maxLines="1"
         android:textAlignment="inherit"
         android:elegantTextHeight="true"
-        android:paddingLeft="5dp" />
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        />
     <TextView
         android:id="@+id/listitem_text"
-        android:layout_width="193dp"
+        android:layout_width="@dimen/chat_width"
         android:layout_height="wrap_content"
         android:singleLine="true"
         android:ellipsize="marquee"
-        android:text="last msg"
-        android:background="#96000000"
+        android:background="@color/accent400"
         android:maxLength="20"
-        android:textColor="#ffe6e4e4"
+        android:textColor="@color/chat_text_color"
         android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:layout_alignBottom="@+id/listitem_image"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toRightOf="@+id/dividertextviewleft"
+        android:layout_toEndOf="@+id/dividertextviewleft"
+        />
     <TextView
         android:id="@+id/listitem_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:text="counter"
-        android:textColor="#ffe6e4e4"
+        android:textColor="@color/chat_text_color"
         android:layout_alignTop="@+id/listitem_text"
         android:layout_toLeftOf="@+id/dividertextviewright"
         android:layout_toStartOf="@+id/dividertextviewright"
@@ -61,11 +65,11 @@
     <TextView
         android:id="@+id/dividertextviewright"
         android:textSize="22sp"
-        android:layout_width="2dp"
+        android:layout_width="1dp"
         android:layout_height="200dp"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
-        android:background="#64000000"
+        android:background="@color/chat_border_background"
         android:elegantTextHeight="true"
         android:layout_alignRight="@+id/listitem_image"
         android:layout_alignEnd="@+id/listitem_image"
@@ -75,14 +79,16 @@
     <TextView
         android:id="@+id/dividertextviewleft"
         android:textSize="22sp"
-        android:layout_width="2dp"
+        android:layout_width="1dp"
         android:layout_height="200dp"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
-        android:background="#64000000"
+        android:background="@color/chat_border_background"
         android:elegantTextHeight="true"
+        android:layout_alignLeft="@id/listitem_image"
+        android:layout_alignStart="@id/listitem_image"
         android:layout_below="@+id/listitem_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_above="@+id/listitem_text"
+        />
 
 </RelativeLayout>

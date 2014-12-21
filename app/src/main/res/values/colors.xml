@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="error">#f00</color>
-
     <color name="white">#fff</color>
 
-    <color name="blue">#00f</color>
-
-    <color name="green">#0f0</color>
+    <color name="chat_text_background">#ff000000</color>
+    <color name="chat_border_background">#64000000</color>
+    <color name="chat_text_color">#e6e4e4</color>
 
     <!-- app colors -->
 
