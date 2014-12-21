@@ -21,4 +21,6 @@ public interface MainPresenter {
     public void setToolbarText(String text);
     public void chatButtonSendPressed(Chat chat, String message);
     public void resetToolbarText();
+
+    public int getBottomPosition();
 }

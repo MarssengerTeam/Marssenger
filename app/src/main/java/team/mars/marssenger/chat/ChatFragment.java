@@ -90,5 +90,15 @@ public class ChatFragment extends Fragment implements ChatView {
     private void test(CharSequence charSequence){
         Toast.makeText(getActivity().getApplicationContext(),charSequence,Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void scrollToBottom() {
+        recyclerView.scrollToPosition(mainPresenter.getBottomPosition());
+    }
+
+    @Override
+    public void smoothScrollToBottom() {
+
+    }
 }
 

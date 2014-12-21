@@ -5,4 +5,7 @@ package team.mars.marssenger.chat;
  */
 public interface ChatView {
 
+    public void scrollToBottom();
+
+    public void smoothScrollToBottom();
 }

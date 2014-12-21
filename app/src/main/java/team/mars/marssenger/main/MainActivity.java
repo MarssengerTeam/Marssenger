@@ -223,4 +223,9 @@ public class MainActivity extends ActionBarActivity implements
     public void resetToolbarText() {
         toolbar.setTitle(R.string.app_name);
     }
+
+    @Override
+    public int getBottomPosition() {
+        return cChatListAdapter.getItemCount();
+    }
 }

@@ -37,7 +37,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
         relativeLayout =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.mars_list_item, viewGroup, false);
+                .inflate(R.layout.list_item, viewGroup, false);
 
         return new ViewHolder(relativeLayout);
     }
