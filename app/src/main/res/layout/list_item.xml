@@ -52,6 +52,7 @@
         android:layout_toEndOf="@+id/dividertextviewleft"
         />
     <TextView
+        android:maxLength="3"
         android:id="@+id/listitem_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
