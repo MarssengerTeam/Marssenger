@@ -7,7 +7,7 @@
     <ImageView
         android:id="@+id/listitem_image"
         android:layout_width="@dimen/chat_width"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/list_item_image_height"
         android:layout_alignParentTop="true"
         android:contentDescription="@string/list_image_description"
         android:src="@drawable/ic_avatar"
@@ -16,7 +16,7 @@
     <TextView
 
         android:id="@+id/listitem_name"
-        android:textSize="22sp"
+        android:textSize="@dimen/list_element_text_size"
         android:layout_width="@dimen/chat_width"
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
@@ -28,11 +28,11 @@
         android:textColor="@color/chat_text_color"
         android:layout_alignRight="@+id/listitem_image"
         android:layout_alignEnd="@+id/listitem_image"
-        android:maxLines="1"
+        android:maxLines="@dimen/list_item_max_lines"
         android:textAlignment="inherit"
         android:elegantTextHeight="true"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="@dimen/list_element_padding"
+        android:paddingRight="@dimen/list_element_padding"
         />
     <TextView
         android:id="@+id/listitem_text"
@@ -41,10 +41,10 @@
         android:singleLine="true"
         android:ellipsize="marquee"
         android:background="@color/accent700"
-        android:maxLength="20"
+        android:maxLength="@dimen/message_max_length"
         android:textColor="@color/chat_text_color"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="@dimen/list_element_padding"
+        android:paddingRight="@dimen/list_element_padding"
         android:layout_alignBottom="@+id/listitem_image"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -52,7 +52,7 @@
         android:layout_toEndOf="@+id/dividertextviewleft"
         />
     <TextView
-        android:maxLength="3"
+        android:maxLength="@dimen/counter_max_length"
         android:id="@+id/listitem_counter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -60,14 +60,14 @@
         android:layout_alignTop="@+id/listitem_text"
         android:layout_toLeftOf="@+id/dividertextviewright"
         android:layout_toStartOf="@+id/dividertextviewright"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginRight="@dimen/counter_end_margin"
+        android:layout_marginEnd="@dimen/counter_end_margin" />
 
     <TextView
         android:id="@+id/dividertextviewright"
-        android:textSize="22sp"
-        android:layout_width="1dp"
-        android:layout_height="200dp"
+        android:textSize="@dimen/list_element_text_size"
+        android:layout_width="@dimen/list_item_divider_width"
+        android:layout_height="@dimen/list_item_image_height"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
         android:background="@color/chat_border_background"
@@ -79,9 +79,9 @@
 
     <TextView
         android:id="@+id/dividertextviewleft"
-        android:textSize="22sp"
-        android:layout_width="1dp"
-        android:layout_height="200dp"
+        android:textSize="@dimen/list_element_text_size"
+        android:layout_width="@dimen/list_item_divider_width"
+        android:layout_height="@dimen/list_item_image_height"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
         android:background="@color/chat_border_background"

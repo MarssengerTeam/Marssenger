@@ -7,6 +7,20 @@
     <dimen name="message_start_margin">16dp</dimen>
     <dimen name="message_end_margin">26dp</dimen>
 
+    <dimen name="list_element_padding">5dp</dimen>
+    <dimen name="list_element_text_size">22sp</dimen>
+
+    <dimen name="list_item_image_height">200dp</dimen>
+
+    <dimen name="counter_end_margin">10dp</dimen>
+
+    <dimen name="list_item_divider_width">1dp</dimen>
+
+    <dimen name="counter_max_length">3</dimen>
+    <dimen name="message_max_length">20</dimen>
+
+    <dimen name="list_item_max_lines">1</dimen>
+
     <dimen name="chat_padding">1sp</dimen>
     <dimen name="chat_height">193dp</dimen>
     <dimen name="chat_width">193dp</dimen>
