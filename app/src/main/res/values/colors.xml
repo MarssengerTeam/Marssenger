@@ -4,7 +4,7 @@
     <color name="white">#fff</color>
 
     <color name="chat_text_background">#ff000000</color>
-    <color name="chat_border_background">#64000000</color>
+    <color name="chat_border_background">#30000000</color>
     <color name="chat_text_color">#e6e4e4</color>
 
     <!-- app colors -->
