@@ -7,6 +7,13 @@
     android:layout_height="wrap_content"
     android:layout_alignParentRight="true"
     android:layout_alignParentEnd="true"
+
+    android:paddingBottom="@dimen/message_vertical_margin"
+    android:paddingTop="@dimen/message_vertical_margin"
+    android:paddingStart="@dimen/message_end_margin"
+    android:paddingLeft="@dimen/message_end_margin"
+    android:paddingEnd="@dimen/message_start_margin"
+    android:paddingRight="@dimen/message_start_margin"
     >
 
     <TextView
@@ -17,9 +24,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
-        android:gravity="end"
-        android:text="message"
-        android:paddingRight="12dp"/>
+        android:gravity="end"/>
 
     <TextView
         android:id="@+id/time"
@@ -31,6 +36,6 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
         android:gravity="end"
-        android:text="time" />
+        />
 
 </RelativeLayout>

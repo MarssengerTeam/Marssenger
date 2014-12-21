@@ -6,21 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
 
+    android:paddingBottom="@dimen/message_vertical_margin"
+    android:paddingTop="@dimen/message_vertical_margin"
+    android:paddingStart="@dimen/message_start_margin"
+    android:paddingLeft="@dimen/message_start_margin"
+    android:paddingEnd="@dimen/message_end_margin"
+    android:paddingRight="@dimen/message_end_margin"
     >
 
     <TextView
         android:id="@+id/message"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/message_text_size"
-        android:text="message" />
+        android:textSize="@dimen/message_text_size"/>
 
     <TextView
         android:id="@+id/time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/time_text_size"
-        android:layout_below="@id/message"
-        android:text="time" />
+        android:layout_below="@id/message"/>
 
 </RelativeLayout>
