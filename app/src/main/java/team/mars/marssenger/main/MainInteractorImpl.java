@@ -96,10 +96,10 @@ public class MainInteractorImpl implements MainInteractor {
             messageDatabase.createMessage("...",sender,5,0);
 
             chatDatabase.createChat("Miss One","111111111111");
-            messageDatabase.createMessage("oneoneoneoneoneoneone",sender,5,0);
+            messageDatabase.createMessage("oneoneoneoneoneoneone",sender,6,0);
 
             chatDatabase.createChat("Null Jr.","015697536458");
-            messageDatabase.createMessage("nullnull null null null",sender,6,0);
+            messageDatabase.createMessage("nullnull null null null",sender,7,0);
         }
     }
 

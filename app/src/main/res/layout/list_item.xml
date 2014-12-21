@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical"
-        android:background="@color/primary600"
+        android:background="@color/primary800"
         android:layout_alignTop="@+id/listitem_image"
         android:layout_alignLeft="@+id/listitem_image"
         android:layout_alignStart="@+id/listitem_image"
