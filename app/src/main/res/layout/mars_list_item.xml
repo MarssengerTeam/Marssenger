@@ -83,7 +83,6 @@
         android:elegantTextHeight="true"
         android:layout_below="@+id/listitem_name"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/listitem_text" />
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

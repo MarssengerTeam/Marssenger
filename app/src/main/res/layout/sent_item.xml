@@ -18,7 +18,8 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
         android:gravity="end"
-        />
+        android:text="message"
+        android:paddingRight="12dp"/>
 
     <TextView
         android:id="@+id/time"
@@ -30,6 +31,6 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="end"
         android:gravity="end"
-        />
+        android:text="time" />
 
 </RelativeLayout>
