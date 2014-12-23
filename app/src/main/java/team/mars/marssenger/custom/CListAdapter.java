@@ -1,5 +1,6 @@
 package team.mars.marssenger.custom;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -22,7 +23,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     private ArrayList<Chat> chatlist;
 
     //layout-attr
-    private RelativeLayout relativeLayout;
+    private CardView layout;
 
     public CListAdapter (ChatDatabase list){
         this.chats=list;
@@ -36,16 +37,16 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
-        relativeLayout =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
+        layout =(CardView) LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_item, viewGroup, false);
 
-        return new ViewHolder(relativeLayout);
+        return new ViewHolder(layout);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
 
-        holder=new ViewHolder(relativeLayout);
+        holder=new ViewHolder(layout);
         holder.name.setText(chatlist.get(i).getName());
         holder.text.setText(chats.getLastMessage(chatlist.get(i)).getMessage());
         holder.counter.setText(chats.getUnreadMessages(chatlist.get(i))+"");
@@ -71,12 +72,12 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
         public ImageView image;
         public TextView counter;
 
-        public ViewHolder(RelativeLayout relativeLayout) {
-            super(relativeLayout);
-            this.name=(TextView) relativeLayout.findViewById(R.id.listitem_name);
-            this.text=(TextView) relativeLayout.findViewById(R.id.listitem_text);
-            this.counter=(TextView) relativeLayout.findViewById(R.id.listitem_counter);
-            this.image=(ImageView) relativeLayout.findViewById(R.id.listitem_image);
+        public ViewHolder(CardView layout) {
+            super(layout);
+            this.name=(TextView) layout.findViewById(R.id.listitem_name);
+            this.text=(TextView) layout.findViewById(R.id.listitem_text);
+            this.counter=(TextView) layout.findViewById(R.id.listitem_counter);
+            this.image=(ImageView) layout.findViewById(R.id.listitem_image);
         }
     }
 
