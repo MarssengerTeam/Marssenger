@@ -109,7 +109,7 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void colorActionBar() {getWindow().setStatusBarColor(getResources().getColor(R.color.primary700));}
+    private void colorActionBar() {getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));}
 
     public FragmentTransaction getFragmentTransition(FragmentTransaction transaction){
 

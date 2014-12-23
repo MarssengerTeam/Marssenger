@@ -15,7 +15,7 @@
         android:layout_height="10dp"
         android:id="@+id/imageView"
         android:layout_gravity="center_horizontal"
-        android:background="@color/accent200"
+        android:background="@color/accent"
         android:contentDescription="@string/just_color" />
 
     <com.digits.sdk.android.DigitsAuthButton

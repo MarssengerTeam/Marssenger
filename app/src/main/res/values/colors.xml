@@ -9,21 +9,15 @@
 
     <!-- app colors -->
 
-    <color name="primary50">#fce4ec</color>
-    <color name="primary100">#f8bbd0</color>
-    <color name="primary200">#f48fb1</color>
-    <color name="primary300">#f06292</color>
-    <color name="primary400">#ec407a</color>
-    <color name="primary500">#e91e63</color>
-    <color name="primary600">#d81b60</color>
-    <color name="primary700">#c2185b</color>
-    <color name="primary800">#ad1457</color>
-    <color name="primary900">#880e4f</color>
+    <color name="primary_dark">#512da8</color>
+    <color name="primary">#673ab7</color>
+    <color name="primary_light">#d1c4e9</color>
+    <color name="accent">#ffc107</color>
 
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#727272</color>
+    <color name="divider">#b6b6b6</color>
+    <color name="text_icon">#fff</color>
 
-    <color name="accent100">#ea80fc</color>
-    <color name="accent200">#e040fb</color>
-    <color name="accent400">#d500f9</color>
-    <color name="accent700">#aa00ff</color>
 
 </resources>
