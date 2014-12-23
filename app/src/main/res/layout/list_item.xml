@@ -33,7 +33,9 @@
             android:src="@drawable/ic_avatar"
             android:layout_centerInParent="true"
             android:layout_below="@id/listitem_name"
-            android:cropToPadding="true"
+            android:cropToPadding="false"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
             />
 
         <!-- last message -->
