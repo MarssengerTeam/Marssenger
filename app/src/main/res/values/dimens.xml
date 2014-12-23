@@ -7,15 +7,13 @@
     <dimen name="message_start_margin">16dp</dimen>
     <dimen name="message_end_margin">26dp</dimen>
 
-    <dimen name="list_element_text_size">22sp</dimen>
-
-    <dimen name="counter_end_margin">10dp</dimen>
+    <dimen name="list_element_text_size">18sp</dimen>
 
     <dimen name="textview_textsize">15dp</dimen>
 
     <dimen name="toolbar_height">56dp</dimen>
 
-    <dimen name="message_text_size">23sp</dimen>
+    <dimen name="message_text_size">20sp</dimen>
 
     <dimen name="time_text_size">10sp</dimen>
 

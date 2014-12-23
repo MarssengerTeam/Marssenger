@@ -7,23 +7,10 @@
     card_view:cardCornerRadius="1dp"
     >
 
-    <RelativeLayout android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <!-- name-->
-        <TextView
-            android:layout_alignParentTop="true"
-            android:id="@+id/listitem_name"
-            android:textSize="@dimen/list_element_text_size"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="top"
-            android:textColor="@color/chat_text_color"
-            android:background="@color/primary_dark"
-            android:maxLines="1"
-            android:textAlignment="inherit"
-            android:elegantTextHeight="true"
-            />
 
         <ImageView
             android:id="@+id/listitem_image"
@@ -31,40 +18,59 @@
             android:layout_height="wrap_content"
             android:contentDescription="@string/list_image_description"
             android:src="@drawable/ic_avatar"
-            android:layout_centerInParent="true"
-            android:layout_below="@id/listitem_name"
             android:cropToPadding="false"
             android:scaleType="fitStart"
             android:adjustViewBounds="true"
             />
 
-        <!-- last message -->
+        <!-- name-->
         <TextView
-            android:id="@+id/listitem_text"
+            android:id="@+id/listitem_name"
+            android:textSize="@dimen/list_element_text_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            android:background="@color/accent"
-            android:maxLength="20"
-            android:textColor="@color/chat_text_color"
             android:gravity="bottom"
+            android:textColor="@color/primary_text"
+            android:background="@color/primary_light"
+            android:maxLines="1"
+            android:textAlignment="inherit"
+            android:elegantTextHeight="true"
             android:layout_below="@id/listitem_image"
             />
 
-        <!-- counter -->
-        <TextView
-            android:maxLength="3"
-            android:id="@+id/listitem_counter"
-            android:layout_width="wrap_content"
+        <!-- last message -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/chat_text_color"
-            android:layout_marginRight="@dimen/counter_end_margin"
-            android:layout_marginEnd="@dimen/counter_end_margin"
+            android:layout_below="@id/listitem_name"
+            android:background="@color/primary_light"
             android:gravity="bottom"
-            android:layout_toRightOf="@id/listitem_text"
-            android:layout_toEndOf="@id/listitem_text"
-            />
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/listitem_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:maxLength="20"
+                android:textColor="@color/secondary_text"
+                android:layout_gravity="start"
+                android:layout_weight="7"
+                />
+
+            <!-- counter -->
+            <TextView
+                android:maxLength="3"
+                android:id="@+id/listitem_counter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/accent"
+                android:layout_gravity="end"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                />
+        </LinearLayout>
 
     </RelativeLayout>
 
