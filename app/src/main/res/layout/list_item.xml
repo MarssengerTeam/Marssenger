@@ -6,101 +6,64 @@
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="1dp"
     >
-    <ImageView
-        android:id="@+id/listitem_image"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/list_item_image_height"
-        android:contentDescription="@string/list_image_description"
-        android:src="@drawable/ic_avatar"
-        android:layout_centerInParent="true"
-        android:scaleType="fitCenter"
-        />
-    <!-- name-->
-    <TextView
-        android:layout_alignParentTop="true"
-        android:id="@+id/listitem_name"
-        android:textSize="@dimen/list_element_text_size"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="top"
-        android:textColor="@color/chat_text_color"
-        android:background="@color/primary800"
-        android:maxLines="1"
-        android:textAlignment="inherit"
-        android:elegantTextHeight="true"
-        />
-    <!--
-    android:layout_alignTop="@+id/listitem_image"
-        android:layout_alignLeft="@+id/listitem_image"
-        android:layout_alignStart="@+id/listitem_image"
-        android:layout_alignRight="@+id/listitem_image"
-        android:layout_alignEnd="@+id/listitem_image"
-    -->
 
-    <!-- last message -->
-    <TextView
-        android:id="@+id/listitem_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:ellipsize="marquee"
-        android:background="@color/accent700"
-        android:maxLength="20"
-        android:textColor="@color/chat_text_color"
-        android:gravity="bottom"
-        />
-    <!--
-    android:layout_alignBottom="@+id/listitem_image"
-    android:layout_toRightOf="@+id/dividertextviewleft"
-        android:layout_toEndOf="@+id/dividertextviewleft" -->
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <!-- name-->
+        <TextView
+            android:layout_alignParentTop="true"
+            android:id="@+id/listitem_name"
+            android:textSize="@dimen/list_element_text_size"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:textColor="@color/chat_text_color"
+            android:background="@color/primary800"
+            android:maxLines="1"
+            android:textAlignment="inherit"
+            android:elegantTextHeight="true"
+            />
 
-    <!-- counter -->
-    <TextView
-        android:maxLength="3"
-        android:id="@+id/listitem_counter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/chat_text_color"
-        android:layout_marginRight="@dimen/counter_end_margin"
-        android:layout_marginEnd="@dimen/counter_end_margin"
-        android:gravity="bottom"
-        android:layout_toRightOf="@id/listitem_text"
-        android:layout_toEndOf="@id/listitem_text"
-        />
-    <!--
-    android:layout_alignTop="@+id/listitem_text"
-        android:layout_toLeftOf="@+id/dividertextviewright"
-        android:layout_toStartOf="@+id/dividertextviewright"
-        -->
+        <ImageView
+            android:id="@+id/listitem_image"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/list_image_description"
+            android:src="@drawable/ic_avatar"
+            android:layout_centerInParent="true"
+            android:layout_below="@id/listitem_name"
+            android:cropToPadding="true"
+            />
 
-    <!--
-    <TextView
-        android:id="@+id/dividertextviewright"
-        android:textSize="@dimen/list_element_text_size"
-        android:layout_width="@dimen/list_item_divider_width"
-        android:layout_height="@dimen/list_item_image_height"
-        android:layout_alignWithParentIfMissing="true"
-        android:gravity="center_vertical"
-        android:background="@color/chat_border_background"
-        android:elegantTextHeight="true"
-        android:layout_alignRight="@+id/listitem_image"
-        android:layout_alignEnd="@+id/listitem_image"
-        android:layout_below="@+id/listitem_name"
-        android:layout_above="@+id/listitem_text" />
+        <!-- last message -->
+        <TextView
+            android:id="@+id/listitem_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:background="@color/accent700"
+            android:maxLength="20"
+            android:textColor="@color/chat_text_color"
+            android:gravity="bottom"
+            android:layout_below="@id/listitem_image"
+            />
 
-    <TextView
-        android:id="@+id/dividertextviewleft"
-        android:textSize="@dimen/list_element_text_size"
-        android:layout_width="@dimen/list_item_divider_width"
-        android:layout_height="@dimen/list_item_image_height"
-        android:layout_alignWithParentIfMissing="true"
-        android:gravity="center_vertical"
-        android:background="@color/chat_border_background"
-        android:elegantTextHeight="true"
-        android:layout_alignLeft="@id/listitem_image"
-        android:layout_alignStart="@id/listitem_image"
-        android:layout_below="@+id/listitem_name"
-        android:layout_above="@+id/listitem_text"
-        />
--->
+        <!-- counter -->
+        <TextView
+            android:maxLength="3"
+            android:id="@+id/listitem_counter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/chat_text_color"
+            android:layout_marginRight="@dimen/counter_end_margin"
+            android:layout_marginEnd="@dimen/counter_end_margin"
+            android:gravity="bottom"
+            android:layout_toRightOf="@id/listitem_text"
+            android:layout_toEndOf="@id/listitem_text"
+            />
+
+    </RelativeLayout>
+
 </android.support.v7.widget.CardView>
