@@ -7,10 +7,10 @@
 
     <!-- app colors -->
 
-    <color name="primary_dark">#00796b</color>
-    <color name="primary">#009688</color>
-    <color name="primary_light">#b2dfdb</color>
-    <color name="accent">#ff4081</color>
+    <color name="primary_dark">#5d4037</color>
+    <color name="primary">#795548</color>
+    <color name="primary_light">#bcaaa4</color>
+    <color name="accent">#ff5252</color>
 
     <color name="primary_text">#434343</color>
     <color name="secondary_text">#727272</color>
