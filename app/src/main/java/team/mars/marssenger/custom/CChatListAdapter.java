@@ -29,10 +29,8 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     private RelativeLayout relativeLayout;
     private Chat chat;
-    private MessageDatabase database;
 
     public CChatListAdapter(MessageDatabase database, Chat chat){
-        this.database=database;
         this.chat=chat;
         mData=database.getAllMessageFromChat(chat);
         mSentIndex=new TreeSet <>();
@@ -64,7 +62,6 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     @Override
     public void onBindViewHolder(CChatListAdapter.ViewHolder holder, int position) {
-        holder=new ViewHolder(relativeLayout);
         holder.message.setText(mData.get(position).getMessage());
         holder.time.setText(getStringFromTime(mData.get(position).getTimestamp()));
     }
