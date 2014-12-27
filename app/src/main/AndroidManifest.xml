@@ -7,10 +7,11 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
-    <permission android:name="com.example.gcm.permission.C2D_MESSAGE"
+    <permission
+        android:name="com.example.gcm.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
-    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
+    <uses-permission android:name="com.example.gcm.permission.C2D_MESSAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,7 +19,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="team.mars.marssenger.main.MainActivity"
+            android:name=".main.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,31 +27,42 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="team.mars.marssenger.register.RegisterActivity"
+            android:name=".register.RegisterActivity"
             android:label="@string/title_activity_register"
-            android:parentActivityName="team.mars.marssenger.main.MainActivity" >
+            android:parentActivityName=".main.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="team.mars.marssenger.main.MainActivity" />
         </activity>
 
-
-
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <receiver
             android:name=".communication.GcmBroadcastReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+
                 <category android:name="com.example.gcm" />
             </intent-filter>
         </receiver>
-        <service android:name=".communication.GcmIntentService" />
-        <meta-data android:name="com.crashlytics.ApiKey" android:value="706b1e39e37b56cd940cc8bb1395797473ee66a0"/>
 
+        <service android:name=".communication.GcmIntentService" />
+
+        <meta-data
+            android:name="com.crashlytics.ApiKey"
+            android:value="706b1e39e37b56cd940cc8bb1395797473ee66a0" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="team.mars.marssenger.main.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

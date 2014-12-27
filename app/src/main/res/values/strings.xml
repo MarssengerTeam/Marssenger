@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <!-- keystore -->
 
 
@@ -25,5 +26,7 @@
     <string name="action_view_all">All</string>
     <string name="action_view_single">Chats</string>
     <string name="action_view_groups">Groups</string>
+    <string name="title_setting_list">Settings</string>
+    <string name="title_setting_detail">Setting Detail</string>
 
 </resources>

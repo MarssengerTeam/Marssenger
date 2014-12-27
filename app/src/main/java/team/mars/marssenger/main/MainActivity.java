@@ -21,6 +21,7 @@ import team.mars.marssenger.chat.ChatFragment;
 import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.custom.CListAdapter;
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.settings.SettingsActivity;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -166,7 +167,8 @@ public class MainActivity extends ActionBarActivity implements
 
                 return true;
             case R.id.action_settings:
-
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
                 return true;
             case R.id.action_new_message:
 
