@@ -214,9 +214,9 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public void chatButtonSendPressed(Chat chat, String message) {
+    public void chatButtonSendPressed(String message) {
         //TODO MY NUMBER HIER           vvv
-        mainInteractor.sendMessage("0157700000", chat.getReciever(), message);
+        mainInteractor.sendMessage("0157700000", this.chat.getReciever(), message);
     }
 
     @Override

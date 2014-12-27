@@ -100,6 +100,17 @@ public class MainInteractorImpl implements MainInteractor {
 
             chatDatabase.createChat("Null Jr.","015697536458");
             messageDatabase.createMessage("nullnull null null null",sender,7,0);
+        }else{
+
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(0)).size(), sender, 0, 0);
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(1)).size(), sender, 1, 0);
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(2)).size(), sender, 2, 0);
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(3)).size(), sender, 3, 0);
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(4)).size(), sender, 4, 0);
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(5)).size(), sender, 5, 0);
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(6)).size(), sender, 6, 0);
+            messageDatabase.createMessage("MessageTest: "+messageDatabase.getAllMessageFromChat(chatDatabase.getAllChatByTime().get(7)).size(), sender, 7, 0);
+
         }
     }
 

@@ -78,7 +78,7 @@ public class ChatFragment extends Fragment implements ChatView {
             @Override
             public void onClick(View view) {
                 if (chat_input_edittext.getText().toString() != "") {
-                    mainPresenter.chatButtonSendPressed(adapter.getChat(), chat_input_edittext.getText().toString());
+                    mainPresenter.chatButtonSendPressed(chat_input_edittext.getText().toString());
                     chat_input_edittext.setText("");
                 }
             }

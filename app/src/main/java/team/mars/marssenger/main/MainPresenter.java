@@ -19,7 +19,7 @@ public interface MainPresenter {
     public void onChatClick(View view,int position);
     public void onRegsiterReturn(int requestCode, int resultCode,Intent data);
     public void setToolbarText(String text);
-    public void chatButtonSendPressed(Chat chat, String message);
+    public void chatButtonSendPressed(String message);
     public void resetToolbarText();
 
     public int getBottomPosition();
