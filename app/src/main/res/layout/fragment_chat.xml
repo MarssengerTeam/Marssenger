@@ -31,9 +31,10 @@
         <Button
             android:id="@+id/chat_send_button"
             android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_action_send_now"/>
+            android:layout_width="dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_action_send_rocket"
+            android:layout_marginRight="5dp" />
 
     </LinearLayout>
 </FrameLayout>
