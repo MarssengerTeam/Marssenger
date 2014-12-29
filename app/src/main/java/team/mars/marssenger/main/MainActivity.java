@@ -4,9 +4,12 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.chat.ChatFragment;
+import team.mars.marssenger.communication.HttpsBackgroundService;
 import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.custom.CListAdapter;
 import team.mars.marssenger.datatype.Chat;
@@ -42,6 +46,10 @@ public class MainActivity extends ActionBarActivity implements
 
     //mvc
     private MainInteractor mainInteractor;
+
+    //HttpsService
+    private HttpsBackgroundService mService;
+    private boolean isBound = false;
 
     @Override
     protected void onResume() {
@@ -74,6 +82,10 @@ public class MainActivity extends ActionBarActivity implements
             test("toolbar null");
         }
 
+        Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
+        //serviceIntent.putExtra("phoneNumber", "010101010101");
+        //serviceIntent.putExtra("regID", "Undso");
+        startService(serviceIntent);
 
         mainInteractor=new MainInteractorImpl(this);
         if(mainInteractor.checkPlayServices()){
@@ -92,6 +104,20 @@ public class MainActivity extends ActionBarActivity implements
         replaceContainer(mainFragment,false);
         mainFragmentActive=true;
     }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
+            mService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     public void replaceContainer(Fragment fragment,boolean addToBackStack) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
