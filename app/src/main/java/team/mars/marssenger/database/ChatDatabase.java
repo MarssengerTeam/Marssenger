@@ -10,7 +10,9 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.datatype.GroupChat;
 import team.mars.marssenger.datatype.Message;
+import team.mars.marssenger.datatype.SingleChat;
 import team.mars.marssenger.util.QuicksortMessages;
 
 
@@ -66,7 +68,6 @@ public class ChatDatabase {
         }
     }
     int getDatabaseChatSize(){
-
         return 1;
     }
     public int isChatExisting(String reciever) {
@@ -80,10 +81,8 @@ public class ChatDatabase {
             cursor.moveToFirst();
             Chat newChat = cursorToChat(cursor);
             cursor.close();
-
-
             if (cursor.getColumnCount() == 0) {
-                Log.e("ChatDatabase", "Debug: kein chat von " + reciever);
+                Log.e("ChatDatabase", "Debug: Kein chat von " + reciever);
                 return -1;
             } else {
                 return (int) newChat.getId();
@@ -93,8 +92,6 @@ public class ChatDatabase {
         }
         return -2;
     }
-
-
 
     public int getUnreadMessages(Chat chat){
         int i= 0;
@@ -150,20 +147,28 @@ public class ChatDatabase {
         for(Message m:msorted){
             csorted.add(0,chats.get((int)m.getChatID()-1));
         }
-
         return csorted;
     }
 
     private Chat cursorToChat(Cursor cursor) {
-        Chat chat = new Chat();
 
-            try {
+        Chat chat;
+        try {
+        String recievers = cursor.getString(3);
+        String allRecievers[] = recievers.split(";");
+        if(allRecievers.length>1){
+           chat = new GroupChat();
+        }else{
+           chat = new SingleChat();
+        }
+
                 chat.setId(cursor.getLong(0));
                 chat.setName(cursor.getString(1));
                 chat.setMessageTableID(cursor.getLong(2));
-                chat.setReceiver(cursor.getString(3));
+                chat.setReceivers(allRecievers);
             } catch (Exception ex) {
                 ex.printStackTrace();//TODO FIXEN
+            chat = new SingleChat();
             }
 
 

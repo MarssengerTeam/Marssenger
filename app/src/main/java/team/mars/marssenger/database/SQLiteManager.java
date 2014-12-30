@@ -37,7 +37,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + COLUMN_CHAT_NAME
             + " text not null,"
             + COLUMN_CHAT_MESSAGENUMBER
-            + " text not null, "
+            + " text not null,"
             + COLUMN_CHAT_RECEIVER
             + " text not null"
             + ");";

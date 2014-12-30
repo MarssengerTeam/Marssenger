@@ -1,46 +1,28 @@
 package team.mars.marssenger.datatype;
 
 
-public class Chat {
-    private long id;
-    private String name;
-    private long messageTableID;
-    private String reciever;
 
-    public long getId() {
-        return id;
-    }
+public interface Chat {
 
-    public void setId(long id) {
-        this.id = id;
-    }
+    public Boolean isSingleChat();
 
-    public String getName() {
-        return name;
-    }
+    public long getId();
+    public void setId(long id);
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    public void setMessageTableID(long id){
-      this.messageTableID=id;
-    }
-
-    public long getMessageTableID() {
-        return messageTableID;
-    }
+    public String getName();
+    public void setName(String name);
 
     // Will be used by the ArrayAdapter in the ListView
     @Override
-    public String toString() {
-        return name;
-    }
+    public String toString();
 
-    public void setReceiver(String reciever) {
-        this.reciever=reciever;
-    }
-    public String getReciever(){
-        return reciever;
-    }
+
+    public void setMessageTableID(long id);
+    public long getMessageTableID();
+
+
+
+    public void setReceivers(String[] reciever);
+    public String[] getReciever();
 }

@@ -33,7 +33,7 @@ public interface MainInteractor {
     public void registerAtServer(String phoneNumber, String email, String GCMCode, String digitCode);
     public SharedPreferences getGCMPreferences(Context context);
     public int getAppVersion(Context context);
-    public void sendMessage(String myNumber, String receiver, String message);
+    public void sendMessage(String myNumber, String[] receivers, String message);
     public String getRegid();
     public void sendRegistrationIdToBackend();
     public void storeRegistrationId(Context context, String regid);
