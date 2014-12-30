@@ -26,6 +26,7 @@ import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.custom.CListAdapter;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.settings.SettingsActivity;
+import team.mars.marssenger.util.Constants;
 
 
 public class MainActivity extends ActionBarActivity implements
@@ -82,19 +83,14 @@ public class MainActivity extends ActionBarActivity implements
             test("toolbar null");
         }
 
-        Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
-        //serviceIntent.putExtra("phoneNumber", "010101010101");
-        //serviceIntent.putExtra("regID", "Undso");
-        startService(serviceIntent);
-
         mainInteractor=new MainInteractorImpl(this);
         if(mainInteractor.checkPlayServices()){
-            if (mainInteractor.getRegid().isEmpty()) {
-                mainInteractor.registerInBackground();
-            }else{
-                //TODO mainInteractor.registerAtServer("0157700003", "hurensohn@aufdeinem.grab", mainInteractor.getRegid(), "4321");
-                //Log.d("GCMSending", mainInteractor.getRegid() + "Hat registriert");
-            }
+            Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
+            serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
+            serviceIntent.putExtra("phoneNumber", "01234567");
+            serviceIntent.putExtra("email", "hurensohn@squad.com");
+            startService(serviceIntent);
+            //mService.sendMessage("012345", "012345", "hallo");
         }else{
             Log.d("GCMundso", "Cry a lot!");
         }
