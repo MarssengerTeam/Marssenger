@@ -5,10 +5,12 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import java.util.Random;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.chat.ChatFragment;
@@ -51,6 +55,19 @@ public class MainActivity extends ActionBarActivity implements
     //HttpsService
     private HttpsBackgroundService mService;
     private boolean isBound = false;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
+            mService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -87,13 +104,24 @@ public class MainActivity extends ActionBarActivity implements
         if(mainInteractor.checkPlayServices()){
             Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
             serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
-            serviceIntent.putExtra("phoneNumber", "01234567");
+            serviceIntent.putExtra("phoneNumber", "0157712345");
             serviceIntent.putExtra("email", "hurensohn@squad.com");
+            serviceIntent.putExtra("digitCode", "010101");
             startService(serviceIntent);
-            //mService.sendMessage("012345", "012345", "hallo");
         }else{
             Log.d("GCMundso", "Cry a lot!");
         }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(isBound) {
+                    mService.sendMessage("0157712345", String.valueOf(new Random().nextInt(100)), "123456");
+                    handler.postDelayed(this, 30000);
+                }
+            }
+        }, 0);
 
         this.mainFragment=MainFragment.getInstance(this);//mainPresenter
 
@@ -101,19 +129,21 @@ public class MainActivity extends ActionBarActivity implements
         mainFragmentActive=true;
     }
 
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
-            mService = binder.getService();
-            isBound = true;
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, HttpsBackgroundService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isBound = false;
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(isBound){
+            unbindService(mConnection);
+            isBound=false;
         }
-    };
+    }
 
     public void replaceContainer(Fragment fragment,boolean addToBackStack) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
@@ -186,7 +216,14 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.action_search:
-
+                //TODO this is chat
+                //only for testing, please changed if function is needed
+                if(isBound) {
+                    mService.sendMessage("0157712345", "test123", "12345");
+                    Toast.makeText(getApplicationContext(), "isBound", Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(getApplicationContext(), "not Bound", Toast.LENGTH_SHORT).show();
+                }
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
