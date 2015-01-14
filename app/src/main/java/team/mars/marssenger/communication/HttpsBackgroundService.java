@@ -13,6 +13,8 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -22,9 +24,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +47,7 @@ import team.mars.marssenger.main.MainActivity;
  */
 public class HttpsBackgroundService extends Service {
     //Service specific
-    int StartMode = START_STICKY;
+    int StartMode = START_REDELIVER_INTENT;
     private final IBinder mBinder  = new myBinder();
     boolean mAllowRebind = true;
     //
@@ -203,9 +207,9 @@ public class HttpsBackgroundService extends Service {
     }
 
     public void registerAtServer(String phoneNumber, String email, String GCMCode, String digitCode){
-        new AsyncTask<String, String, JSONArray>() {
+        new AsyncTask<String, String, JSONObject>() {
             @Override
-            protected JSONArray doInBackground(String... params) {
+            protected JSONObject doInBackground(String... params) {
                 String result11;
                 try {
                     HttpClient httpclient = new DefaultHttpClient();
@@ -224,17 +228,35 @@ public class HttpsBackgroundService extends Service {
                     HttpResponse response = httpclient.execute(httppost);
                     Log.d("SendingService", "Nach senden");
 
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
-                    StringBuilder sb = new StringBuilder();
-                    sb.append(reader.readLine() + "\n");
-                    String line = "0";
-                    while ((line = reader.readLine()) != null) {
-                        sb.append(line + "\n");
+                    HttpEntity entity = response.getEntity();
+                    if(entity != null){
+                        InputStream inputStream = entity.getContent();
+
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                        StringBuilder sb = new StringBuilder();
+
+                        String line = null;
+                        try {
+                            while ((line = reader.readLine()) != null) {
+                                sb.append(line + "\n");
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        } finally {
+                            try {
+                                inputStream.close();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        String resultString = sb.toString().substring(1, sb.length()-1);
+
+                        JSONObject jsonObject = new JSONObject(resultString);
+                        Log.i("SendingService", jsonObject.toString());
+
+                        return jsonObject;
                     }
-                    reader.close();
-                    Log.d("Sending", "Sendet daten!");
-                    result11 = sb.toString();
-                    return new JSONArray(result11);
+                    return null;
                     // parsing data
                 } catch (Exception e) {
                     Log.d("SendingService", e.toString());
@@ -244,16 +266,17 @@ public class HttpsBackgroundService extends Service {
             }
 
             @Override
-            protected void onPostExecute(JSONArray result) {
-                /*try {
-                    if(result.getString(0).equals("This phoneNumber is already in use!")){
-                        Toast.makeText(getBaseContext(), "This phoneNumber is already in use!", Toast.LENGTH_SHORT).show();
-                    }else{
-                        isVerified=true;
+            protected void onPostExecute(JSONObject result) {
+                try {
+                    if(result.toString()!="") {
+                        Log.i("SendingService", result.toString());
+                    }
+                    if(result.getString("error")=="1"){
+                        Toast.makeText(getBaseContext(), "Phonenumber already in use", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }*/
+                }
             }
         }.execute(phoneNumber, GCMCode,digitCode, email);
     }
@@ -274,8 +297,8 @@ public class HttpsBackgroundService extends Service {
             protected JSONArray doInBackground(String... params) {
                 String result11="123";
                 try {
-                    //TODO new function to Verify regID
-                    /*HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/user/checkRegID");
+
+                    HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/user/isVerified");
 
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -283,7 +306,8 @@ public class HttpsBackgroundService extends Service {
                     nameValuePairs.add(new BasicNameValuePair("phoneNumber", params[1]));
 
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
+                    Log.d("ConnectionHandler", "Waiting in checkRegId");
+                    Thread.sleep(10000);
                     // Execute HTTP Post Request
                     Log.d("SendingService", "Vor senden");
                     HttpResponse response = httpClient.execute(httppost);
@@ -299,14 +323,7 @@ public class HttpsBackgroundService extends Service {
                     reader.close();
                     Log.d("Sending", "Sendet daten!");
                     result11 = sb.toString();
-                    */
-                    try{
-                        Log.d("ConnectionHandler", "Waiting in checkRegId");
-                        Thread.sleep(20000);
-                        isVerified=true;
-                    }catch (Exception e){
-                        e.toString();
-                    }
+
                     return new JSONArray(result11);
                     // parsing data
                 } catch (Exception e) {
@@ -319,15 +336,18 @@ public class HttpsBackgroundService extends Service {
             @Override
             protected void onPostExecute(JSONArray result) {
                 //TODO replace with real code
-                /*try {
-                    if(result.getString(1).equals("true")){
-                        isVerified=true;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }*/
+                try{
+                    setVerified(true);
+                }catch (Exception e){
+                    e.toString();
+                }
+
             }
         }.execute(regID, myPhoneNumber);
+    }
+
+    private void setVerified(boolean b){
+        isVerified = b;
     }
 
     public void sendMessage(String receiver, String message, String messageID){

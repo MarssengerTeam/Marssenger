@@ -28,15 +28,12 @@ public interface MainInteractor {
     public void closeChatDB();
 
     public boolean checkPlayServices();
-    public void registerInBackground();
-    public String getRegistrationId(Context context);
-    public void registerAtServer(String phoneNumber, String email, String GCMCode, String digitCode);
-    public SharedPreferences getGCMPreferences(Context context);
-    public int getAppVersion(Context context);
-    public void sendMessage(String myNumber, String[] receivers, String message);
+
+    public void setMyPhoneNumber(String phoneNumber);
+    public String getMyPhoneNumber();
+
     public String getRegid();
-    public void sendRegistrationIdToBackend();
-    public void storeRegistrationId(Context context, String regid);
+
     public MessageDatabase getMessageDataBase();
 
 }

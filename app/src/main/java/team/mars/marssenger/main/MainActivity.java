@@ -2,6 +2,7 @@ package team.mars.marssenger.main;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.ComponentName;
@@ -102,17 +103,21 @@ public class MainActivity extends ActionBarActivity implements
 
         mainInteractor=new MainInteractorImpl(this);
         if(mainInteractor.checkPlayServices()){
-            Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
-            serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
-            serviceIntent.putExtra("phoneNumber", "0157712345");
-            serviceIntent.putExtra("email", "hurensohn@squad.com");
-            serviceIntent.putExtra("digitCode", "010101");
-            startService(serviceIntent);
+            if(!isSerivceRunning(HttpsBackgroundService.class)){
+                Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
+                serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
+                serviceIntent.putExtra("phoneNumber", "0157712345");
+                serviceIntent.putExtra("email", "hurensohn@squad.com");
+                serviceIntent.putExtra("digitCode", "010101");
+                startService(serviceIntent);
+            }else{
+                Toast.makeText(getApplicationContext(), "Service already running", Toast.LENGTH_SHORT).show();
+            }
         }else{
             Log.d("GCMundso", "Cry a lot!");
         }
 
-        final Handler handler = new Handler();
+        /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -121,7 +126,7 @@ public class MainActivity extends ActionBarActivity implements
                     handler.postDelayed(this, 30000);
                 }
             }
-        }, 0);
+        }, 0);*/
 
         this.mainFragment=MainFragment.getInstance(this);//mainPresenter
 
@@ -159,6 +164,16 @@ public class MainActivity extends ActionBarActivity implements
             transaction.commit();
         }
 
+    }
+
+    private boolean isSerivceRunning(Class<?> serviceClass) {
+        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+            if (serviceClass.getName().equals(service.service.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -264,7 +279,7 @@ public class MainActivity extends ActionBarActivity implements
         if (requestCode == REGISTER_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 String number = data.getStringExtra("number");
-                mainInteractor.storeRegistrationId(this,number);
+                //mainInteractor.storeRegistrationId(this,number);
             }
         }
     }
@@ -276,8 +291,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void chatButtonSendPressed(String message) {
-        //TODO MY NUMBER HIER           vvv
-        mainInteractor.sendMessage("0157700000", this.chat.getReciever(), message);
+        mService.sendMessage(this.chat.getReciever()[0], message, "12345");
     }
 
     @Override
