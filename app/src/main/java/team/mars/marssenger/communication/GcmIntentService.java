@@ -56,7 +56,7 @@ public class GcmIntentService extends IntentService {
                 // This loop represents the service doing some work.
 
                 // Post notification of received message.
-                sendNotification("Received: " + extras.toString()+extras.getString("MessageID"));
+                sendNotification(extras.getString("sender")+": "+extras.getString("message"));
 
                 Log.i(TAG, "Received: " + extras.toString());
 
@@ -71,18 +71,18 @@ public class GcmIntentService extends IntentService {
     // This is just one simple example of what you might choose to do with
     // a GCM message.
     private void sendNotification(String msg) {
-        mNotificationManager = (NotificationManager)
-                this.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0); //TODO MainActivity is correct?
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("StartMode", "Notification");
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher)//TODO ic_stat_gcm
                         .setContentTitle("GCM Notification")
                         .setStyle(new NotificationCompat.BigTextStyle()
-                                .bigText(msg))
+                        .bigText(msg))
                         .setContentText(msg);
 
         mBuilder.setContentIntent(contentIntent);

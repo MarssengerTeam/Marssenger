@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -100,6 +101,11 @@ public class MainActivity extends ActionBarActivity implements
         } else {
             test("toolbar null");
         }
+
+        //if there is a Notification from GCM, cancel.
+        NotificationManager nm = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
+        nm.cancel(1);
+
 
         mainInteractor=new MainInteractorImpl(this);
         if(mainInteractor.checkPlayServices()){
