@@ -9,4 +9,5 @@ public interface ChatPresenter {
     public void chatButtonSendPressed(String message);
     public int getBottomPosition();
     public CChatListAdapter getChatAdapter();
+    public void updateLayout();
 }

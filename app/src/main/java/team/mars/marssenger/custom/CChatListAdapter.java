@@ -1,5 +1,6 @@
 package team.mars.marssenger.custom;
 
+import android.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -26,9 +27,15 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
     private ArrayList<Message> mData;
 
     private TreeSet <Integer> mSentIndex;
+    private int positionLastChecked;
+    private int typeLastChecked;
+
+    private long oneMin;
 
     private RelativeLayout relativeLayout;
     private Chat chat;
+
+    private ArrayList<ViewHolder> viewHolderList;
 
     public CChatListAdapter(MessageDatabase database, Chat chat){
         this.chat=chat;
@@ -40,9 +47,73 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
                 mSentIndex.add(i);
             }
         }
+        viewHolderList=new ArrayList<>();
+        positionLastChecked=0;
+        Calendar now=Calendar.getInstance();
+        Calendar then=Calendar.getInstance();
+        then.set(now.get(Calendar.YEAR),now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH),now.get(Calendar.HOUR_OF_DAY),
+                now.get(Calendar.MINUTE)+1,now.get(Calendar.SECOND));
+        oneMin=then.getTimeInMillis()-now.getTimeInMillis();
     }
 
     //TODO method to edit margins on certain views
+    private void combineMessages(int last, int next){
+        RelativeLayout.LayoutParams layoutParams=
+                new RelativeLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.WRAP_CONTENT,
+                        RelativeLayout.LayoutParams.WRAP_CONTENT);
+        /*
+        margins right now:
+        top: message_top_margin
+        bottom: <none>
+         */
+        //left, top, right, bottom
+        layoutParams.setMargins(0,0,0,0);
+        //remove top margin from next
+        if (next<viewHolderList.size()) {
+            viewHolderList.get(next).setMargins(layoutParams);
+        }
+        //remove timestamp from last
+        if (last<viewHolderList.size()) {
+            viewHolderList.get(last).removeTimestamp();
+        }
+
+    }
+
+    public void updateLayout(){
+        //check them messages for combining them
+        typeLastChecked=getItemViewType(positionLastChecked);
+        int nextCheck=positionLastChecked++;
+        ArrayList<Integer> positions=new ArrayList<>();
+        while (positionLastChecked<mData.size()){
+            if (nextCheck<mData.size()){
+                if (match(positionLastChecked,nextCheck)){
+                    combineMessages(positionLastChecked,nextCheck);
+                }
+            }
+            //increase both integers for the next check
+            positionLastChecked++;
+            nextCheck++;
+        }
+    }
+
+    public boolean match(int last, int next){
+        //check if types match
+        if ((mSentIndex.contains(last) && mSentIndex.contains(next)) ||
+                (!mSentIndex.contains(last) && !mSentIndex.contains(next))){
+            //check if time is near enough
+            if (mData.get(next).getTimestamp()-mData.get(last).getTimestamp()<=oneMin){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addMessage(Message message){
+        this.mData.add(message);
+        notifyDataSetChanged();
+    }
 
     @Override
     public CChatListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -57,7 +128,6 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
                 break;
             default:break;
         }
-
         return new ViewHolder(relativeLayout);
     }
 
@@ -65,6 +135,7 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
     public void onBindViewHolder(CChatListAdapter.ViewHolder holder, int position) {
         holder.message.setText(mData.get(position).getMessage());
         holder.time.setText(getStringFromTime(mData.get(position).getTimestamp()));
+        viewHolderList.add(holder);
     }
 
     private String getStringFromTime(long time){
@@ -90,12 +161,21 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView message;
         public TextView time;
-
+        public RelativeLayout relativeLayout;
 
         public ViewHolder(RelativeLayout relativeLayout) {
             super(relativeLayout);
+            this.relativeLayout=(RelativeLayout) relativeLayout.findViewById(R.id.item_root);
             this.message=(TextView) relativeLayout.findViewById(R.id.message);
             this.time=(TextView) relativeLayout.findViewById(R.id.time);
+        }
+
+        public void setMargins(RelativeLayout.LayoutParams layoutParams){
+            relativeLayout.setLayoutParams(layoutParams);
+        }
+
+        public void removeTimestamp(){
+            time.setText("");
         }
     }
 }

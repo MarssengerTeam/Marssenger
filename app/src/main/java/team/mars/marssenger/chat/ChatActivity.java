@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.TreeSet;
+
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.datatype.Chat;
@@ -96,10 +98,10 @@ public class ChatActivity extends ActionBarActivity implements
     @Override
     public void chatButtonSendPressed(String message) {
 
-        /*
+        /*TODO figure out how to send a message
         mService.sendMessage(this.chat.getReciever()[0], message, "12345");
          */
-        test("omg the button was PRESSED!");
+
     }
 
     @Override
@@ -111,6 +113,11 @@ public class ChatActivity extends ActionBarActivity implements
     public CChatListAdapter getChatAdapter() {
         cChatListAdapter=new CChatListAdapter(mainInteractor.getMessageDataBase(),this.chat);
         return cChatListAdapter;
+    }
+
+    @Override
+    public void updateLayout() {
+        cChatListAdapter.updateLayout();
     }
 
     @Override

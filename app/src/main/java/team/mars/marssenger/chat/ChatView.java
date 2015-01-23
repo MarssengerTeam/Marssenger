@@ -11,6 +11,4 @@ public interface ChatView {
     public void smoothScrollToBottom();
 
     public void updateContent(CChatListAdapter adapter);
-
-    public void combineMessages(int [] positions);
 }

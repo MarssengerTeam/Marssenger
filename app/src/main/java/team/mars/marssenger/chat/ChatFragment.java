@@ -74,6 +74,7 @@ public class ChatFragment extends Fragment implements
         //set adapter
         this.adapter=chatPresenter.getChatAdapter();
         recyclerView.setAdapter(adapter);
+        chatPresenter.updateLayout();
         scrollToBottom();
     }
 
@@ -82,11 +83,6 @@ public class ChatFragment extends Fragment implements
         this.adapter=adapter;
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void combineMessages(int[] positions) {
-
     }
 
     private void test(CharSequence charSequence){
@@ -105,7 +101,11 @@ public class ChatFragment extends Fragment implements
 
     @Override
     public void onClick(View v) {
-
+        //forward event to ChatPresenter with Text from EditText
+        String input=chatInput.getText().toString();
+        if (input!=null){
+            chatPresenter.chatButtonSendPressed(input);
+        }
     }
 }
 
