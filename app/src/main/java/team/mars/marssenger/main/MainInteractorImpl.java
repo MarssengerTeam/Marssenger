@@ -26,6 +26,9 @@ import team.mars.marssenger.util.Constants;
  */
 public class MainInteractorImpl implements MainInteractor {
 
+    //Keys
+    public static final String INTERACTOR="interactor";
+
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String TAG = "MainInteractorImpl";
     public static final String EXTRA_MESSAGE = "message";
@@ -184,6 +187,11 @@ public class MainInteractorImpl implements MainInteractor {
     public MessageDatabase getMessageDataBase(){return messageDatabase;}
 
     @Override
+    public MainInteractorImpl get() {
+        return this;
+    }
+
+    @Override
     public boolean connectionEstablished() {
         return connected;
     }
@@ -216,6 +224,5 @@ public class MainInteractorImpl implements MainInteractor {
     private void test(CharSequence charSequence){
         Toast.makeText(context,charSequence,Toast.LENGTH_SHORT).show();
     }
-
 
 }

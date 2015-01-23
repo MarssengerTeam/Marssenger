@@ -3,7 +3,6 @@ package team.mars.marssenger.chat;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.main.MainActivity;
 import team.mars.marssenger.main.MainInteractor;
 
 public class ChatActivity extends ActionBarActivity implements ChatPresenter {
@@ -31,7 +31,7 @@ public class ChatActivity extends ActionBarActivity implements ChatPresenter {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             colorActionBar();
         }
-
+/*
         //check if given chat has receiver
         String [] receiver;
         if (getIntent().getIntExtra(Chat.CHAT_RECEIVER_COUNT,0)>0){
@@ -49,7 +49,14 @@ public class ChatActivity extends ActionBarActivity implements ChatPresenter {
                 data.getStringExtra(Chat.CHAT_NAME),
                 receiver,
                 data.getBooleanExtra(Chat.CHAT_IS_SINGLE_CHAT,true)
-        );
+        );*/
+
+        this.chat= (Chat) getIntent().getSerializableExtra(Chat.CHAT);
+        this.mainInteractor= MainActivity.MAIN_INTERACTOR;
+
+        //create fragment
+        ChatFragment chatFragment=ChatFragment.getInstance(this); //ChatPresenter
+        replaceContainer(chatFragment);
     }
 
 

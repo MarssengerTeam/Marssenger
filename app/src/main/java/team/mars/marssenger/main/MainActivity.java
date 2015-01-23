@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,9 +31,9 @@ public class MainActivity extends ActionBarActivity implements
             Toolbar.OnMenuItemClickListener,
             MainPresenter
 {
-    private Toolbar toolbar;
+    public static MainInteractor MAIN_INTERACTOR;
 
-    private boolean mainFragmentActive;
+    private Toolbar toolbar;
 
     private CListAdapter cListAdapter;
     private final int REGISTER_REQUEST_CODE = 01000;
@@ -83,6 +82,7 @@ public class MainActivity extends ActionBarActivity implements
 
 
         mainInteractor=new MainInteractorImpl(this);
+        MainActivity.MAIN_INTERACTOR=this.mainInteractor;
         if(mainInteractor.checkPlayServices()){
             if(!isSerivceRunning(HttpsBackgroundService.class)){
                 Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
@@ -112,7 +112,6 @@ public class MainActivity extends ActionBarActivity implements
         this.mainFragment=MainFragment.getInstance(this);//mainPresenter
 
         replaceContainer(mainFragment);
-        mainFragmentActive=true;
     }
 
 
@@ -183,18 +182,6 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (!mainFragmentActive) {
-                replaceContainer(mainFragment);
-                mainFragmentActive = true;
-                return true;
-            }
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.action_search:
@@ -219,7 +206,10 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onChatClick(View view, int position) {
-        startActivity(getChatIntent(cListAdapter.getItem(position)));
+        //startActivity(getChatIntent(cListAdapter.getItem(position)));
+        Intent intent=new Intent(getApplicationContext(),ChatActivity.class);
+        intent.putExtra(Chat.CHAT, cListAdapter.getItem(position));
+        startActivity(intent);
     }
 
     private Intent getChatIntent(Chat chat){

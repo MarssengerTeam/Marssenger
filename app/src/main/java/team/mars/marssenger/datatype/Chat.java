@@ -1,7 +1,9 @@
 package team.mars.marssenger.datatype;
 
 
-public class Chat {
+import java.io.Serializable;
+
+public class Chat implements Serializable{
 
     /*
     all the fields you need

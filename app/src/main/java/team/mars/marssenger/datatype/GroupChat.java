@@ -1,9 +1,11 @@
 package team.mars.marssenger.datatype;
 
+import java.io.Serializable;
+
 /**
  * Created by Kern on 28.12.2014.
  */
-public class GroupChat extends Chat{
+public class GroupChat extends Chat implements Serializable {
 
     /*
     all the fields you need
@@ -17,15 +19,13 @@ public class GroupChat extends Chat{
 
 
 
-    boolean type = false;
-
     //default const
     public GroupChat(){}
 
 
     @Override
     public boolean isSingleChat() {
-        return type;
+        return false;
     }
 
 /*
