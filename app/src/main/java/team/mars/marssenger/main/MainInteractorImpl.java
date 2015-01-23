@@ -1,11 +1,15 @@
 package team.mars.marssenger.main;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import team.mars.marssenger.communication.HttpsBackgroundService;
 import team.mars.marssenger.database.ChatDatabase;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
@@ -57,6 +62,40 @@ public class MainInteractorImpl implements MainInteractor {
     private ChatDatabase chatDatabase;
     private MessageDatabase messageDatabase;
     private Context context;
+
+    //HttpsService
+    private HttpsBackgroundService mService;
+    private boolean isBound = false;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
+            mService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
+
+    /*
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, HttpsBackgroundService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(isBound){
+            unbindService(mConnection);
+            isBound=false;
+        }
+    }*/
 
     public MainInteractorImpl(Context context){
         this.context= context;

@@ -24,5 +24,5 @@ public interface Chat {
 
 
     public void setReceivers(String[] reciever);
-    public String[] getReciever();
+    public String[] getReceiver();
 }

@@ -34,7 +34,9 @@
             android:layout_width="dp"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_action_send_now"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp"
+            android:layout_marginEnd="5dp"
+            />
 
     </LinearLayout>
 </FrameLayout>

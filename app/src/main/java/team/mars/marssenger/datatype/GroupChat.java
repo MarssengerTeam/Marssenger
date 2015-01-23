@@ -6,7 +6,7 @@ import java.util.ArrayList;
  * Created by Kern on 28.12.2014.
  */
 public class GroupChat implements Chat {
-    private String[] recivers;
+    private String[] receivers;
     private String name;
     private long id;
     private long messageTableID;
@@ -49,12 +49,12 @@ public class GroupChat implements Chat {
     }
 
     @Override
-    public void setReceivers(String[] reciever) {
-        this.recivers=reciever;
+    public void setReceivers(String[] receiver) {
+        this.receivers=receiver;
     }
 
     @Override
-    public String[] getReciever() {
-        return recivers;
+    public String[] getReceiver() {
+        return receivers;
     }
 }

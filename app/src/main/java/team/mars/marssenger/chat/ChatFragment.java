@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CChatListAdapter;
+import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.main.MainInteractor;
 import team.mars.marssenger.main.MainPresenter;
 
@@ -28,7 +29,7 @@ import team.mars.marssenger.main.MainPresenter;
 public class ChatFragment extends Fragment implements ChatView {
 
     private RecyclerView recyclerView;
-    private MainPresenter mainPresenter;
+    private ChatPresenter chatPresenter;
     private EditText chat_input_edittext;
     private Button sendButton;
 
@@ -36,15 +37,15 @@ public class ChatFragment extends Fragment implements ChatView {
     private CChatListAdapter adapter;
     private RecyclerView.LayoutManager manager;
 
-    public static ChatFragment getInstance(MainPresenter mainPresenter){
+    public static ChatFragment getInstance(ChatPresenter chatPresenter){
         ChatFragment c=new ChatFragment();
-        c.setMainPresenter(mainPresenter);
+        c.setChatPresenter(chatPresenter);
         return c;
     }
 
     public ChatFragment (){}
 
-    public void setMainPresenter(MainPresenter mainPresenter){this.mainPresenter=mainPresenter;}
+    public void setChatPresenter(ChatPresenter chatPresenter){this.chatPresenter=chatPresenter;}
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -78,7 +79,7 @@ public class ChatFragment extends Fragment implements ChatView {
             @Override
             public void onClick(View view) {
                 if (!chat_input_edittext.getText().toString().isEmpty()) {
-                    mainPresenter.chatButtonSendPressed(chat_input_edittext.getText().toString());
+                    chatPresenter.chatButtonSendPressed(chat_input_edittext.getText().toString());
                     chat_input_edittext.setText("");
                 }
             }
@@ -89,7 +90,7 @@ public class ChatFragment extends Fragment implements ChatView {
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         //set adapter
-        this.adapter=mainPresenter.getChatAdapter();
+        this.adapter=chatPresenter.getChatAdapter();
         recyclerView.setAdapter(adapter);
         scrollToBottom();
     }
@@ -107,12 +108,12 @@ public class ChatFragment extends Fragment implements ChatView {
 
     @Override
     public void scrollToBottom() {
-        recyclerView.scrollToPosition(mainPresenter.getBottomPosition());
+        recyclerView.scrollToPosition(chatPresenter.getBottomPosition());
     }
 
     @Override
     public void smoothScrollToBottom() {
-        recyclerView.smoothScrollToPosition(mainPresenter.getBottomPosition());
+        recyclerView.smoothScrollToPosition(chatPresenter.getBottomPosition());
     }
 }
 

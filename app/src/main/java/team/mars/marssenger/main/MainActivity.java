@@ -44,32 +44,14 @@ public class MainActivity extends ActionBarActivity implements
     private boolean mainFragmentActive;
 
     private CListAdapter cListAdapter;
-    private CChatListAdapter cChatListAdapter;
     private final int REGISTER_REQUEST_CODE = 01000;
-
-    private Chat chat;
 
     private MainFragment mainFragment;
 
     //mvc
     private MainInteractor mainInteractor;
 
-    //HttpsService
-    private HttpsBackgroundService mService;
-    private boolean isBound = false;
-    private ServiceConnection mConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
-            mService = binder.getService();
-            isBound = true;
-        }
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isBound = false;
-        }
-    };
 
     @Override
     protected void onResume() {
@@ -140,21 +122,7 @@ public class MainActivity extends ActionBarActivity implements
         mainFragmentActive=true;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, HttpsBackgroundService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(isBound){
-            unbindService(mConnection);
-            isBound=false;
-        }
-    }
 
     public void replaceContainer(Fragment fragment,boolean addToBackStack) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
@@ -237,14 +205,6 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.action_search:
-                //TODO this is chat
-                //only for testing, please changed if function is needed
-                if(isBound) {
-                    mService.sendMessage("0157712345", "test123", "12345");
-                    Toast.makeText(getApplicationContext(), "isBound", Toast.LENGTH_SHORT).show();
-                }else{
-                    Toast.makeText(getApplicationContext(), "not Bound", Toast.LENGTH_SHORT).show();
-                }
                 return true;
             case R.id.action_settings:
                 Intent intent = new Intent(this, SettingsActivity.class);
@@ -265,19 +225,9 @@ public class MainActivity extends ActionBarActivity implements
     }
 
     @Override
-    public CChatListAdapter getChatAdapter(){
-        cChatListAdapter=new CChatListAdapter(mainInteractor.getMessageDataBase(),this.chat);
-        return cChatListAdapter;
-    }
-
-    @Override
     public void onChatClick(View view, int position) {
-        chat=cListAdapter.getItem(position);
-        setToolbarText(chat.getName());
-        //create fragment and initiate it
-        ChatFragment chatFragment=ChatFragment.getInstance(this); //mainPresenter
-        replaceContainer(chatFragment,true);
-        mainFragmentActive=false;
+        Chat chat=cListAdapter.getItem(position);
+        //TODO give chat to ChatActivity and start intent
     }
 
     @Override
@@ -295,18 +245,9 @@ public class MainActivity extends ActionBarActivity implements
         toolbar.setTitle(text);
     }
 
-    @Override
-    public void chatButtonSendPressed(String message) {
-        mService.sendMessage(this.chat.getReciever()[0], message, "12345");
-    }
 
     @Override
     public void resetToolbarText() {
         toolbar.setTitle(R.string.app_name);
-    }
-
-    @Override
-    public int getBottomPosition() {
-        return cChatListAdapter.getItemCount()-1;
     }
 }

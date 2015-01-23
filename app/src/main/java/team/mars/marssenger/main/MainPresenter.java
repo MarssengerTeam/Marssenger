@@ -15,12 +15,12 @@ public interface MainPresenter {
     //Methoden zur Steuerung des Interactors und der View
 
     public CListAdapter getAdapter();
-    public CChatListAdapter getChatAdapter();
+
     public void onChatClick(View view,int position);
     public void onRegsiterReturn(int requestCode, int resultCode,Intent data);
     public void setToolbarText(String text);
-    public void chatButtonSendPressed(String message);
+
     public void resetToolbarText();
 
-    public int getBottomPosition();
+
 }

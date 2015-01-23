@@ -6,7 +6,7 @@ package team.mars.marssenger.datatype;
 
 public class SingleChat implements Chat {
 
-    private String[] recivers;
+    private String[] receivers;
     private String name;
     private long id;
     private long messageTableID;
@@ -50,12 +50,12 @@ public class SingleChat implements Chat {
     }
 
     @Override
-    public void setReceivers(String[] reciever) {
-        this.recivers=reciever;
+    public void setReceivers(String[] receiver) {
+        this.receivers=receiver;
     }
 
     @Override
-    public String[] getReciever() {
-        return recivers;
+    public String[] getReceiver() {
+        return receivers;
     }
 }
