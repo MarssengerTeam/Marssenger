@@ -51,16 +51,25 @@
         </receiver>
 
         <service android:name=".communication.GcmIntentService" />
-        <service android:name=".communication.HttpsBackgroundService"
-                 android:exported="false"/>
-
+        <service
+            android:name=".communication.HttpsBackgroundService"
+            android:exported="false" />
 
         <meta-data
             android:name="com.crashlytics.ApiKey"
             android:value="706b1e39e37b56cd940cc8bb1395797473ee66a0" />
+
         <activity
             android:name=".settings.SettingsActivity"
             android:label="@string/title_activity_settings"
+            android:parentActivityName=".main.MainActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="team.mars.marssenger.main.MainActivity" />
+        </activity>
+        <activity
+            android:name=".chat.ChatActivity"
+            android:label="@string/title_activity_chat"
             android:parentActivityName=".main.MainActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

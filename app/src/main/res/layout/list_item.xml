@@ -5,6 +5,12 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="1dp"
+    android:layout_marginBottom="@dimen/chat_bottom_margin"
+    android:layout_marginStart="@dimen/chat_vertical_margin"
+    android:layout_marginLeft="@dimen/chat_vertical_margin"
+    android:layout_marginEnd="@dimen/chat_vertical_margin"
+    android:layout_marginRight="@dimen/chat_vertical_margin"
+    android:layout_marginTop="@dimen/chat_top_margin"
     >
 
     <RelativeLayout
@@ -36,6 +42,8 @@
             android:textAlignment="inherit"
             android:elegantTextHeight="true"
             android:layout_below="@id/listitem_image"
+            android:paddingLeft="@dimen/text_padding"
+            android:paddingRight="@dimen/text_padding"
             />
 
         <!-- last message -->
@@ -46,6 +54,7 @@
             android:background="@color/primary_light"
             android:gravity="bottom"
             android:orientation="horizontal"
+            android:paddingBottom="@dimen/chat_bottom_margin"
             >
             <TextView
                 android:id="@+id/listitem_text"
@@ -57,6 +66,8 @@
                 android:textColor="@color/secondary_text"
                 android:layout_gravity="start"
                 android:layout_weight="7"
+                android:paddingLeft="@dimen/text_padding"
+                android:paddingRight="@dimen/text_padding"
                 />
 
             <!-- counter -->

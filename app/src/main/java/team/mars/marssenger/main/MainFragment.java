@@ -1,12 +1,9 @@
 package team.mars.marssenger.main;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.os.Build;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,7 +19,7 @@ import team.mars.marssenger.custom.CItemClickListener;
 /**
  * Created by Kern on 09.12.2014.
  */
-public class MainFragment extends Fragment implements MainView{
+public class MainFragment extends Fragment implements MainView {
     private RecyclerView recyclerView;
     private MainPresenter mainPresenter;
 

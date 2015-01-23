@@ -7,6 +7,12 @@
     <dimen name="message_start_margin">16dp</dimen>
     <dimen name="message_end_margin">26dp</dimen>
 
+    <dimen name="chat_vertical_margin">4dp</dimen>
+    <dimen name="chat_bottom_margin">2dp</dimen>
+    <dimen name="chat_top_margin">5dp</dimen>
+
+    <dimen name="text_padding">5dp</dimen>
+
     <dimen name="list_element_text_size">18sp</dimen>
 
     <dimen name="textview_textsize">15dp</dimen>

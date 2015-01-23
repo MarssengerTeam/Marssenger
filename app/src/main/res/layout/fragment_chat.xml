@@ -33,7 +33,7 @@
             android:layout_weight="1"
             android:layout_width="dp"
             android:layout_height="wrap_content"
-            android:background="@drawable/ic_action_send_rocket"
+            android:background="@drawable/ic_action_send_now"
             android:layout_marginRight="5dp"/>
 
     </LinearLayout>
