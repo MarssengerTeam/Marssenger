@@ -37,7 +37,6 @@ public class MainFragment extends Fragment implements MainView {
 
         View root=inflater.inflate(
                 R.layout.fragment_main, container, false);
-        mainPresenter.resetToolbarText();
         recyclerView=(RecyclerView) root.findViewById(R.id.main_listview);
 
         return root;
