@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,43 +17,44 @@ import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.main.MainActivity;
 import team.mars.marssenger.main.MainInteractor;
 
-public class ChatActivity extends ActionBarActivity implements ChatPresenter {
+public class ChatActivity extends ActionBarActivity implements
+        ChatPresenter,
+        Toolbar.OnMenuItemClickListener
+{
 
+    //mvc
     private CChatListAdapter cChatListAdapter;
     private MainInteractor mainInteractor;
+
     private Chat chat;
-    private ChatView chatView;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.chat= (Chat) getIntent().getSerializableExtra(Chat.CHAT);
+        this.mainInteractor= MainActivity.MAIN_INTERACTOR;
+
         setContentView(R.layout.activity_chat);
+
+        toolbar=(Toolbar) findViewById(R.id.toolbar);
+        if (toolbar!=null){
+
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+
+            toolbar.setTitle(chat.getName());
+            toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+            //menu
+            toolbar.inflateMenu(R.menu.menu_main);
+            toolbar.setOnMenuItemClickListener(this);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             colorActionBar();
         }
-/*
-        //check if given chat has receiver
-        String [] receiver;
-        if (getIntent().getIntExtra(Chat.CHAT_RECEIVER_COUNT,0)>0){
-            receiver=new String[getIntent().getIntExtra(Chat.CHAT_RECEIVER_COUNT,0)];
-            for (int i=0;i<receiver.length;i++){
-                receiver[i]=getIntent().getStringExtra(Chat.getChatReceiverKey(i));
-            }
-        } else {
-            receiver=new String[0];
-        }
-        Intent data=getIntent();
-        this.chat=new Chat(
-                data.getLongExtra(Chat.CHAT_ID,0),
-                data.getLongExtra(Chat.CHAT_MESSAGE_TABLE_ID,0),
-                data.getStringExtra(Chat.CHAT_NAME),
-                receiver,
-                data.getBooleanExtra(Chat.CHAT_IS_SINGLE_CHAT,true)
-        );*/
-
-        this.chat= (Chat) getIntent().getSerializableExtra(Chat.CHAT);
-        this.mainInteractor= MainActivity.MAIN_INTERACTOR;
 
         //create fragment
         ChatFragment chatFragment=ChatFragment.getInstance(this); //ChatPresenter
@@ -69,16 +71,11 @@ public class ChatActivity extends ActionBarActivity implements ChatPresenter {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()){
+            case R.id.action_settings:
+                return true;
+            default:break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -88,26 +85,12 @@ public class ChatActivity extends ActionBarActivity implements ChatPresenter {
 
     private void replaceContainer(Fragment fragment) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
-            FragmentTransaction lollioptransaction = getLollipopTransaction(transaction);
-            lollioptransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            lollioptransaction.replace(R.id.chat_container, fragment);
-            lollioptransaction.addToBackStack(null);
-            lollioptransaction.commit();
-        }else{
-            transaction.replace(R.id.chat_container, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-
+        transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+        transaction.replace(R.id.chat_container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    //TODO rausfinden warum diese Methode aufgerufen werden soll
-    private FragmentTransaction getLollipopTransaction(FragmentTransaction transaction){
-        //   transaction.addSharedElement(mainFragment.getView().findViewById(R.id.listitem_name), "listitem_name");
-        return transaction;
-    }
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void colorActionBar() {getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));}
 
@@ -130,5 +113,16 @@ public class ChatActivity extends ActionBarActivity implements ChatPresenter {
     public CChatListAdapter getChatAdapter() {
         cChatListAdapter=new CChatListAdapter(mainInteractor.getMessageDataBase(),this.chat);
         return cChatListAdapter;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch(menuItem.getItemId()){
+            case R.id.action_search:
+
+                return true;
+            default:break;
+        }
+        return onOptionsItemSelected(menuItem);
     }
 }

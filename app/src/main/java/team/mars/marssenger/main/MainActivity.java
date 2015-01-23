@@ -29,36 +29,25 @@ import team.mars.marssenger.util.Constants;
 
 public class MainActivity extends ActionBarActivity implements
             Toolbar.OnMenuItemClickListener,
-            MainPresenter
-{
-    public static MainInteractor MAIN_INTERACTOR;
-
+            MainPresenter {
     private Toolbar toolbar;
 
     private CListAdapter cListAdapter;
     private final int REGISTER_REQUEST_CODE = 01000;
 
-    private MainFragment mainFragment;
-
     //mvc
     private MainInteractor mainInteractor;
-
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
+    public static MainInteractor MAIN_INTERACTOR;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        setContentView(R.layout.activity_main);
+
         if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
             colorActionBar();
         }
-
-        setContentView(R.layout.activity_main);
 
         toolbar=(Toolbar) findViewById(R.id.toolbar);
         if (toolbar!=null){
@@ -81,8 +70,10 @@ public class MainActivity extends ActionBarActivity implements
         nm.cancel(1);
 
 
-        mainInteractor=new MainInteractorImpl(this);
+        mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
+        //save mainInteractor in static reference so it can be accessed in other parts of the code
         MainActivity.MAIN_INTERACTOR=this.mainInteractor;
+
         if(mainInteractor.checkPlayServices()){
             if(!isSerivceRunning(HttpsBackgroundService.class)){
                 Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
@@ -91,13 +82,11 @@ public class MainActivity extends ActionBarActivity implements
                 serviceIntent.putExtra("email", "hurensohn@squad.com");
                 serviceIntent.putExtra("digitCode", "010101");
                 startService(serviceIntent);
-            }else{
-                Toast.makeText(getApplicationContext(), "Service already running", Toast.LENGTH_SHORT).show();
             }
         }else{
             Log.d("GCMundso", "Cry a lot!");
         }
-
+        //TODO figure this out
         /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -109,27 +98,17 @@ public class MainActivity extends ActionBarActivity implements
             }
         }, 0);*/
 
-        this.mainFragment=MainFragment.getInstance(this);//mainPresenter
+        MainFragment mainFragment = MainFragment.getInstance(this);//this -> MainPresenter
 
         replaceContainer(mainFragment);
     }
 
-
-
     private void replaceContainer(Fragment fragment) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
-        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
-            FragmentTransaction lollioptransaction = getLollipopTransaction(transaction);
-            lollioptransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-            lollioptransaction.replace(R.id.container, fragment);
-            lollioptransaction.addToBackStack(null);
-            lollioptransaction.commit();
-        }else{
-            transaction.replace(R.id.container, fragment);
-            transaction.addToBackStack(null);
-            transaction.commit();
-        }
-
+        transaction.setTransition(FragmentTransaction.TRANSIT_NONE);
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private boolean isSerivceRunning(Class<?> serviceClass) {
@@ -144,23 +123,6 @@ public class MainActivity extends ActionBarActivity implements
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void colorActionBar() {getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));}
-
-    public FragmentTransaction getFragmentTransition(FragmentTransaction transaction){
-
-        return transaction;
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private FragmentTransaction getLollipopTransaction(FragmentTransaction transaction){
-
-
-         //   transaction.addSharedElement(mainFragment.getView().findViewById(R.id.listitem_name), "listitem_name");
-
-        return transaction;
-    }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
@@ -191,7 +153,6 @@ public class MainActivity extends ActionBarActivity implements
                 startActivity(intent);
                 return true;
             case R.id.action_new_message:
-
                 return true;
             default:break;
         }
@@ -206,25 +167,10 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onChatClick(View view, int position) {
-        //startActivity(getChatIntent(cListAdapter.getItem(position)));
+        //make intent and put serializable chat object into it
         Intent intent=new Intent(getApplicationContext(),ChatActivity.class);
         intent.putExtra(Chat.CHAT, cListAdapter.getItem(position));
         startActivity(intent);
-    }
-
-    private Intent getChatIntent(Chat chat){
-        Intent intent=new Intent(getApplicationContext(),ChatActivity.class);
-        intent.putExtra(Chat.CHAT_ID, chat.getId());
-        intent.putExtra(Chat.CHAT_MESSAGE_TABLE_ID, chat.getMessageTableId());
-        intent.putExtra(Chat.CHAT_NAME, chat.getName());
-        intent.putExtra(Chat.CHAT_IS_SINGLE_CHAT, chat.isSingleChat());
-        intent.putExtra(Chat.CHAT_RECEIVER_COUNT, chat.getReceiverCount());
-        if (chat.getReceiverCount()>0){
-            for (int i=0;i<chat.getReceiver().length;i++){
-                intent.putExtra(Chat.getChatReceiverKey(i), chat.getReceiver()[i]);
-            }
-        }
-        return intent;
     }
 
     @Override
@@ -235,16 +181,5 @@ public class MainActivity extends ActionBarActivity implements
                 //mainInteractor.storeRegistrationId(this,number);
             }
         }
-    }
-
-    @Override
-    public void setToolbarText(String text) {
-        toolbar.setTitle(text);
-    }
-
-
-    @Override
-    public void resetToolbarText() {
-        toolbar.setTitle(R.string.app_name);
     }
 }

@@ -10,7 +10,6 @@ import team.mars.marssenger.datatype.Chat;
  * Created by root on 03.12.14.
  */
 public interface MainInteractor{
-
     //Methoden für den Zugriff auf die Daten
     public ArrayList<Chat> getChatsList();
 
@@ -34,5 +33,4 @@ public interface MainInteractor{
     public MessageDatabase getMessageDataBase();
 
     public MainInteractorImpl get();
-
 }

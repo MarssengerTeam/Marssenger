@@ -36,6 +36,7 @@
             android:background="@drawable/ic_action_send_now"
             android:layout_marginRight="5dp"
             android:layout_marginEnd="5dp"
+            android:onClick="onButtonClick"
             />
 
     </LinearLayout>

@@ -17,15 +17,6 @@ public class Chat implements Serializable{
 
     //KEYS
     public static final String CHAT="chat";
-    public static final String CHAT_ID="chatid";
-    public static final String CHAT_MESSAGE_TABLE_ID="chatmessagetableid";
-    public static final String CHAT_NAME="chatname";
-    public static final String CHAT_IS_SINGLE_CHAT="chatissinglechat";
-    public static final String CHAT_RECEIVER_COUNT="chatreceivercount";
-
-    public static String getChatReceiverKey(int i){
-        return "chatreceiver"+i;
-    }
 
     //default const
     public Chat(){}
@@ -63,11 +54,8 @@ public class Chat implements Serializable{
     // Will be used by the ArrayAdapter in the ListView
     //public String toString();
 
-
     public void setMessageTableId(long messageTableId){this.messageTableId=messageTableId;}
     public long getMessageTableId(){return messageTableId;}
-
-
 
     public void setReceivers(String[] receiver){this.receiver=receiver;}
     public String[] getReceiver(){return receiver;}

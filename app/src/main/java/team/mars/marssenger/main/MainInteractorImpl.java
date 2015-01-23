@@ -26,9 +26,6 @@ import team.mars.marssenger.util.Constants;
  */
 public class MainInteractorImpl implements MainInteractor {
 
-    //Keys
-    public static final String INTERACTOR="interactor";
-
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String TAG = "MainInteractorImpl";
     public static final String EXTRA_MESSAGE = "message";
