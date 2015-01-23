@@ -3,9 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <dimen name="message_vertical_margin">4dp</dimen>
-    <dimen name="message_start_margin">16dp</dimen>
-    <dimen name="message_end_margin">26dp</dimen>
+    <dimen name="message_bottom_margin">3dp</dimen>
+    <dimen name="message_top_margin">3dp</dimen>
+    <dimen name="message_vertical_margin">5dp</dimen>
 
     <dimen name="chat_vertical_margin">4dp</dimen>
     <dimen name="chat_bottom_margin">2dp</dimen>

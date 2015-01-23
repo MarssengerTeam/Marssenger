@@ -20,7 +20,9 @@ import team.mars.marssenger.custom.CChatListAdapter;
 /**
  * Created by Kern on 09.12.2014.
  */
-public class ChatFragment extends Fragment implements ChatView {
+public class ChatFragment extends Fragment implements
+        ChatView,
+        View.OnClickListener{
 
     private RecyclerView recyclerView;
     private ChatPresenter chatPresenter;
@@ -44,12 +46,6 @@ public class ChatFragment extends Fragment implements ChatView {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
-        inflater.inflate(R.menu.menu_chat, menu);
     }
 
     @Override
@@ -69,15 +65,7 @@ public class ChatFragment extends Fragment implements ChatView {
         //set layoutmanager
         RecyclerView.LayoutManager layoutManager=new LinearLayoutManager(getActivity().getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!chat_input_edittext.getText().toString().isEmpty()) {
-                    chatPresenter.chatButtonSendPressed(chat_input_edittext.getText().toString());
-                    chat_input_edittext.setText("");
-                }
-            }
-        });
+        sendButton.setOnClickListener(this);
     }
 
     @Override
@@ -108,6 +96,11 @@ public class ChatFragment extends Fragment implements ChatView {
     @Override
     public void smoothScrollToBottom() {
         recyclerView.smoothScrollToPosition(chatPresenter.getBottomPosition());
+    }
+
+    @Override
+    public void onClick(View v) {
+
     }
 }
 

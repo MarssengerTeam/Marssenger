@@ -70,7 +70,9 @@
         <activity
             android:name=".chat.ChatActivity"
             android:label="@string/title_activity_chat"
-            android:parentActivityName=".main.MainActivity" >
+            android:parentActivityName=".main.MainActivity"
+            android:windowSoftInputMode="adjustNothing"
+            >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="team.mars.marssenger.main.MainActivity" />

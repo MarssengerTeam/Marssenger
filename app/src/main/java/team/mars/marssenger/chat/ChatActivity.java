@@ -40,16 +40,14 @@ public class ChatActivity extends ActionBarActivity implements
 
         toolbar=(Toolbar) findViewById(R.id.toolbar);
         if (toolbar!=null){
-
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-
             toolbar.setTitle(chat.getName());
             toolbar.setTitleTextColor(getResources().getColor(R.color.white));
-
             //menu
             toolbar.inflateMenu(R.menu.menu_main);
             toolbar.setOnMenuItemClickListener(this);
+
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

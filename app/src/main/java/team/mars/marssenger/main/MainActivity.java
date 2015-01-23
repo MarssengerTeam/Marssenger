@@ -52,19 +52,16 @@ public class MainActivity extends ActionBarActivity implements
         toolbar=(Toolbar) findViewById(R.id.toolbar);
         if (toolbar!=null){
 
-            setSupportActionBar(toolbar);
-            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
-
             toolbar.setTitle(R.string.app_name);
             toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
             //menu
             toolbar.inflateMenu(R.menu.menu_main);
             toolbar.setOnMenuItemClickListener(this);
-        } else {
-            test("toolbar null");
-        }
 
+            setSupportActionBar(toolbar);
+            getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        }
         //if there is a Notification from GCM, cancel.
         NotificationManager nm = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
         nm.cancel(1);
@@ -126,7 +123,8 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
     }
 
     @Override
