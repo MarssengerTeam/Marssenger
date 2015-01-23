@@ -8,8 +8,9 @@ import team.mars.marssenger.custom.CChatListAdapter;
 public interface ChatView {
 
     public void scrollToBottom();
-
     public void smoothScrollToBottom();
 
     public void updateContent(CChatListAdapter adapter);
+
+    public void combineMessages(int [] positions);
 }

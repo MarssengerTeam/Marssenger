@@ -26,7 +26,7 @@ public class ChatFragment extends Fragment implements
 
     private RecyclerView recyclerView;
     private ChatPresenter chatPresenter;
-    private EditText chat_input_edittext;
+    private EditText chatInput;
     private Button sendButton;
 
     //adapter and layoutmanager
@@ -53,7 +53,7 @@ public class ChatFragment extends Fragment implements
                              ViewGroup container, Bundle savedInstanceState) {
         FrameLayout layout = (FrameLayout) inflater.inflate(R.layout.fragment_chat, container, false);
         //get reference to recyclerview
-        chat_input_edittext = (EditText) layout.findViewById(R.id.chat_input_edittext);
+        chatInput = (EditText) layout.findViewById(R.id.chat_input_edittext);
         sendButton = (Button) layout.findViewById(R.id.chat_send_button);
         recyclerView = (RecyclerView) layout.findViewById(R.id.chat_listview);
         return layout;
@@ -82,6 +82,11 @@ public class ChatFragment extends Fragment implements
         this.adapter=adapter;
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void combineMessages(int[] positions) {
+
     }
 
     private void test(CharSequence charSequence){

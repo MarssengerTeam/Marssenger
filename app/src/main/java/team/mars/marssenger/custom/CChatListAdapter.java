@@ -42,6 +42,7 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
         }
     }
 
+    //TODO method to edit margins on certain views
 
     @Override
     public CChatListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
