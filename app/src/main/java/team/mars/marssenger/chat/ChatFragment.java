@@ -1,9 +1,6 @@
 package team.mars.marssenger.chat;
 
-import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +16,6 @@ import android.widget.Toast;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CChatListAdapter;
-import team.mars.marssenger.datatype.Chat;
-import team.mars.marssenger.main.MainInteractor;
-import team.mars.marssenger.main.MainPresenter;
 
 /**
  * Created by Kern on 09.12.2014.

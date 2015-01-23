@@ -6,14 +6,10 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -23,12 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import java.util.Random;
-
 import team.mars.marssenger.R;
-import team.mars.marssenger.chat.ChatFragment;
+import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.communication.HttpsBackgroundService;
-import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.custom.CListAdapter;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.settings.SettingsActivity;
@@ -118,13 +111,13 @@ public class MainActivity extends ActionBarActivity implements
 
         this.mainFragment=MainFragment.getInstance(this);//mainPresenter
 
-        replaceContainer(mainFragment,false);
+        replaceContainer(mainFragment);
         mainFragmentActive=true;
     }
 
 
 
-    public void replaceContainer(Fragment fragment,boolean addToBackStack) {
+    private void replaceContainer(Fragment fragment) {
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
             FragmentTransaction lollioptransaction = getLollipopTransaction(transaction);
@@ -193,7 +186,7 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (!mainFragmentActive) {
-                replaceContainer(mainFragment, false);
+                replaceContainer(mainFragment);
                 mainFragmentActive = true;
                 return true;
             }
@@ -226,8 +219,9 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onChatClick(View view, int position) {
-        Chat chat=cListAdapter.getItem(position);
-        //TODO give chat to ChatActivity and start intent
+        Intent intent=new Intent(getApplicationContext(), ChatActivity.class);
+        intent.putExtra(Chat.CHAT,cListAdapter.getItem(position));
+        startActivity(intent);
     }
 
     @Override

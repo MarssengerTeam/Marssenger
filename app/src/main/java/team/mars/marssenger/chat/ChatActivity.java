@@ -1,7 +1,11 @@
 package team.mars.marssenger.chat;
 
-import android.support.v7.app.ActionBarActivity;
+import android.annotation.TargetApi;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -16,11 +20,20 @@ public class ChatActivity extends ActionBarActivity implements ChatPresenter {
     private CChatListAdapter cChatListAdapter;
     private MainInteractor mainInteractor;
     private Chat chat;
+    private ChatView chatView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            colorActionBar();
+        }
+
+        //get chat
+        this.chat=(Chat) getIntent().getExtras().getParcelable(Chat.CHAT);
+        test(chat.getName());
     }
 
 
@@ -49,6 +62,31 @@ public class ChatActivity extends ActionBarActivity implements ChatPresenter {
     private void test(CharSequence charSequence){
         Toast.makeText(getApplicationContext(),charSequence,Toast.LENGTH_SHORT).show();
     }
+
+    private void replaceContainer(Fragment fragment) {
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
+            FragmentTransaction lollioptransaction = getLollipopTransaction(transaction);
+            lollioptransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
+            lollioptransaction.replace(R.id.chat_container, fragment);
+            lollioptransaction.addToBackStack(null);
+            lollioptransaction.commit();
+        }else{
+            transaction.replace(R.id.chat_container, fragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
+        }
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    //TODO rausfinden warum diese Methode aufgerufen werden soll
+    private FragmentTransaction getLollipopTransaction(FragmentTransaction transaction){
+        //   transaction.addSharedElement(mainFragment.getView().findViewById(R.id.listitem_name), "listitem_name");
+        return transaction;
+    }
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void colorActionBar() {getWindow().setStatusBarColor(getResources().getColor(R.color.primary_dark));}
 
     //ChatView methods
     @Override

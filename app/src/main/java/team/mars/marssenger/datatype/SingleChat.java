@@ -4,21 +4,33 @@ package team.mars.marssenger.datatype;
  * Created by Kern on 28.12.2014.
  */
 
-public class SingleChat implements Chat {
+public class SingleChat extends Chat{
+
+    /*
+    all the fields you need
+
+    id : long
+    messageTableId : long
+    name : String
+    receivers : String []
+    type : boolean
+     */
 
     private String[] receivers;
     private String name;
     private long id;
     private long messageTableID;
-    final Boolean type = true;
+    private boolean type = true;
 
-
+    //default const
+    public SingleChat(){}
 
     @Override
-    public Boolean isSingleChat() {
-        return null;
+    public boolean isSingleChat() {
+        return type;
     }
 
+/*
     @Override
     public long getId() {
         return id;
@@ -40,12 +52,12 @@ public class SingleChat implements Chat {
     }
 
     @Override
-    public void setMessageTableID(long id) {
+    public void setMessageTableId(long id) {
         this.messageTableID=id;
     }
 
     @Override
-    public long getMessageTableID() {
+    public long getMessageTableId() {
         return messageTableID;
     }
 
@@ -58,4 +70,6 @@ public class SingleChat implements Chat {
     public String[] getReceiver() {
         return receivers;
     }
+    */
+    //its exactly the same as in Chat
 }

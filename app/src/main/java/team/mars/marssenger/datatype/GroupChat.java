@@ -1,22 +1,40 @@
 package team.mars.marssenger.datatype;
 
-import java.util.ArrayList;
-
 /**
  * Created by Kern on 28.12.2014.
  */
-public class GroupChat implements Chat {
+public class GroupChat extends Chat{
+
+    /*
+    all the fields you need
+
+    id : long
+    messageTableId : long
+    name : String
+    receivers : String []
+    type : boolean
+     */
+
+    public static String getChatReceiverKey(int i){
+        return "chatreceiver"+i;
+    }
+
     private String[] receivers;
     private String name;
     private long id;
     private long messageTableID;
-    final Boolean type = false;
+    boolean type = false;
+
+    //default const
+    public GroupChat(){}
 
 
     @Override
-    public Boolean isSingleChat() {
+    public boolean isSingleChat() {
         return type;
     }
+
+/*
 
     @Override
     public long getId() {
@@ -39,12 +57,12 @@ public class GroupChat implements Chat {
     }
 
     @Override
-    public void setMessageTableID(long id) {
+    public void setMessageTableId(long id) {
         this.messageTableID=id;
     }
 
     @Override
-    public long getMessageTableID() {
+    public long getMessageTableId() {
         return messageTableID;
     }
 
@@ -57,4 +75,6 @@ public class GroupChat implements Chat {
     public String[] getReceiver() {
         return receivers;
     }
+    */
+    //exactly the same as in Chat
 }

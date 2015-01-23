@@ -50,9 +50,9 @@ public class MessageDatabase {
     }
 
     public void deleteMessage(Chat chat) {
-        System.out.println("Message deleted with id: " + chat.getMessageTableID());
-        database.delete(SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableID(), SQLiteManager.COLUMN_MESSAGES_ID
-                + " = " +chat.getMessageTableID(), null);
+        System.out.println("Message deleted with id: " + chat.getMessageTableId());
+        database.delete(SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableId(), SQLiteManager.COLUMN_MESSAGES_ID
+                + " = " +chat.getMessageTableId(), null);
     }
 
 
@@ -60,7 +60,7 @@ public class MessageDatabase {
         ArrayList<Message> messages = new ArrayList<Message>();
         Cursor cursor =
                 database.query(
-                        SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableID(),
+                        SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableId(),
                         allColumnsMessage,
                         null, null, null, null, null);
 

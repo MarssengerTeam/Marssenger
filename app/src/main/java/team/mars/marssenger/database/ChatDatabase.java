@@ -164,7 +164,7 @@ public class ChatDatabase {
 
                 chat.setId(cursor.getLong(0));
                 chat.setName(cursor.getString(1));
-                chat.setMessageTableID(cursor.getLong(2));
+                chat.setMessageTableId(cursor.getLong(2));
                 chat.setReceivers(allRecievers);
             } catch (Exception ex) {
                 ex.printStackTrace();//TODO FIXEN

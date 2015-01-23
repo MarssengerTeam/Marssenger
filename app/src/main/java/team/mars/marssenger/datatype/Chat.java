@@ -1,28 +1,60 @@
 package team.mars.marssenger.datatype;
 
 
+public class Chat {
 
-public interface Chat {
+    /*
+    all the fields you need
 
-    public Boolean isSingleChat();
+    id : long
+    messageTableId : long
+    name : String
+    receivers : String []
+    type : boolean
+     */
 
-    public long getId();
-    public void setId(long id);
+    //KEYS
+    public static final String CHAT="chat";
+    public static final String CHAT_ID="chatid";
+    public static final String CHAT_MESSAGE_TABLE_ID="chatmessagetableid";
+    public static final String CHAT_NAME="chatname";
+    public static final String CHAT_TYPE="chattype";
+    public static final String CHAT_RECEIVER_COUNT="chatreceivercount";
+
+    //default const
+    public Chat(){}
+
+    long id;
+    long messageTableId;
+    String name;
+    String [] receiver;
+    boolean type;
+
+    public boolean isSingleChat(){return type;}
+
+    public long getId(){return id;}
+    public void setId(long id){this.id=id;}
 
 
-    public String getName();
-    public void setName(String name);
+    public String getName(){return name;}
+    public void setName(String name){this.name=name;}
 
     // Will be used by the ArrayAdapter in the ListView
-    @Override
-    public String toString();
+    //public String toString();
 
 
-    public void setMessageTableID(long id);
-    public long getMessageTableID();
+    public void setMessageTableId(long messageTableId){this.messageTableId=messageTableId;}
+    public long getMessageTableId(){return messageTableId;}
 
 
 
-    public void setReceivers(String[] reciever);
-    public String[] getReceiver();
+    public void setReceivers(String[] receiver){this.receiver=receiver;}
+    public String[] getReceiver(){return receiver;}
+    public int getReceiverCount(){
+        if (receiver==null){
+            return 0;
+        } else {
+            return receiver.length;
+        }
+    }
 }

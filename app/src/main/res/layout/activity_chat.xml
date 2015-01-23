@@ -14,7 +14,7 @@
         android:layout_gravity="top" />
 
     <FrameLayout
-        android:id="@+id/container"
+        android:id="@+id/chat_container"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 

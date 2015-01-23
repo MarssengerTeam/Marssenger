@@ -15,13 +15,13 @@ import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.support.v4.app.NavUtils;
-
-import team.mars.marssenger.R;
 
 import java.util.List;
+
+import team.mars.marssenger.R;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On

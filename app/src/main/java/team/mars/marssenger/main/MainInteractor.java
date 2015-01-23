@@ -1,8 +1,5 @@
 package team.mars.marssenger.main;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import java.util.ArrayList;
 
 import team.mars.marssenger.database.ChatDatabase;

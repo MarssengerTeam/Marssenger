@@ -3,9 +3,7 @@ package team.mars.marssenger.main;
 import android.content.Intent;
 import android.view.View;
 
-import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.custom.CListAdapter;
-import team.mars.marssenger.datatype.Chat;
 
 /**
  * Created by root on 03.12.14.
