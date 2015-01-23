@@ -18,11 +18,30 @@ public class Chat {
     public static final String CHAT_ID="chatid";
     public static final String CHAT_MESSAGE_TABLE_ID="chatmessagetableid";
     public static final String CHAT_NAME="chatname";
-    public static final String CHAT_TYPE="chattype";
+    public static final String CHAT_IS_SINGLE_CHAT="chatissinglechat";
     public static final String CHAT_RECEIVER_COUNT="chatreceivercount";
+
+    public static String getChatReceiverKey(int i){
+        return "chatreceiver"+i;
+    }
 
     //default const
     public Chat(){}
+
+    //const with everything
+    public Chat(
+            long id,
+            long messageTableId,
+            String name,
+            String [] receiver,
+            boolean type
+    ){
+        this.id=id;
+        this.messageTableId=messageTableId;
+        this.name=name;
+        this.receiver=receiver;
+        this.type=type;
+    }
 
     long id;
     long messageTableId;

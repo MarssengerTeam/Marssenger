@@ -219,9 +219,22 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public void onChatClick(View view, int position) {
-        Intent intent=new Intent(getApplicationContext(), ChatActivity.class);
-        intent.putExtra(Chat.CHAT,cListAdapter.getItem(position));
-        startActivity(intent);
+        startActivity(getChatIntent(cListAdapter.getItem(position)));
+    }
+
+    private Intent getChatIntent(Chat chat){
+        Intent intent=new Intent(getApplicationContext(),ChatActivity.class);
+        intent.putExtra(Chat.CHAT_ID, chat.getId());
+        intent.putExtra(Chat.CHAT_MESSAGE_TABLE_ID, chat.getMessageTableId());
+        intent.putExtra(Chat.CHAT_NAME, chat.getName());
+        intent.putExtra(Chat.CHAT_IS_SINGLE_CHAT, chat.isSingleChat());
+        intent.putExtra(Chat.CHAT_RECEIVER_COUNT, chat.getReceiverCount());
+        if (chat.getReceiverCount()>0){
+            for (int i=0;i<chat.getReceiver().length;i++){
+                intent.putExtra(Chat.getChatReceiverKey(i), chat.getReceiver()[i]);
+            }
+        }
+        return intent;
     }
 
     @Override

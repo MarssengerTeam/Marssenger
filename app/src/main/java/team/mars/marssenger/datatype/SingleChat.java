@@ -16,10 +16,6 @@ public class SingleChat extends Chat{
     type : boolean
      */
 
-    private String[] receivers;
-    private String name;
-    private long id;
-    private long messageTableID;
     private boolean type = true;
 
     //default const

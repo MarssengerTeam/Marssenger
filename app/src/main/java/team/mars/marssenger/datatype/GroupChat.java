@@ -15,14 +15,8 @@ public class GroupChat extends Chat{
     type : boolean
      */
 
-    public static String getChatReceiverKey(int i){
-        return "chatreceiver"+i;
-    }
 
-    private String[] receivers;
-    private String name;
-    private long id;
-    private long messageTableID;
+
     boolean type = false;
 
     //default const
