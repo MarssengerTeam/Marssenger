@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CChatListAdapter;
+import team.mars.marssenger.util.MessageStringValidater;
 
 /**
  * Created by Kern on 09.12.2014.
@@ -101,10 +102,14 @@ public class ChatFragment extends Fragment implements
 
     @Override
     public void onClick(View v) {
+
         //forward event to ChatPresenter with Text from EditText
         String input=chatInput.getText().toString();
-        if (input!=null){
+        if(MessageStringValidater.isValid(input)){
             chatPresenter.chatButtonSendPressed(input);
+            chatInput.setText("");
+        }else {
+            test("Input not valid.");
         }
     }
 }

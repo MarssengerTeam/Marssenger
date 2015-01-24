@@ -150,7 +150,7 @@ public class ChatDatabase {
         return csorted;
     }
 
-    private Chat cursorToChat(Cursor cursor) {
+        private Chat cursorToChat(Cursor cursor) {
 
         Chat chat;
         try {
