@@ -58,6 +58,10 @@ public class ChatActivity extends ActionBarActivity implements
             colorActionBar();
         }
 
+        mainInteractor.getMessageDataBase().setAllMessagesRead(chat);
+
+        //TODO SEND TO SERVER MESSAGES READ
+
         //create fragment
         ChatFragment chatFragment=ChatFragment.getInstance(this); //ChatPresenter
         replaceContainer(chatFragment);
