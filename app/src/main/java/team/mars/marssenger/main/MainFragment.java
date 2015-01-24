@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -49,15 +50,18 @@ public class MainFragment extends Fragment implements MainView {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState){
+
         super.onViewCreated(view,savedInstanceState);
         //set layoutmanager
-         RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getActivity().getApplicationContext(),2,GridLayoutManager.VERTICAL,false);
+
+        RecyclerView.LayoutManager layoutManager=new GridLayoutManager(getActivity().getApplicationContext(),2,GridLayoutManager.VERTICAL,false);
         recyclerView.setLayoutManager(layoutManager);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
+
         //set adapter
         recyclerView.setAdapter(mainPresenter.getAdapter());
 

@@ -91,6 +91,7 @@ public class ChatActivity extends ActionBarActivity implements
         transaction.replace(R.id.chat_container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)

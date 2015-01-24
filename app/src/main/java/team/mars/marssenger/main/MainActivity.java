@@ -106,6 +106,7 @@ public class MainActivity extends ActionBarActivity implements
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+
     }
 
     private boolean isSerivceRunning(Class<?> serviceClass) {
@@ -140,7 +141,11 @@ public class MainActivity extends ActionBarActivity implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         onRegsiterReturn(requestCode, resultCode, data);
     }
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        cListAdapter.updateCardView();
+    }
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){

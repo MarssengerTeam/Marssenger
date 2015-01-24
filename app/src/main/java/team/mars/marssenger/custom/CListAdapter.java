@@ -26,7 +26,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
     public CListAdapter (ChatDatabase list){
         this.chats=list;
-        chatlist = list.getAllChatByTime();
+        chatlist = chats.getAllChatByTime();
     }
 
     public Chat getItem(int position){
@@ -49,6 +49,10 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
         holder.counter.setText(chats.getUnreadMessages(chatlist.get(i))+"");
     }
 
+    public void updateCardView(){
+        chatlist = chats.getAllChatByTime();
+        notifyDataSetChanged();
+    }
     @Override
     public long getItemId(int i) {
         if (i<chatlist.size() && i>=0){
