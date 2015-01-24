@@ -24,7 +24,7 @@ public class ChatDatabase {
     // Database fields
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID, SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_MESSAGENUMBER,SQLiteManager.COLUMN_CHAT_RECEIVER };
+    private String[] allColumnsChat = { SQLiteManager.COLUMN_CHAT_ID, SQLiteManager.COLUMN_CHAT_NAME, SQLiteManager.COLUMN_CHAT_MESSAGENUMBER,SQLiteManager.COLUMN_CHAT_RECEIVER,SQLiteManager.COLUMN_CHAT_TYPE };
     private MessageDatabase messageDatabase;
 
     public ChatDatabase(Context context,MessageDatabase messageDatabase) {
@@ -40,13 +40,14 @@ public class ChatDatabase {
         dbHelper.close();
     }
 
-    public Chat createChat(String name,String receiver) {
+    public Chat createChat(String name,String receiver,int isTypeGroup) {
         int messageDBID= this.getAllChat().size();
         dbHelper.newMessageDatabase(messageDBID);
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_CHAT_NAME, name);
         values.put(SQLiteManager.COLUMN_CHAT_MESSAGENUMBER, messageDBID);
         values.put(SQLiteManager.COLUMN_CHAT_RECEIVER, receiver);
+        values.put(SQLiteManager.COLUMN_CHAT_TYPE, isTypeGroup);
         long insertId = database.insert(SQLiteManager.TABLE_CHAT, null,values);
         Cursor cursor = database.query(SQLiteManager.TABLE_CHAT,
                 allColumnsChat, SQLiteManager.COLUMN_CHAT_NAME + " = " + insertId, null,
@@ -154,18 +155,15 @@ public class ChatDatabase {
 
         Chat chat;
         try {
-        String reciever = cursor.getString(3);
-
-        if(reciever.startsWith("g:")){
-           chat = new GroupChat();
-        }else{
-           chat = new SingleChat();
-        }
-
+           if(cursor.getInt(4)==0){
+               chat = new SingleChat();
+           }else {
+               chat = new GroupChat();
+           }
                 chat.setId(cursor.getLong(0));
                 chat.setName(cursor.getString(1));
                 chat.setMessageTableId(cursor.getLong(2));
-                chat.setReceiver(reciever);
+                chat.setReceiver(cursor.getString(3));
             } catch (Exception ex) {
                 ex.printStackTrace();//TODO FIXEN
             chat = new SingleChat();

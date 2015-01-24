@@ -11,11 +11,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.TreeSet;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.datatype.Message;
 import team.mars.marssenger.main.MainActivity;
 import team.mars.marssenger.main.MainInteractor;
 
@@ -98,10 +100,11 @@ public class ChatActivity extends ActionBarActivity implements
     @Override
     public void chatButtonSendPressed(String message) {
         mainInteractor.getMessageDataBase().createMessage(message,1,chat.getId()-1,1);
+        ArrayList<Message> messages = mainInteractor.getMessageDataBase().getAllMessageFromChat(chat);
+        cChatListAdapter.addMessage(messages.get(messages.size()-1));
         /*TODO figure out how to send a message
         mService.sendMessage(this.chat.getReciever()[0], message, "12345");
         */
-
     }
 
     @Override
