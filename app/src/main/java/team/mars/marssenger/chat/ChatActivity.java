@@ -97,10 +97,10 @@ public class ChatActivity extends ActionBarActivity implements
     //ChatView methods
     @Override
     public void chatButtonSendPressed(String message) {
-
+        mainInteractor.getMessageDataBase().createMessage(message,1,chat.getId()-1,1);
         /*TODO figure out how to send a message
         mService.sendMessage(this.chat.getReciever()[0], message, "12345");
-         */
+        */
 
     }
 

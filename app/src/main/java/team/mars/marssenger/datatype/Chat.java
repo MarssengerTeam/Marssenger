@@ -26,7 +26,7 @@ public class Chat implements Serializable{
             long id,
             long messageTableId,
             String name,
-            String [] receiver,
+            String receiver,
             boolean type
     ){
         this.id=id;
@@ -39,7 +39,7 @@ public class Chat implements Serializable{
     long id;
     long messageTableId;
     String name;
-    String [] receiver;
+    String receiver;
     boolean type;
 
     public boolean isSingleChat(){return type;}
@@ -57,13 +57,6 @@ public class Chat implements Serializable{
     public void setMessageTableId(long messageTableId){this.messageTableId=messageTableId;}
     public long getMessageTableId(){return messageTableId;}
 
-    public void setReceivers(String[] receiver){this.receiver=receiver;}
-    public String[] getReceiver(){return receiver;}
-    public int getReceiverCount(){
-        if (receiver==null){
-            return 0;
-        } else {
-            return receiver.length;
-        }
-    }
+    public void setReceiver(String receiver){this.receiver=receiver;}
+    public String getReceiver(){return receiver;}
 }

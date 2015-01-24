@@ -77,7 +77,7 @@ public class MainActivity extends ActionBarActivity implements
                 serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
                 serviceIntent.putExtra("phoneNumber", "0157712345");
                 serviceIntent.putExtra("email", "hurensohn@squad.com");
-                serviceIntent.putExtra("digitCode", "010101");
+                serviceIntent.putExtra("digitCode", "010101"); //TODO Maybe / Maybe not
                 startService(serviceIntent);
             }
         }else{

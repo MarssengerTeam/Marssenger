@@ -154,9 +154,9 @@ public class ChatDatabase {
 
         Chat chat;
         try {
-        String recievers = cursor.getString(3);
-        String allRecievers[] = recievers.split(";");
-        if(allRecievers.length>1){
+        String reciever = cursor.getString(3);
+
+        if(reciever.startsWith("g:")){
            chat = new GroupChat();
         }else{
            chat = new SingleChat();
@@ -165,7 +165,7 @@ public class ChatDatabase {
                 chat.setId(cursor.getLong(0));
                 chat.setName(cursor.getString(1));
                 chat.setMessageTableId(cursor.getLong(2));
-                chat.setReceivers(allRecievers);
+                chat.setReceiver(reciever);
             } catch (Exception ex) {
                 ex.printStackTrace();//TODO FIXEN
             chat = new SingleChat();
