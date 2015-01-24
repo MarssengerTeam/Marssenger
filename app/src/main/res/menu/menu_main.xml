@@ -4,9 +4,17 @@
     tools:context=".main.MainActivity">
 
     <item
+        android:id="@+id/action_read"
+        android:title="@string/action_read"
+        android:orderInCategory="1"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_action_read"
+        />
+
+    <item
         android:id="@+id/action_search"
         android:title="@string/action_search"
-        android:orderInCategory="1"
+        android:orderInCategory="10"
         app:showAsAction="never"
         android:icon="@drawable/ic_action_search"
         />
@@ -14,7 +22,7 @@
     <item
         android:id="@+id/action_new_message"
         android:title="@string/action_new_message"
-        android:orderInCategory="2"
+        android:orderInCategory="5"
         app:showAsAction="ifRoom"
         android:icon="@drawable/ic_action_chat"
         />

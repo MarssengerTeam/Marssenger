@@ -28,5 +28,6 @@
     <string name="action_view_groups">Groups</string>
     <string name="title_setting_list">Settings</string>
     <string name="title_setting_detail">Setting Detail</string>
+    <string name="action_read">Mark as read</string>
 
 </resources>

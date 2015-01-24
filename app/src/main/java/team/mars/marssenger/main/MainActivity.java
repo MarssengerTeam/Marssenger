@@ -152,6 +152,8 @@ public class MainActivity extends ActionBarActivity implements
                 return true;
             case R.id.action_new_message:
                 return true;
+            case R.id.action_read:
+                return true;
             default:break;
         }
         return false;
