@@ -18,7 +18,7 @@ import team.mars.marssenger.datatype.Message;
 public class MessageDatabase {
     private SQLiteDatabase database;
     private SQLiteManager dbHelper;
-    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID, SQLiteManager.COLUMN_MESSAGES_MSG, SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_TIME, SQLiteManager.COLUMN_MESSAGES_READ};
+    private String[] allColumnsMessage = { SQLiteManager.COLUMN_MESSAGES_ID, SQLiteManager.COLUMN_MESSAGES_MSG, SQLiteManager.COLUMN_MESSAGES_SENDER, SQLiteManager.COLUMN_MESSAGES_TIME, SQLiteManager.COLUMN_MESSAGES_READ,SQLiteManager.COLUMN_CHAT_TYPE};
 
     public MessageDatabase(Context context) {
         dbHelper = new SQLiteManager(context);
@@ -32,13 +32,14 @@ public class MessageDatabase {
         dbHelper.close();
     }
 
-    public Message createMessage(String message,int isSender, long chatID,int read) {
+    public Message createMessage(String message,int isSender, long chatID,int read,int type) {
 
         ContentValues values = new ContentValues();
         values.put(SQLiteManager.COLUMN_MESSAGES_MSG, message);
         values.put(SQLiteManager.COLUMN_MESSAGES_SENDER, isSender);
         values.put(SQLiteManager.COLUMN_MESSAGES_TIME, getDate());
         values.put(SQLiteManager.COLUMN_MESSAGES_READ, read);
+        values.put(SQLiteManager.COLUMN_MESSAGES_TYPE, type);
         long insertId = database.insert(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID, null, values);
         Cursor cursor = database.query(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID,
                 allColumnsMessage, SQLiteManager.COLUMN_MESSAGES_ID + " = " + insertId, null,

@@ -100,31 +100,31 @@ public class MainInteractorImpl implements MainInteractor {
         int sender =(int) (Math.random()*2);
         if(chatDatabase.getAllChat().size()<8) {
             chatDatabase.createChat("Timo", "0157700000",0);
-            messageDatabase.createMessage("1st Message", sender, 0, 0);
+            messageDatabase.createMessage("1st Message", sender, 0, 0,0);
 
             chatDatabase.createChat("Jan Niklas", "0157712345",0);
-            messageDatabase.createMessage("1st Message", sender, 1, 0);
+            messageDatabase.createMessage("1st Message", sender, 1, 0,0);
 
             chatDatabase.createChat("Noli", "015712563485",0);
-            messageDatabase.createMessage("last message this is really interesting oh my god!", sender, 2, 0);
+            messageDatabase.createMessage("last message this is really interesting oh my god!", sender, 2, 0,0);
 
             chatDatabase.createChat("Nils", "015748569521",0);
-            messageDatabase.createMessage("this is also a really long message to see if it breaks the layout", sender, 3, 0);
+            messageDatabase.createMessage("this is also a really long message to see if it breaks the layout", sender, 3, 0,0);
 
             chatDatabase.createChat("Nicolas", "015784594253",0);
-            messageDatabase.createMessage("to have a beard is to have democracy", sender, 4, 0);
+            messageDatabase.createMessage("to have a beard is to have democracy", sender, 4, 0,0);
 
             chatDatabase.createChat("Mister Null","000000000000",0);
-            messageDatabase.createMessage("...",sender,5,0);
+            messageDatabase.createMessage("...",sender,5,0,0);
 
             chatDatabase.createChat("Miss One","111111111111",0);
-            messageDatabase.createMessage("oneoneoneoneoneoneone",sender,6,0);
+            messageDatabase.createMessage("oneoneoneoneoneoneone",sender,6,0,0);
 
             chatDatabase.createChat("Null Jr.","015697536458",0);
-            messageDatabase.createMessage("nullnull null null null",sender,7,0);
+            messageDatabase.createMessage("nullnull null null null",sender,7,0,0);
 
             chatDatabase.createChat("1st Group","54a1cf3958a438f71421d4ef",1);
-            messageDatabase.createMessage("GroupMessage to Group 54a1cf3958a438f71421d4ef", sender, 8, 0);
+            messageDatabase.createMessage("GroupMessage to Group 54a1cf3958a438f71421d4ef", sender, 8, 0,0);
         }
     }
 

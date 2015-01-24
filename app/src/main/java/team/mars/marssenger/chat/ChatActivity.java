@@ -100,7 +100,7 @@ public class ChatActivity extends ActionBarActivity implements
     //ChatView methods
     @Override
     public void chatButtonSendPressed(String message) {
-        mainInteractor.getMessageDataBase().createMessage(message,1,chat.getId()-1,1);
+        mainInteractor.getMessageDataBase().createMessage(message,1,chat.getId()-1,1,0);
         ArrayList<Message> messages = mainInteractor.getMessageDataBase().getAllMessageFromChat(chat);
         cChatListAdapter.addMessage(messages.get(messages.size()-1));
         /*TODO figure out how to send a message

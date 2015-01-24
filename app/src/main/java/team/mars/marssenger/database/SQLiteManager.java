@@ -18,7 +18,8 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String COLUMN_MESSAGES_MSG = "message";
     public static final String COLUMN_MESSAGES_TIME = "time";
     public static final String COLUMN_MESSAGES_SENDER= "isSender";
-    public static final String COLUMN_MESSAGES_READ= "read";
+    public static final String COLUMN_MESSAGES_READ = "read";
+    public static final String COLUMN_MESSAGES_TYPE = "type";
 
 
     public static final String TABLE_MESSAGES_PREFIX= "messagesforchat";
@@ -32,7 +33,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String COLUMN_CHAT_TYPE = "type";
 
     private static final String DATABASE_NAME = "chats.db";
-    private static final int DATABASE_VERSION = 12;
+    private static final int DATABASE_VERSION = 13;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE_TABLE_CHAT = "create table "
@@ -59,7 +60,10 @@ public class SQLiteManager extends SQLiteOpenHelper {
             + COLUMN_MESSAGES_TIME
             + " text not null, "
             + COLUMN_MESSAGES_READ
-            + " integer);";
+            + " integer,"
+            + COLUMN_MESSAGES_TYPE
+            + " integer"
+            +");";
     private final Context context;
 
     public SQLiteManager(Context context) {
