@@ -55,6 +55,7 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
                 now.get(Calendar.DAY_OF_MONTH),now.get(Calendar.HOUR_OF_DAY),
                 now.get(Calendar.MINUTE)+1,now.get(Calendar.SECOND));
         oneMin=then.getTimeInMillis()-now.getTimeInMillis();
+
     }
 
     //TODO method to edit margins on certain views
@@ -112,6 +113,9 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     public void addMessage(Message message){
         this.mData.add(message);
+        if (message.isSender()){
+            mSentIndex.add(mData.size()-1);
+        }
         notifyDataSetChanged();
     }
 
