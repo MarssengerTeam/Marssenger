@@ -119,7 +119,7 @@ public class ChatActivity extends ActionBarActivity implements
 
     @Override
     public CChatListAdapter getChatAdapter() {
-        cChatListAdapter=new CChatListAdapter(mainInteractor.getMessageDataBase(),this.chat);
+        cChatListAdapter=new CChatListAdapter(mainInteractor.getMessageDataBase(),this.chat, getApplicationContext());
         return cChatListAdapter;
     }
 

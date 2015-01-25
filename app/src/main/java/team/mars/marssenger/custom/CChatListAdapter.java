@@ -1,6 +1,7 @@
 package team.mars.marssenger.custom;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -37,7 +38,10 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     private ArrayList<ViewHolder> viewHolderList;
 
-    public CChatListAdapter(MessageDatabase database, Chat chat){
+    private Context context;
+
+    public CChatListAdapter(MessageDatabase database, Chat chat, Context context){
+        this.context=context;
         this.chat=chat;
         mData=database.getAllMessageFromChat(chat);
         mSentIndex=new TreeSet <>();
@@ -132,7 +136,7 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
                 break;
             default:break;
         }
-        return new ViewHolder(relativeLayout);
+        return new ViewHolder(relativeLayout, viewType);
     }
 
     @Override
@@ -167,11 +171,23 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
         public TextView time;
         public RelativeLayout relativeLayout;
 
-        public ViewHolder(RelativeLayout relativeLayout) {
+        public ViewHolder(RelativeLayout relativeLayout, int type) {
             super(relativeLayout);
             this.relativeLayout=(RelativeLayout) relativeLayout.findViewById(R.id.item_root);
             this.message=(TextView) relativeLayout.findViewById(R.id.message);
             this.time=(TextView) relativeLayout.findViewById(R.id.time);
+            switch (type){
+                case TYPE_RECEIVED:
+                    //color accent
+                    relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.accent));
+                    break;
+                /*
+                case TYPE_SENT:
+                    relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.white));
+                    break;
+                */
+                default:break;
+            }
         }
 
         public void setMargins(RelativeLayout.LayoutParams layoutParams){

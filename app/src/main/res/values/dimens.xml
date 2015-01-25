@@ -8,6 +8,7 @@
     <dimen name="message_bottom_margin">2dp</dimen>
     <dimen name="message_top_margin">6dp</dimen>
     <dimen name="message_vertical_margin">5dp</dimen>
+    <dimen name="message_offset">20dp</dimen>
 
     <dimen name="chat_vertical_margin">6dp</dimen>
     <dimen name="chat_horizontal_margin">3dp</dimen>
