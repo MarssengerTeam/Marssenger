@@ -4,5 +4,11 @@
     tools:context="team.mars.marssenger.chat.ChatActivity">
 
 
-
+    <item
+        android:id="@+id/action_picture"
+        android:icon="@drawable/ic_action_new_attachment"
+        android:title="@string/picture"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        />
 </menu>

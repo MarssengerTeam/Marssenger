@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -32,6 +34,8 @@ public class MainInteractorImpl implements MainInteractor {
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final String PROPERTY_MY_PHONENUMBER = "myPhoneNumber";
+    public static final File pictureFolder = new File(Environment.getExternalStorageDirectory()+ "/Marssenger/Pictures");
+
     String SENDER_ID;
 
     GoogleCloudMessaging gcm;
@@ -87,6 +91,17 @@ public class MainInteractorImpl implements MainInteractor {
         openChatDB();
         openMessageDB();
 
+        boolean success;
+        if (!pictureFolder.exists()) {
+            success = pictureFolder.mkdirs();
+            if (success) {
+                Log.i(MainInteractor.class.toString(),"Could Create 'Picture' Folder");
+            } else {
+                Log.e(MainInteractor.class.toString(),"Could not Create 'Picture' Folder");
+            }
+        }
+
+
         //create test chats
         createTestChats();
 
@@ -126,6 +141,13 @@ public class MainInteractorImpl implements MainInteractor {
             chatDatabase.createChat("1st Group","54a1cf3958a438f71421d4ef",1);
             messageDatabase.createMessage("GroupMessage to Group 54a1cf3958a438f71421d4ef", sender, 8, 0,0);
         }
+
+
+
+
+
+
+        messageDatabase.createMessage("ImageMessage", sender, 8, 0,1);
     }
 
     @Override

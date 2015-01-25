@@ -1,8 +1,8 @@
 package team.mars.marssenger.custom;
 
-import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +20,7 @@ import java.util.Date;
 import team.mars.marssenger.R;
 import team.mars.marssenger.database.ChatDatabase;
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.datatype.TextMessage;
 
 /**
  * Created by root on 03.12.14.
@@ -52,14 +53,34 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
+        switch (chats.getLastMessage(chatlist.get(i)).getType()){
+            case 0:
+                holder.text.setText((String)chats.getLastMessage(chatlist.get(i)).getMessage());
+                break;
+            case 1:
+                holder.text.setText("Picture");
+                break;
+            default:
+
+                Log.e("CChatListAdapter", "Message type wrong / not implemented yet");
+                break;
+
+        }
         holder.name.setText(chatlist.get(i).getName());
-        holder.text.setText(chats.getLastMessage(chatlist.get(i)).getMessage());
+        if(chats.getLastMessage(chatlist.get(i)).getType()==0){
+            holder.text.setText(((TextMessage)chats.getLastMessage(chatlist.get(i))).getMessage());
+        }else{
+            holder.text.setText("Picture");
+        }
+
         if (chats.getUnreadMessages(chatlist.get(i))>0){
             holder.counter.setText(String.valueOf(chats.getUnreadMessages(chatlist.get(i))));
         } else {
             holder.counter.setVisibility(View.GONE);
         }
         holder.timestamp.setText(convertTime(chats.getLastMessage(chatlist.get(i)).getTimestamp()));
+
+        holder.counter.setText(chats.getUnreadMessages(chatlist.get(i))+"");
     }
 
     public String convertTime(long time){

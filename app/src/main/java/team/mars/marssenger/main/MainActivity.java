@@ -6,10 +6,13 @@ import android.app.ActivityManager;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -157,6 +160,40 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.action_new_message:
                 return true;
             case R.id.action_read:
+                NotificationCompat.Builder mBuilder =
+                        new NotificationCompat.Builder(this)
+                                .setSmallIcon(R.drawable.ic_launcher)
+                                .setContentTitle("test:")
+                                .setContentText("5 nachrichten");
+
+                NotificationCompat.InboxStyle inboxStyle =
+                        new NotificationCompat.InboxStyle();
+                String[] events ={"zeile1","2","drei","test","nice"};
+
+                inboxStyle.setBigContentTitle("test:");
+
+
+                for (int i=0; i < events.length; i++) {
+
+                    inboxStyle.addLine(events[i]);
+                }
+                mBuilder.setStyle(inboxStyle);
+                Intent resultIntent = new Intent(this,MainActivity.class);
+                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+                stackBuilder.addParentStack(MainActivity.class);
+                stackBuilder.addNextIntent(resultIntent);
+
+                PendingIntent resultPendingIntent =
+                        stackBuilder.getPendingIntent(
+                                0,
+                                PendingIntent.FLAG_UPDATE_CURRENT
+                        );
+                mBuilder.addAction(R.drawable.ic_action_read, "Read", resultPendingIntent);
+                mBuilder.addAction(R.drawable.ic_launcher, "Fast Re", resultPendingIntent);
+                mBuilder.setContentIntent(resultPendingIntent);
+                NotificationManager mNotificationManager =(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                int mId= 1;
+                mNotificationManager.notify(mId, mBuilder.build());
                 return true;
             default:break;
         }

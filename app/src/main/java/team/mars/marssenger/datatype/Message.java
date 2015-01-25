@@ -1,20 +1,25 @@
 package team.mars.marssenger.datatype;
 
 
+import android.util.Log;
+
+import java.io.Serializable;
+
 /**
  * Created by TimoBlock on 24.07.2014.
  */
 
-public class Message {
+public class Message implements Serializable {
+    private int type;
     private long id;
-    private String message;
+    private Object message;
     private String receiver;
     private long timestamp;
     private boolean sender;
     private boolean read;
     private long chatID;
 
-
+    Message(){}
     public long getId() {
         return id;
     }
@@ -36,7 +41,7 @@ public class Message {
 
     }
 
-    public String getMessage() {
+    public Object getMessage() {
         return message;
     }
 
@@ -45,12 +50,6 @@ public class Message {
     public boolean isSender(){return  sender;}
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    // Will be used by the ArrayAdapter in the ListView
-    @Override
-    public String toString() {
-        return message;
     }
 
     public void setSender(int sender){
@@ -62,5 +61,9 @@ public class Message {
 
     public void setTime(long time) {
         this.timestamp = time;
+    }
+    public int getType(){return type;}
+    public void debug(){
+        Log.d("MESSAGEDEBUG","ID:"+id+"\n"+"CID:"+chatID+"\nREAD:"+read+"\nMSG:"+message+"\nisSender:"+sender+"\nTIME:"+timestamp+"\nTYPE:"+type);
     }
 }

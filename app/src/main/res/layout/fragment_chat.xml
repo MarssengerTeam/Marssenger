@@ -27,7 +27,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:inputType="textAutoCorrect"
-            />
+            android:maxLines="5"
+            android:minLines="1"
+            android:lines="2" />
 
         <Button
             android:id="@+id/chat_send_button"

@@ -1,10 +1,14 @@
 package team.mars.marssenger.custom;
 
 import android.app.ActionBar;
+import android.media.Image;
+import android.net.Uri;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -16,18 +20,23 @@ import team.mars.marssenger.R;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
+import team.mars.marssenger.datatype.PictureMessage;
+import team.mars.marssenger.datatype.TextMessage;
 
 /**
  * Created by Nicolas on 10/12/2014.
  */
 public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.ViewHolder> {
 
-    private static final int TYPE_SENT=0;
-    private static final int TYPE_RECEIVED=1;
+    private static final int TYPE_SENT_TEXT=0;
+    private static final int TYPE_RECEIVED_TEXT=1;
+    private static final int TYPE_SENT_IMAGE=2;
+    private static final int TYPE_RECEIVED_IMAGE=3;
 
     private ArrayList<Message> mData;
 
     private TreeSet <Integer> mSentIndex;
+    private TreeSet <Integer> mPictureIndex;
     private int positionLastChecked;
     private int typeLastChecked;
 
@@ -45,12 +54,17 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
         this.chat=chat;
         mData=database.getAllMessageFromChat(chat);
         mSentIndex=new TreeSet <>();
+        mPictureIndex=new TreeSet <>();
 
         for (int i=0;i<mData.size();i++){
             if (mData.get(i).isSender()){
                 mSentIndex.add(i);
             }
+            if(mData.get(i).getType()==1){
+                mPictureIndex.add(i);
+            }
         }
+
         viewHolderList=new ArrayList<>();
         positionLastChecked=0;
         Calendar now=Calendar.getInstance();
@@ -121,18 +135,27 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
             mSentIndex.add(mData.size()-1);
         }
         notifyDataSetChanged();
+
     }
 
     @Override
     public CChatListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
-            case TYPE_RECEIVED:
+            case TYPE_RECEIVED_TEXT:
                 relativeLayout =(RelativeLayout) LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.received_item, parent, false);
+                        .inflate(R.layout.received_text_item, parent, false);
                 break;
-            case TYPE_SENT:
+            case TYPE_SENT_TEXT:
                 relativeLayout =(RelativeLayout) LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.sent_item, parent, false);
+                        .inflate(R.layout.sent_text_item, parent, false);
+                break;
+            case TYPE_RECEIVED_IMAGE:
+                relativeLayout =(RelativeLayout) LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.received_picture_item, parent, false);
+                break;
+            case TYPE_SENT_IMAGE:
+                relativeLayout =(RelativeLayout) LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.sent_picture_item, parent, false);
                 break;
             default:break;
         }
@@ -141,7 +164,17 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     @Override
     public void onBindViewHolder(CChatListAdapter.ViewHolder holder, int position) {
-        holder.message.setText(mData.get(position).getMessage());
+        switch (mData.get(position).getType()){
+            case 0:
+                holder.message.setText((String)mData.get(position).getMessage());
+                break;
+            case 1:
+               // holder.image.set//setImageURI(mData.get(position).getMessage());
+                break;
+            default:
+                Log.e("CChatListAdapter", "Message type wrong / not implemented yet");
+                break;
+        }
         holder.time.setText(getStringFromTime(mData.get(position).getTimestamp()));
         viewHolderList.add(holder);
     }
@@ -154,7 +187,20 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     @Override
     public int getItemViewType(int position){
-        return mSentIndex.contains(position)?TYPE_SENT:TYPE_RECEIVED;
+        if(mSentIndex.contains(position)){
+            if(mPictureIndex.contains(position)){
+                 return TYPE_SENT_IMAGE;
+            }
+            else {
+                return TYPE_SENT_TEXT;
+            }
+        }else{   //RECIEVED
+            if(mPictureIndex.contains(position)){
+                return TYPE_RECEIVED_IMAGE;
+            }else{
+                return TYPE_RECEIVED_TEXT;
+            }
+        }
     }
 
     public Chat getChat() {
@@ -169,15 +215,26 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView message;
         public TextView time;
+        public ImageView image;
         public RelativeLayout relativeLayout;
 
         public ViewHolder(RelativeLayout relativeLayout, int type) {
             super(relativeLayout);
             this.relativeLayout=(RelativeLayout) relativeLayout.findViewById(R.id.item_root);
-            this.message=(TextView) relativeLayout.findViewById(R.id.message);
+            try{
+                this.message=(TextView) relativeLayout.findViewById(R.id.message);
+                this.image=(ImageView) relativeLayout.findViewById(R.id.image);
+            }catch (Exception e){
+                Log.e("CCHATLISTADAPTER",e.getMessage());
+            }
+
             this.time=(TextView) relativeLayout.findViewById(R.id.time);
             switch (type){
-                case TYPE_RECEIVED:
+                case TYPE_RECEIVED_TEXT:
+                    //color accent
+                    relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.accent));
+                    break;
+                case TYPE_RECEIVED_IMAGE:
                     //color accent
                     relativeLayout.setBackgroundColor(context.getResources().getColor(R.color.accent));
                     break;

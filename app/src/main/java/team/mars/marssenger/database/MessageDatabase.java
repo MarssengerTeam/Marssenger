@@ -5,12 +5,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
+import team.mars.marssenger.datatype.PictureMessage;
+import team.mars.marssenger.datatype.TextMessage;
 
 /**
  * Created by Kern on 03.12.2014.
@@ -40,6 +43,7 @@ public class MessageDatabase {
         values.put(SQLiteManager.COLUMN_MESSAGES_TIME, getDate());
         values.put(SQLiteManager.COLUMN_MESSAGES_READ, read);
         values.put(SQLiteManager.COLUMN_MESSAGES_TYPE, type);
+
         long insertId = database.insert(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID, null, values);
         Cursor cursor = database.query(SQLiteManager.TABLE_MESSAGES_PREFIX+chatID,
                 allColumnsMessage, SQLiteManager.COLUMN_MESSAGES_ID + " = " + insertId, null,
@@ -82,7 +86,20 @@ public class MessageDatabase {
     }
 
     private Message cursorToMessage(Cursor cursor,long chatID) {
-        Message message = new Message();
+        Message message;
+        switch (cursor.getInt(5)){
+            case 0:
+                message = new TextMessage();
+                break;
+            case 1:
+                message = new PictureMessage();
+                break;
+            default:
+                message = null;
+                Log.e("MessageDatabase","Message type wrong / not implemented yet");
+                break;
+        }
+
         try{
             message.setId(cursor.getLong(0));
             message.setMessage(cursor.getString(1));

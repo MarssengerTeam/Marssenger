@@ -76,6 +76,7 @@ public class ChatFragment extends Fragment implements
         this.adapter=chatPresenter.getChatAdapter();
         recyclerView.setAdapter(adapter);
         chatPresenter.updateLayout();
+
         scrollToBottom();
     }
 
@@ -108,6 +109,7 @@ public class ChatFragment extends Fragment implements
         if(MessageStringValidater.isValid(input)){
             chatPresenter.chatButtonSendPressed(input);
             chatInput.setText("");
+            smoothScrollToBottom();
         }else {
             test("Input not valid.");
         }
