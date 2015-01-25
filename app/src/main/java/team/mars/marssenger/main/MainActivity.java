@@ -152,8 +152,7 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.action_search:
                 return true;
             case R.id.action_settings:
-                Intent intent = new Intent(this, SettingsActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_new_message:
                 return true;

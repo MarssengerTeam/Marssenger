@@ -1,13 +1,21 @@
 package team.mars.marssenger.custom;
 
+import android.provider.ContactsContract;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.database.ChatDatabase;
@@ -22,7 +30,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     private ArrayList<Chat> chatlist;
 
     //layout-attr
-    private CardView layout;
+    private RelativeLayout layout;
 
     public CListAdapter (ChatDatabase list){
         this.chats=list;
@@ -36,7 +44,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
 
-        layout =(CardView) LayoutInflater.from(viewGroup.getContext())
+        layout =(RelativeLayout) LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.list_item, viewGroup, false);
 
         return new ViewHolder(layout);
@@ -46,7 +54,18 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int i) {
         holder.name.setText(chatlist.get(i).getName());
         holder.text.setText(chats.getLastMessage(chatlist.get(i)).getMessage());
-        holder.counter.setText(chats.getUnreadMessages(chatlist.get(i))+"");
+        if (chats.getUnreadMessages(chatlist.get(i))>0){
+            holder.counter.setText(String.valueOf(chats.getUnreadMessages(chatlist.get(i))));
+        } else {
+            holder.counter.setVisibility(View.GONE);
+        }
+        holder.timestamp.setText(convertTime(chats.getLastMessage(chatlist.get(i)).getTimestamp()));
+    }
+
+    public String convertTime(long time){
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("HH:mm dd MMM yyyy");
+        return format.format(date);
     }
 
     public void updateCardView(){
@@ -72,13 +91,16 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
         public TextView text;
         public ImageView image;
         public TextView counter;
+        public TextView timestamp;
 
-        public ViewHolder(CardView layout) {
+        //gets view of type root in list_item.xml
+        public ViewHolder(RelativeLayout layout) {
             super(layout);
             this.name=(TextView) layout.findViewById(R.id.listitem_name);
             this.text=(TextView) layout.findViewById(R.id.listitem_text);
             this.counter=(TextView) layout.findViewById(R.id.listitem_counter);
             this.image=(ImageView) layout.findViewById(R.id.listitem_image);
+            this.timestamp=(TextView) layout.findViewById(R.id.listitem_time);
         }
     }
 

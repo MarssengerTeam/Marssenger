@@ -7,13 +7,20 @@
     <dimen name="message_top_margin">3dp</dimen>
     <dimen name="message_vertical_margin">5dp</dimen>
 
-    <dimen name="chat_vertical_margin">4dp</dimen>
-    <dimen name="chat_bottom_margin">2dp</dimen>
-    <dimen name="chat_top_margin">5dp</dimen>
+    <dimen name="chat_vertical_margin">6dp</dimen>
+    <dimen name="chat_horizontal_margin">3dp</dimen>
 
-    <dimen name="text_padding">5dp</dimen>
+    <dimen name="chat_image_padding">8dp</dimen>
+    <dimen name="chat_image_margin">4dp</dimen>
+    <dimen name="chat_image_margin_start">16dp</dimen>
+    <dimen name="minimum_margin">1dp</dimen>
 
-    <dimen name="list_element_text_size">18sp</dimen>
+    <dimen name="text_margin">20dp</dimen>
+
+    <dimen name="list_element_name">17sp</dimen>
+    <dimen name="list_element_message">14sp</dimen>
+    <dimen name="list_element_counter">20sp</dimen>
+    <dimen name="list_element_time">14sp</dimen>
 
     <dimen name="textview_textsize">15dp</dimen>
 
