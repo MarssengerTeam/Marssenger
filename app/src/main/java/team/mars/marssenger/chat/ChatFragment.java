@@ -1,7 +1,10 @@
 package team.mars.marssenger.chat;
 
 import android.app.Fragment;
+import android.content.ComponentName;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.communication.HttpsBackgroundService;
 import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.util.MessageStringValidater;
 
@@ -33,6 +37,8 @@ public class ChatFragment extends Fragment implements
     //adapter and layoutmanager
     private CChatListAdapter adapter;
     private RecyclerView.LayoutManager manager;
+
+
 
     public static ChatFragment getInstance(ChatPresenter chatPresenter){
         ChatFragment c=new ChatFragment();

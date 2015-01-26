@@ -34,7 +34,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.main.MainActivity;
+import team.mars.marssenger.main.MainInteractor;
+import team.mars.marssenger.main.MainInteractorImpl;
+import team.mars.marssenger.main.Marssenger;
 
 
 /**
@@ -53,6 +57,9 @@ public class HttpsBackgroundService extends Service {
     private final IBinder mBinder  = new myBinder();
     boolean mAllowRebind = true;
     //
+
+    private MainInteractorImpl mainInteractor;
+
     //For Server Connection
     private GoogleCloudMessaging gcm;
     private HttpClient httpClient;
@@ -130,7 +137,8 @@ public class HttpsBackgroundService extends Service {
     private void controlConnection(){
         //Toast.makeText(getBaseContext(), "BackgroundService: Controlling", Toast.LENGTH_SHORT).show();
         //TODO controlling Connection
-        Log.d("ConnectionHandler", "Controlling");
+
+        //Log.d("ConnectionHandler", "Controlling");
     }
 
     @Override
@@ -302,6 +310,8 @@ public class HttpsBackgroundService extends Service {
 
                     HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/user/isVerified");
 
+                    Log.d("SendingService", params[1]+" : "+params[0]);
+
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
                     nameValuePairs.add(new BasicNameValuePair("regID", params[0]));
@@ -353,6 +363,8 @@ public class HttpsBackgroundService extends Service {
     }
 
     public void sendMessage(String receiver, String message, String messageID){
+        Log.d("SendingService", message);
+
         new AsyncTask<String, String, JSONArray>() {
             @Override
             protected JSONArray doInBackground(String... params) {
@@ -399,6 +411,65 @@ public class HttpsBackgroundService extends Service {
 
             }
         }.execute(myPhoneNumber,receiver,message, messageID);
+    }
+
+    public void getMessages(){
+        new AsyncTask<String, String, JSONArray>() {
+            @Override
+            protected JSONArray doInBackground(String... params) {
+                String result11;
+                try {
+                    //Now using existing client
+                    HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/messages/getMessages");
+
+
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
+                    nameValuePairs.add(new BasicNameValuePair("number",params[0]));
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    // Execute HTTP Post Request
+                    Log.d("SendingService", "Vor senden");
+                    HttpResponse response = httpClient.execute(httppost);
+                    Log.d("SendingService", "Nach senden");
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(reader.readLine() + "\n");
+                    String line = "0";
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    reader.close();
+                    result11 = sb.toString();
+                    return new JSONArray(result11);
+                    // parsing data
+                } catch (Exception e) {
+                    Log.d("SendingService", e.toString());
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray result) {
+                Log.d("SendingService", result.toString());
+                addToDB(result);
+            }
+        }.execute(myPhoneNumber);
+    }
+
+    public void addToDB(JSONArray result){
+        Log.d("DB", "Addtodb");
+        try {
+            Marssenger marssenger = (Marssenger) getApplicationContext();
+            MessageDatabase mDataBase = marssenger.mainInteractor.getMessageDataBase();
+            for (int i = 0; i < result.length(); i++) {
+                mDataBase.createMessage(result.getJSONObject(i).getString("data"), 0, 4, 0, 0);
+            } ;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public String getRegistrationId(Context context) {

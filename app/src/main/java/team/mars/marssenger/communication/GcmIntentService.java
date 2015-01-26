@@ -3,9 +3,13 @@ package team.mars.marssenger.communication;
 import android.app.IntentService;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
+import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
@@ -58,6 +62,25 @@ public class GcmIntentService extends IntentService {
                 sendNotification(extras.getString("sender")+": "+extras.getString("message"));
 
                 Log.i(TAG, "Received: " + extras.toString());
+
+                //Build up Connection to Service
+
+                ServiceConnection mConnection = new ServiceConnection() {
+                    @Override
+                    public void onServiceConnected(ComponentName name, IBinder service) {
+                        HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
+                        HttpsBackgroundService mService = binder.getService();
+                        mService.getMessages();
+                    }
+
+                    @Override
+                    public void onServiceDisconnected(ComponentName name) {
+
+                    }
+                };
+
+                Intent intent2 = new Intent(this, HttpsBackgroundService.class);
+                bindService(intent2, mConnection, getBaseContext().BIND_AUTO_CREATE);
 
 
             }

@@ -74,6 +74,9 @@ public class MainActivity extends ActionBarActivity implements
         //save mainInteractor in static reference so it can be accessed in other parts of the code
         MainActivity.MAIN_INTERACTOR=this.mainInteractor;
 
+        Marssenger marssenger = (Marssenger) getApplicationContext();
+        marssenger.mainInteractor = mainInteractor;
+
         if(mainInteractor.checkPlayServices()){
             if(!isSerivceRunning(HttpsBackgroundService.class)){
                 Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);

@@ -88,6 +88,8 @@ public class MainInteractorImpl implements MainInteractor {
 
         messageDatabase = new MessageDatabase(context);
         chatDatabase = new ChatDatabase(context,messageDatabase);
+        //Marssenger marssenger =(Marssenger)context.getApplicationContext();
+        //marssenger.mDataBase = messageDatabase;
         openChatDB();
         openMessageDB();
 

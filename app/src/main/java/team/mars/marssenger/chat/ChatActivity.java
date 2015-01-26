@@ -3,7 +3,9 @@ package team.mars.marssenger.chat;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,6 +34,7 @@ import java.util.TreeSet;
 import javax.xml.transform.Result;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.communication.HttpsBackgroundService;
 import team.mars.marssenger.custom.CChatListAdapter;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
@@ -48,6 +52,23 @@ public class ChatActivity extends ActionBarActivity implements
 
     private Chat chat;
     private Toolbar toolbar;
+
+    //BackgroundService
+    private HttpsBackgroundService mService;
+    private boolean isBound = false;
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
+            mService = binder.getService();
+            isBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,15 +99,30 @@ public class ChatActivity extends ActionBarActivity implements
 
         //TODO SEND TO SERVER MESSAGES READ
 
+
+
         //create fragment
         ChatFragment chatFragment=ChatFragment.getInstance(this); //ChatPresenter
         replaceContainer(chatFragment);
     }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent intent = new Intent(this, HttpsBackgroundService.class);
+        bindService(intent, mConnection, getBaseContext().BIND_AUTO_CREATE);
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(isBound){
+            unbindService(mConnection);
+            isBound=false;
+        }
 
-
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -181,9 +217,17 @@ public class ChatActivity extends ActionBarActivity implements
         mainInteractor.getMessageDataBase().createMessage(message,1,chat.getId()-1,1,0);
         ArrayList<Message> messages = mainInteractor.getMessageDataBase().getAllMessageFromChat(chat);
         cChatListAdapter.addMessage(messages.get(messages.size()-1));
-        /*TODO figure out how to send a message
-        mService.sendMessage(this.chat.getReciever()[0], message, "12345");
-        */
+                                                       //TODO generate messageId
+        try {
+            if(mService == null){
+                Log.e ("Help me!", "No Connection");
+            }else {
+                mService.sendMessage(this.chat.getReceiver(), message, String.valueOf((int)Math.random()*1000));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
