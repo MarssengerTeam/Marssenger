@@ -23,7 +23,11 @@ public interface MainInteractor{
     public void closeMessageDB();
     public void closeChatDB();
 
+    public void stopBind();
+
     public boolean checkPlayServices();
+
+    public void cancelNotification();
 
     public void setMyPhoneNumber(String phoneNumber);
     public String getMyPhoneNumber();

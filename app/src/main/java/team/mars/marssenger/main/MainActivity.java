@@ -65,9 +65,7 @@ public class MainActivity extends ActionBarActivity implements
             setSupportActionBar(toolbar);
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         }
-        //if there is a Notification from GCM, cancel.
-        NotificationManager nm = (NotificationManager) this.getSystemService(NOTIFICATION_SERVICE);
-        nm.cancel(1);
+
 
 
         mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
@@ -89,6 +87,9 @@ public class MainActivity extends ActionBarActivity implements
         }else{
             Log.d("GCMundso", "Cry a lot!");
         }
+
+
+
         //TODO figure this out
         /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -104,6 +105,16 @@ public class MainActivity extends ActionBarActivity implements
         MainFragment mainFragment = MainFragment.getInstance(this);//this -> MainPresenter
 
         replaceContainer(mainFragment);
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        //mainInteractor.cancelNotification();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mainInteractor.stopBind();
     }
 
     private void replaceContainer(Fragment fragment) {

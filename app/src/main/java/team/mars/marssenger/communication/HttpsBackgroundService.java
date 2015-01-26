@@ -1,15 +1,20 @@
 package team.mars.marssenger.communication;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -34,6 +39,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.mars.marssenger.R;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.main.MainActivity;
 import team.mars.marssenger.main.MainInteractor;
@@ -79,7 +85,11 @@ public class HttpsBackgroundService extends Service {
     //
     //Controlling
     private boolean isVerified=false;
-    //
+
+    //Notification
+    private NotificationManager mNotificationManager;
+    private int NOTIFICATION_ID = 627777777;
+    private ArrayList<String> notItems = new ArrayList<String>();
 
     //Service Methods
     @Override
@@ -301,7 +311,7 @@ public class HttpsBackgroundService extends Service {
         editor.commit();
     }
 
-    public void checkRegistrationId(String regID) {
+    public void checkRegistrationId(final String regID) {
         new AsyncTask<String, String, JSONArray>() {
             @Override
             protected JSONArray doInBackground(String... params) {
@@ -318,12 +328,8 @@ public class HttpsBackgroundService extends Service {
                     nameValuePairs.add(new BasicNameValuePair("phoneNumber", params[1]));
 
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-                    Log.d("ConnectionHandler", "Waiting in checkRegId");
-                    Thread.sleep(10000);
                     // Execute HTTP Post Request
-                    Log.d("SendingService", "Vor senden");
                     HttpResponse response = httpClient.execute(httppost);
-                    Log.d("SendingService", "Nach senden");
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
                     StringBuilder sb = new StringBuilder();
@@ -333,7 +339,6 @@ public class HttpsBackgroundService extends Service {
                         sb.append(line + "\n");
                     }
                     reader.close();
-                    Log.d("Sending", "Sendet daten!");
                     result11 = sb.toString();
 
                     return new JSONArray(result11);
@@ -349,7 +354,11 @@ public class HttpsBackgroundService extends Service {
             protected void onPostExecute(JSONArray result) {
                 //TODO replace with real code
                 try{
-                    setVerified(true);
+                    /*if(result.getJSONObject(0).getString("regID") == regID){
+                        setVerified(true);
+                    }*/
+                    Log.d("What", result.toString());
+                    isVerified = true;
                 }catch (Exception e){
                     e.toString();
                 }
@@ -429,9 +438,7 @@ public class HttpsBackgroundService extends Service {
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                     // Execute HTTP Post Request
-                    Log.d("SendingService", "Vor senden");
                     HttpResponse response = httpClient.execute(httppost);
-                    Log.d("SendingService", "Nach senden");
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
                     StringBuilder sb = new StringBuilder();
@@ -454,6 +461,7 @@ public class HttpsBackgroundService extends Service {
             @Override
             protected void onPostExecute(JSONArray result) {
                 Log.d("SendingService", result.toString());
+                sendNotification(result);
                 addToDB(result);
             }
         }.execute(myPhoneNumber);
@@ -470,6 +478,68 @@ public class HttpsBackgroundService extends Service {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void sendNotification(JSONArray result) {
+        Intent notIntent = new Intent(this, MainActivity.class);
+        notIntent.putExtra("StartMode", "Notification");
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notIntent, 0);
+
+        convertJsonIntoArrayList(result);
+
+        mNotificationManager =(NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher);//TODO ic_stat_gcm
+
+        if(notItems.size()>1) {
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.setBigContentTitle("Marssenger: " +notItems.size()+ " Messages");
+            mBuilder.setContentTitle("Marssenger: " + notItems.size() + " Messages");
+            mBuilder.setContentText(notItems.get(0));
+            for (int i = 0; i < notItems.size(); i++) {
+                inboxStyle.addLine(notItems.get(i));
+            }
+            mBuilder.setStyle(inboxStyle);
+        }else{
+            mBuilder.setContentTitle("Marssenger");
+            mBuilder.setContentText(notItems.get(0));
+        }
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getBaseContext());
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(notIntent);
+
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.addAction(R.drawable.ic_action_read, "Read", resultPendingIntent);
+        mBuilder.addAction(R.drawable.ic_launcher, "Fast Re", resultPendingIntent);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        mBuilder.setLights(Color.GREEN, 100, 500);
+        long[] pattern = {500, 100, 100};
+        mBuilder.setVibrate(pattern);
+        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+
+    }
+
+    private void convertJsonIntoArrayList(JSONArray items){
+        String result = "";
+        try{
+            for(int i = 0; i<items.length(); i++){
+                notItems.add(items.getJSONObject(i).getString("sender")+": "+ items.getJSONObject(i).getString("data"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void clearNotification(){
+        this.notItems.clear();
     }
 
     public String getRegistrationId(Context context) {

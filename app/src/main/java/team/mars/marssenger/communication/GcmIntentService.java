@@ -48,29 +48,30 @@ public class GcmIntentService extends IntentService {
              */
             if (GoogleCloudMessaging.
                     MESSAGE_TYPE_SEND_ERROR.equals(messageType)) {
-                sendNotification("Send error: " + extras.toString());
+
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_DELETED.equals(messageType)) {
-                sendNotification("Deleted messages on server: " +
-                        extras.toString());
+
+
                 // If it's a regular GCM message, do some work.
             } else if (GoogleCloudMessaging.
                     MESSAGE_TYPE_MESSAGE.equals(messageType)) {
                 // This loop represents the service doing some work.
 
                 // Post notification of received message.
-                sendNotification(extras.getString("sender")+": "+extras.getString("message"));
+
 
                 Log.i(TAG, "Received: " + extras.toString());
 
                 //Build up Connection to Service
 
-                ServiceConnection mConnection = new ServiceConnection() {
+                final ServiceConnection mConnection = new ServiceConnection() {
                     @Override
                     public void onServiceConnected(ComponentName name, IBinder service) {
                         HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
                         HttpsBackgroundService mService = binder.getService();
                         mService.getMessages();
+
                     }
 
                     @Override
@@ -81,7 +82,13 @@ public class GcmIntentService extends IntentService {
 
                 Intent intent2 = new Intent(this, HttpsBackgroundService.class);
                 bindService(intent2, mConnection, getBaseContext().BIND_AUTO_CREATE);
+                try {
+                    Thread.sleep(1000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
+                unbindService(mConnection);
 
             }
         }
@@ -92,23 +99,5 @@ public class GcmIntentService extends IntentService {
     // Put the message into a notification and post it.
     // This is just one simple example of what you might choose to do with
     // a GCM message.
-    private void sendNotification(String msg) {
-        mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("StartMode", "Notification");
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, intent, 0);
-
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(R.drawable.ic_launcher)//TODO ic_stat_gcm
-                        .setContentTitle("GCM Notification")
-                        .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(msg))
-                        .setContentText(msg);
-
-        mBuilder.setContentIntent(contentIntent);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
-    }
 }

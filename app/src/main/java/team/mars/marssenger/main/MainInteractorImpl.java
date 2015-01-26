@@ -1,7 +1,9 @@
 package team.mars.marssenger.main;
 
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.Environment;
@@ -34,6 +36,7 @@ public class MainInteractorImpl implements MainInteractor {
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
     private static final String PROPERTY_MY_PHONENUMBER = "myPhoneNumber";
+    private static final int NOTIFICATION_ID = 627777777;
     public static final File pictureFolder = new File(Environment.getExternalStorageDirectory()+ "/Marssenger/Pictures");
 
     String SENDER_ID;
@@ -58,6 +61,7 @@ public class MainInteractorImpl implements MainInteractor {
             HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
             mService = binder.getService();
             isBound = true;
+            cancelNotification();
         }
 
         @Override
@@ -66,22 +70,6 @@ public class MainInteractorImpl implements MainInteractor {
         }
     };
 
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent intent = new Intent(this, HttpsBackgroundService.class);
-        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if(isBound){
-            unbindService(mConnection);
-            isBound=false;
-        }
-    }*/
 
     public MainInteractorImpl(Context context){
         this.context= context;
@@ -103,6 +91,8 @@ public class MainInteractorImpl implements MainInteractor {
             }
         }
 
+        /*Intent intent = new Intent(context, HttpsBackgroundService.class);
+        context.bindService(intent, mConnection, Context.BIND_AUTO_CREATE);*/
 
         //create test chats
         createTestChats();
@@ -112,6 +102,15 @@ public class MainInteractorImpl implements MainInteractor {
         gcm = GoogleCloudMessaging.getInstance(context);
         regid = null;
     }
+
+    public void stopBind(){
+        if(isBound){
+            context.unbindService(mConnection);
+            isBound=false;
+        }
+    }
+
+
 
     private void createTestChats(){
         int sender =(int) (Math.random()*2);
@@ -154,6 +153,14 @@ public class MainInteractorImpl implements MainInteractor {
 
     @Override
     public String getRegid(){return regid;}
+
+    @Override
+    public void cancelNotification(){
+        //if there is a Notification from GCM, cancel.
+        NotificationManager nm = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+        nm.cancel(NOTIFICATION_ID);
+        mService.clearNotification();
+    }
 
     @Override
     public boolean checkPlayServices() {
