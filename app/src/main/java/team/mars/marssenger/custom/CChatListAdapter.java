@@ -138,6 +138,7 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     }
 
+
     @Override
     public CChatListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){

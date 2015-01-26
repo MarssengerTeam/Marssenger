@@ -39,8 +39,11 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.mars.marssenger.chat.ChatActivity;
+import team.mars.marssenger.database.ChatDatabase;
 import team.mars.marssenger.R;
 import team.mars.marssenger.database.MessageDatabase;
+import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.main.MainActivity;
 import team.mars.marssenger.main.MainInteractor;
 import team.mars.marssenger.main.MainInteractorImpl;
@@ -85,6 +88,7 @@ public class HttpsBackgroundService extends Service {
     //
     //Controlling
     private boolean isVerified=false;
+    //
 
     //Notification
     private NotificationManager mNotificationManager;
@@ -472,9 +476,27 @@ public class HttpsBackgroundService extends Service {
         try {
             Marssenger marssenger = (Marssenger) getApplicationContext();
             MessageDatabase mDataBase = marssenger.mainInteractor.getMessageDataBase();
-            for (int i = 0; i < result.length(); i++) {
-                mDataBase.createMessage(result.getJSONObject(i).getString("data"), 0, 4, 0, 0);
-            } ;
+            ChatDatabase cDataBase = marssenger.mainInteractor.getChatDatabase();
+
+            Chat senderChat = null;
+            ArrayList<Chat> chats = cDataBase.getAllChat();
+            for(int i=0;i<result.length();i++) {
+
+                for (Chat c : chats) {
+
+                    if (result.getJSONObject(i).getString("sender").equals(c.getReceiver())) {
+                        Log.e("addToDB",result.getJSONObject(i).getString("sender")+"=="+c.getReceiver());
+                        senderChat = c;
+                    }
+                }
+                if(senderChat==null){
+                    Log.e("addToDB","NEW CHAT FOR NUMMBER "+result.getJSONObject(i).getString("sender"));
+                    cDataBase.createChat(result.getJSONObject(i).getString("sender"),result.getJSONObject(i).getString("sender"),0);
+                    senderChat = cDataBase.getAllChat().get(cDataBase.getAllChat().size()-1);
+                }
+                mDataBase.createMessage(result.getJSONObject(i).getString("data"), 0,senderChat.getId()-1, 0, 0);//TODO TYPE
+                ChatActivity.cChatListAdapter.addMessage(cDataBase.getLastMessage(senderChat));
+            }
         }catch (Exception e){
             e.printStackTrace();
         }

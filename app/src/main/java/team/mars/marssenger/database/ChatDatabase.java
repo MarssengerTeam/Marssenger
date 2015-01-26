@@ -94,6 +94,7 @@ public class ChatDatabase {
         return -2;
     }
 
+
     public int getUnreadMessages(Chat chat){
         int i= 0;
         for(Message m: messageDatabase.getAllMessageFromChat(chat)) {

@@ -40,6 +40,7 @@ import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
 import team.mars.marssenger.main.MainActivity;
 import team.mars.marssenger.main.MainInteractor;
+import team.mars.marssenger.main.Marssenger;
 
 public class ChatActivity extends ActionBarActivity implements
         ChatPresenter,
@@ -47,7 +48,7 @@ public class ChatActivity extends ActionBarActivity implements
 {
 
     //mvc
-    private CChatListAdapter cChatListAdapter;
+    public static CChatListAdapter cChatListAdapter;
     private MainInteractor mainInteractor;
 
     private Chat chat;
@@ -151,7 +152,6 @@ public class ChatActivity extends ActionBarActivity implements
 
     if (resultCode == RESULT_OK && requestCode == 1)
     {
-
         Date a= new Date();
         String timestamp = String.valueOf(a.getTime());
         android.net.Uri selectedImageUri = data.getData();
@@ -177,7 +177,6 @@ public class ChatActivity extends ActionBarActivity implements
             }
 
         } catch (Exception e) {}
-
     }}}
     private void test(CharSequence charSequence){
         Toast.makeText(getApplicationContext(),charSequence,Toast.LENGTH_SHORT).show();

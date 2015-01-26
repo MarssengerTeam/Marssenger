@@ -33,7 +33,7 @@ public class SQLiteManager extends SQLiteOpenHelper {
     public static final String COLUMN_CHAT_TYPE = "type";
 
     private static final String DATABASE_NAME = "chats.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 14;
 
     // Database creation sql statement
     private static final String DATABASE_CREATE_TABLE_CHAT = "create table "

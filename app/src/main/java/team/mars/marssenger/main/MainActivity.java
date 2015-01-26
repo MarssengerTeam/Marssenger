@@ -21,6 +21,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+
 import team.mars.marssenger.R;
 import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.communication.HttpsBackgroundService;
@@ -67,7 +69,6 @@ public class MainActivity extends ActionBarActivity implements
         }
 
 
-
         mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
         //save mainInteractor in static reference so it can be accessed in other parts of the code
         MainActivity.MAIN_INTERACTOR=this.mainInteractor;
@@ -87,9 +88,6 @@ public class MainActivity extends ActionBarActivity implements
         }else{
             Log.d("GCMundso", "Cry a lot!");
         }
-
-
-
         //TODO figure this out
         /*final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
