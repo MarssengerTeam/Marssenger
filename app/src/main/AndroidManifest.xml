@@ -73,7 +73,7 @@
             android:name=".chat.ChatActivity"
             android:label="@string/title_activity_chat"
             android:parentActivityName=".main.MainActivity"
-            android:windowSoftInputMode="adjustNothing"
+            android:windowSoftInputMode="adjustResize"
             >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -103,7 +103,7 @@ public class ChatFragment extends Fragment implements
     }
 
     @Override
-    public void smoothScrollToBottom() {
+    public void smoothScrollToBottom(){
         recyclerView.smoothScrollToPosition(chatPresenter.getBottomPosition());
     }
 

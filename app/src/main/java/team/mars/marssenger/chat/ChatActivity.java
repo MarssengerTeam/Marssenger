@@ -221,7 +221,7 @@ public class ChatActivity extends ActionBarActivity implements
             if(mService == null){
                 Log.e ("Help me!", "No Connection");
             }else {
-                mService.sendMessage(this.chat.getReceiver(), message, String.valueOf((int)Math.random()*1000));
+                mService.sendMessage(this.chat.getReceiver(), message, String.valueOf((int)(Math.random()*1000)));
             }
         }catch(Exception e){
             e.printStackTrace();

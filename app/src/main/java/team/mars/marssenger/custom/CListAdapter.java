@@ -55,10 +55,21 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int i) {
         switch (chats.getLastMessage(chatlist.get(i)).getType()){
             case 0:
-                holder.text.setText((String)chats.getLastMessage(chatlist.get(i)).getMessage());
+                String prefix;
+                if(chats.getLastMessage(chatlist.get(i)).isSender()){
+                    prefix=">> ";
+                }else {
+                    prefix="<< ";
+                }
+                holder.text.setText(prefix+chats.getLastMessage(chatlist.get(i)).getMessage());
                 break;
             case 1:
-                holder.text.setText("Picture");
+                if(chats.getLastMessage(chatlist.get(i)).isSender()){
+                    prefix=">> ";
+                }else {
+                    prefix="<< ";
+                }
+                holder.text.setText(prefix+"Picture");
                 break;
             default:
 
@@ -67,12 +78,6 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
         }
         holder.name.setText(chatlist.get(i).getName());
-        if(chats.getLastMessage(chatlist.get(i)).getType()==0){
-            holder.text.setText(((TextMessage)chats.getLastMessage(chatlist.get(i))).getMessage());
-        }else{
-            holder.text.setText("Picture");
-        }
-
         if (chats.getUnreadMessages(chatlist.get(i))>0){
             holder.counter.setText(String.valueOf(chats.getUnreadMessages(chatlist.get(i))));
         } else {

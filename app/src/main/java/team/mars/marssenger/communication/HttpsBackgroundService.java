@@ -524,9 +524,11 @@ public class HttpsBackgroundService extends Service {
                 inboxStyle.addLine(notItems.get(i));
             }
             mBuilder.setStyle(inboxStyle);
-        }else{
+        }else if(notItems.size()==1){
             mBuilder.setContentTitle("Marssenger");
             mBuilder.setContentText(notItems.get(0));
+        }else{
+            Log.e("HttpsBackgroundService","line 531 dunno whats happening");
         }
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getBaseContext());
