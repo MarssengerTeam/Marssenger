@@ -23,6 +23,7 @@ public interface MainInteractor{
     public void closeMessageDB();
     public void closeChatDB();
 
+    public void bindService();
     public void stopBind();
 
     public boolean checkPlayServices();

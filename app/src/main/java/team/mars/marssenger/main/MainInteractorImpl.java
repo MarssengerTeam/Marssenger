@@ -103,6 +103,13 @@ public class MainInteractorImpl implements MainInteractor {
         regid = null;
     }
 
+    public void bindService(){
+        if(!isBound){
+            Intent intent2 = new Intent(context, HttpsBackgroundService.class);
+            context.bindService(intent2, mConnection, context.BIND_AUTO_CREATE);
+        }
+    }
+
     public void stopBind(){
         if(isBound){
             context.unbindService(mConnection);

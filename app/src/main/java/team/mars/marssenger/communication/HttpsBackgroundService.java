@@ -88,6 +88,7 @@ public class HttpsBackgroundService extends Service {
     //
     //Controlling
     private boolean isVerified=false;
+    private boolean isBound=false;
     //
 
     //Notification
@@ -158,6 +159,7 @@ public class HttpsBackgroundService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         //Returns Interface for Clients
+        isBound = true;
         return mBinder;
     }
 
@@ -168,6 +170,7 @@ public class HttpsBackgroundService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
+        isBound = false;
         return mAllowRebind;
     }
 
@@ -465,7 +468,9 @@ public class HttpsBackgroundService extends Service {
             @Override
             protected void onPostExecute(JSONArray result) {
                 Log.d("SendingService", result.toString());
-                sendNotification(result);
+                if(!isBound){
+                    sendNotification(result);
+                }
                 addToDB(result);
             }
         }.execute(myPhoneNumber);
