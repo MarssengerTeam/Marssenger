@@ -80,7 +80,7 @@ public class MainActivity extends ActionBarActivity implements
             if(!isSerivceRunning(HttpsBackgroundService.class)){
                 Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
                 serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
-                serviceIntent.putExtra("phoneNumber", );
+                serviceIntent.putExtra("phoneNumber", "0157700000");
                 serviceIntent.putExtra("email", "hurensohn@squad.com");
                 serviceIntent.putExtra("digitCode", "010101"); //TODO Maybe / Maybe not
                 startService(serviceIntent);

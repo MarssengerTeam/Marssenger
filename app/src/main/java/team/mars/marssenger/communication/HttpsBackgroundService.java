@@ -472,14 +472,23 @@ public class HttpsBackgroundService extends Service {
     }
 
     public void addToDB(JSONArray result){
-        Log.d("DB", "Addtodb");
-        try {
-            Marssenger marssenger = (Marssenger) getApplicationContext();
-            MessageDatabase mDataBase = marssenger.mainInteractor.getMessageDataBase();
-            ChatDatabase cDataBase = marssenger.mainInteractor.getChatDatabase();
+        boolean isDBOpen=false;
+        MessageDatabase messageDatabase;
+        ChatDatabase chatDatabase;
+        if(MainActivity.MAIN_INTERACTOR==null){
+            messageDatabase = new MessageDatabase(getBaseContext());
+            chatDatabase = new ChatDatabase(getBaseContext(),messageDatabase);
+            messageDatabase.open();
+            chatDatabase.open();
+            isDBOpen=true;
+        }else{
+            messageDatabase = MainActivity.MAIN_INTERACTOR.getMessageDataBase();
+            chatDatabase = MainActivity.MAIN_INTERACTOR.getChatDatabase();
+        }
 
+        try {
             Chat senderChat = null;
-            ArrayList<Chat> chats = cDataBase.getAllChat();
+            ArrayList<Chat> chats = chatDatabase.getAllChat();
             for(int i=0;i<result.length();i++) {
 
                 for (Chat c : chats) {
@@ -491,14 +500,19 @@ public class HttpsBackgroundService extends Service {
                 }
                 if(senderChat==null){
                     Log.e("addToDB","NEW CHAT FOR NUMMBER "+result.getJSONObject(i).getString("sender"));
-                    cDataBase.createChat(result.getJSONObject(i).getString("sender"),result.getJSONObject(i).getString("sender"),0);
-                    senderChat = cDataBase.getAllChat().get(cDataBase.getAllChat().size()-1);
+                    chatDatabase.createChat(result.getJSONObject(i).getString("sender"),result.getJSONObject(i).getString("sender"),0);
+                    senderChat = chatDatabase.getAllChat().get(chatDatabase.getAllChat().size()-1);
                 }
-                mDataBase.createMessage(result.getJSONObject(i).getString("data"), 0,senderChat.getId()-1, 0, 0);//TODO TYPE
-                ChatActivity.cChatListAdapter.addMessage(cDataBase.getLastMessage(senderChat));
+                messageDatabase.createMessage(result.getJSONObject(i).getString("data"), 0,senderChat.getId()-1, 0, 0);//TODO TYPE
+                ChatActivity.cChatListAdapter.addMessage(chatDatabase.getLastMessage(senderChat));
             }
         }catch (Exception e){
             e.printStackTrace();
+        }
+        if(isDBOpen){
+            messageDatabase.close();
+            chatDatabase.close();
+            isDBOpen=!isDBOpen;
         }
     }
 

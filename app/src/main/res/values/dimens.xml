@@ -29,7 +29,7 @@
 
     <dimen name="toolbar_height">56dp</dimen>
 
-    <dimen name="message_text_size">20sp</dimen>
+    <dimen name="message_text_size">16sp</dimen>
 
     <dimen name="time_text_size">10sp</dimen>
 
