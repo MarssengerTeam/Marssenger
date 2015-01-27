@@ -9,6 +9,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -28,6 +29,7 @@ import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.communication.HttpsBackgroundService;
 import team.mars.marssenger.custom.CListAdapter;
 import team.mars.marssenger.datatype.Chat;
+import team.mars.marssenger.register.RegisterActivity;
 import team.mars.marssenger.settings.SettingsActivity;
 import team.mars.marssenger.util.Constants;
 
@@ -44,10 +46,22 @@ public class MainActivity extends ActionBarActivity implements
     private MainInteractor mainInteractor;
     public static MainInteractor MAIN_INTERACTOR;
 
+
+
+    //Controlling
+    private  boolean isRegistered = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
+        if(!mainInteractor.isRegistered()){
+            Intent regIntent = new Intent(this, RegisterActivity.class);
+            startActivityForResult(regIntent,REGISTER_REQUEST_CODE);
+        }else {
+            isRegistered = true;
+        }
         setContentView(R.layout.activity_main);
 
         if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
@@ -69,46 +83,41 @@ public class MainActivity extends ActionBarActivity implements
         }
 
 
-        mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
+
         //save mainInteractor in static reference so it can be accessed in other parts of the code
         MainActivity.MAIN_INTERACTOR=this.mainInteractor;
 
         Marssenger marssenger = (Marssenger) getApplicationContext();
         marssenger.mainInteractor = mainInteractor;
 
-        if(mainInteractor.checkPlayServices()){
-            if(!isSerivceRunning(HttpsBackgroundService.class)){
-                Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
-                serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
-                serviceIntent.putExtra("phoneNumber", );
-                serviceIntent.putExtra("email", "hurensohn@squad.com");
-                serviceIntent.putExtra("digitCode", "010101"); //TODO Maybe / Maybe not
-                startService(serviceIntent);
-            }
-        }else{
-            Log.d("GCMundso", "Cry a lot!");
-        }
-        //TODO figure this out
-        /*final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(isBound) {
-                    mService.sendMessage("0157712345", String.valueOf(new Random().nextInt(100)), "123456");
-                    handler.postDelayed(this, 30000);
-                }
-            }
-        }, 0);*/
+
 
         MainFragment mainFragment = MainFragment.getInstance(this);//this -> MainPresenter
 
         replaceContainer(mainFragment);
+
     }
+
+
     @Override
     protected void onStart(){
         super.onStart();
         //mainInteractor.cancelNotification();
-        mainInteractor.bindService();
+        if(isRegistered) {
+            if(mainInteractor.checkPlayServices()){
+                if(!isSerivceRunning(HttpsBackgroundService.class)){
+                    Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
+                    serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
+                    serviceIntent.putExtra("phoneNumber", mainInteractor.getMyNumber());
+                    serviceIntent.putExtra("email", mainInteractor.getMyEMail());
+                    serviceIntent.putExtra("digitCode", "010101"); //TODO Maybe / Maybe not
+                    startService(serviceIntent);
+                }
+            }else{
+                Log.d("GCMundso", "Cry a lot!");
+            }
+            mainInteractor.bindService();
+        }
     }
     @Override
     protected void onStop() {
@@ -160,7 +169,9 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onResume(){
         super.onResume();
-        cListAdapter.updateCardView();
+        if(isRegistered) {
+            cListAdapter.updateCardView();
+        }
     }
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -231,8 +242,11 @@ public class MainActivity extends ActionBarActivity implements
     public void onRegsiterReturn(int requestCode, int resultCode, Intent data) {
         if (requestCode == REGISTER_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
+                Log.d("Register", "is Registered");
+                isRegistered=true;
                 String number = data.getStringExtra("number");
-                //mainInteractor.storeRegistrationId(this,number);
+                Log.d("Register", number);
+                mainInteractor.storePhoneNumber(number);
             }
         }
     }

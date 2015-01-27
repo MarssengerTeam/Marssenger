@@ -30,10 +30,11 @@ public interface MainInteractor{
 
     public void cancelNotification();
 
-    public void setMyPhoneNumber(String phoneNumber);
-    public String getMyPhoneNumber();
-
     public String getRegid();
+    public boolean isRegistered();
+    public String getMyNumber();
+    public String getMyEMail();
+    public void storePhoneNumber(String number);
 
     public MessageDatabase getMessageDataBase();
 

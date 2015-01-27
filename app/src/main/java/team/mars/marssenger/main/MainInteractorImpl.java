@@ -32,10 +32,14 @@ public class MainInteractorImpl implements MainInteractor {
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String TAG = "MainInteractorImpl";
+    //SharedPreferences
+    public static final String PREF_NAME = "Account";
+    public static final String PROPERTY_PHONE_NUMBER = "myPhoneNumber";
+    public static final String PROPERTY_E_MAIL = "myEMail";
     public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "appVersion";
-    private static final String PROPERTY_MY_PHONENUMBER = "myPhoneNumber";
+
     private static final int NOTIFICATION_ID = 627777777;
     public static final File pictureFolder = new File(Environment.getExternalStorageDirectory()+ "/Marssenger/Pictures");
 
@@ -144,6 +148,49 @@ public class MainInteractorImpl implements MainInteractor {
     @Override
     public String getRegid(){return regid;}
 
+    public boolean isRegistered(){
+        boolean registered = false;
+
+        final SharedPreferences prefs = context.getSharedPreferences("Account", context.MODE_PRIVATE);
+        String myPhoneNumber = prefs.getString(PROPERTY_PHONE_NUMBER, "");
+
+        Log.d("Preferences", myPhoneNumber);
+
+        if(myPhoneNumber.isEmpty()){
+            return false;
+        }
+
+        return true;
+    }
+
+    public String getMyNumber(){
+        final SharedPreferences prefs = context.getSharedPreferences("Account", context.MODE_PRIVATE);
+        String myPhoneNumber = prefs.getString(PROPERTY_PHONE_NUMBER, "");
+
+        if(myPhoneNumber.isEmpty()){
+            return "";
+        }
+        return myPhoneNumber;
+    }
+
+    public String getMyEMail(){
+        final SharedPreferences prefs = context.getSharedPreferences("Account", context.MODE_PRIVATE);
+        String myEMail = prefs.getString(PROPERTY_E_MAIL, "");
+
+        if(myEMail.isEmpty()){
+            return "";
+        }
+        return myEMail;
+    }
+
+    public void storePhoneNumber(String number){
+        final SharedPreferences prefs = context.getSharedPreferences("Account", context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_PHONE_NUMBER, number);
+        editor.apply();
+    }
+
+
     @Override
     public void cancelNotification(){
         //if there is a Notification from GCM, cancel.
@@ -167,17 +214,9 @@ public class MainInteractorImpl implements MainInteractor {
         return true;
     }
 
-    public void setMyPhoneNumber(String phoneNumber){
-        final SharedPreferences prefs = context.getSharedPreferences(MainActivity.class.getSimpleName(), Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(PROPERTY_MY_PHONENUMBER, phoneNumber);
-        editor.apply();
-    }
 
-    public String getMyPhoneNumber(){
-        final SharedPreferences prefs = context.getSharedPreferences(MainActivity.class.getSimpleName(), Context.MODE_PRIVATE);
-        return prefs.getString(PROPERTY_MY_PHONENUMBER, "null");
-    }
+
+
 
     @Override
     public ArrayList<Chat> getChatsList() {

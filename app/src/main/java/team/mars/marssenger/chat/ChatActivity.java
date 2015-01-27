@@ -3,6 +3,7 @@ package team.mars.marssenger.chat;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -55,6 +56,7 @@ public class ChatActivity extends ActionBarActivity implements
     private Toolbar toolbar;
 
     //BackgroundService
+    private static final int NOTIFICATION_ID = 627777777;
     private HttpsBackgroundService mService;
     private boolean isBound = false;
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -101,7 +103,8 @@ public class ChatActivity extends ActionBarActivity implements
 
         //TODO SEND TO SERVER MESSAGES READ
 
-
+        NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        nm.cancel(NOTIFICATION_ID);
 
         //create fragment
         ChatFragment chatFragment=ChatFragment.getInstance(this); //ChatPresenter
