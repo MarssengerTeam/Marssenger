@@ -469,9 +469,13 @@ public class HttpsBackgroundService extends Service {
 
             @Override
             protected void onPostExecute(JSONArray result) {
-                Log.d("SendingService", result.toString());
-                if (!isBound) {
+
+
+                if (!((Marssenger)Marssenger.getInstance()).isUserActive()) {
+                    Log.w("Nofification", "User is not active");
                     sendNotification(result);
+                }else {
+                    Log.w("Nofification", "User is active");
                 }
                 addToDB(result);
             }
@@ -493,7 +497,11 @@ public class HttpsBackgroundService extends Service {
                 }
                 database.addMessageToDB(senderChat.getId()-1,result.getJSONObject(i).getString("data"),0,0,0);
                 if(isUserActive) {
-                    ChatActivity.cChatListAdapter.addMessage(database.getLastMessageFromChat(senderChat));
+                    if(((Marssenger)Marssenger.getInstance()).getActiveChat()!=null){
+                        if(((Marssenger)Marssenger.getInstance()).getActiveChat().getId()==senderChat.getId()){
+                            ChatActivity.cChatListAdapter.addMessage(database.getLastMessageFromChat(senderChat));
+                        }
+                    }
                 }
             }
         } catch (Exception e) {
@@ -502,6 +510,7 @@ public class HttpsBackgroundService extends Service {
     }
 
     private void sendNotification(JSONArray result) {
+
         Intent notIntent = new Intent(this, MainActivity.class);
         notIntent.putExtra("StartMode", "Notification");
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notIntent, 0);
@@ -526,8 +535,6 @@ public class HttpsBackgroundService extends Service {
         } else if (notItems.size() == 1) {
             mBuilder.setContentTitle("Marssenger");
             mBuilder.setContentText(notItems.get(0));
-        } else {
-            Log.e("HttpsBackgroundService", "line 531 dunno whats happening");
         }
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getBaseContext());
@@ -540,13 +547,13 @@ public class HttpsBackgroundService extends Service {
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
         mBuilder.addAction(R.drawable.ic_action_send_now, "Quick Reply", resultPendingIntent);
-        mBuilder.addAction(R.drawable.ic_action_read, "Read", resultPendingIntent);
+        mBuilder.addAction(R.drawable.ic_action_read, "Mark As Read", resultPendingIntent);
         mBuilder.setContentIntent(resultPendingIntent);
 
-        mBuilder.setLights(Color.GREEN, 300, 2000);
+        mBuilder.setLights(Color.argb(255,255,102,0), 500, 3000);
         long[] pattern = {500, 100, 100, 200};
-        Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(pattern,0);
+        mBuilder.setVibrate(pattern);
+        mNotificationManager.notify(NOTIFICATION_ID,mBuilder.build());
     }
 
 
@@ -564,7 +571,7 @@ public class HttpsBackgroundService extends Service {
             for(int i = 0; i<items.length(); i++){
                 String nametag=null;//TODO GROUPS TO NAMTEAG
 
-                for(int a = 0;a<database.getChats().size();i++){
+                for(int a = 0;a<database.getChats().size();a++){
                     if(database.getChats().get(a).getReceiver().equals(items.getJSONObject(i).getString("sender"))){
                     nametag = database.getChats().get(a).getName();
                     }

@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements
 
         mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
         //save mainInteractor in static reference so it can be accessed in other parts of the code
-        MainActivity.MAIN_INTERACTOR=this.mainInteractor;
+        //MainActivity.MAIN_INTERACTOR=this.mainInteractor;
 
 
 

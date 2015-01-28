@@ -77,9 +77,9 @@ public class ChatActivity extends ActionBarActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        ((Marssenger)Marssenger.getInstance()).setUserActive(true);
         this.chat= (Chat) getIntent().getSerializableExtra(Chat.CHAT);
-
+        ((Marssenger)Marssenger.getInstance()).setActiveChat(chat);
 
         setContentView(R.layout.activity_chat);
 
@@ -122,6 +122,9 @@ public class ChatActivity extends ActionBarActivity implements
     @Override
     protected void onStop() {
         super.onStop();
+        ((Marssenger)Marssenger.getInstance()).setUserActive(false);
+        ((Marssenger)Marssenger.getInstance()).setActiveChat(null);
+
         if(isBound){
             unbindService(mConnection);
             isBound=false;
@@ -217,7 +220,7 @@ public class ChatActivity extends ActionBarActivity implements
     //ChatView methods
     @Override
     public void chatButtonSendPressed(String message) {
-        ((Marssenger)Marssenger.getInstance()).getDatabase().addMessageToDB(chat.getId()-1,message,1,0,0);
+        ((Marssenger)Marssenger.getInstance()).getDatabase().addMessageToDB(chat.getId()-1,message,1,0,1);
 
         cChatListAdapter.addMessage(((Marssenger)Marssenger.getInstance()).getDatabase().getMessagesFormChat(chat).get(((Marssenger)Marssenger.getInstance()).getDatabase().getMessagesFormChat(chat).size()-1));
                                                        //TODO generate messageId
