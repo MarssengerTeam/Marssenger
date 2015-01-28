@@ -61,9 +61,7 @@ public class MessageDatabase {
     }
 
     public void setAllMessagesRead(Chat chat){
-
         database.execSQL("UPDATE "+SQLiteManager.TABLE_MESSAGES_PREFIX+chat.getMessageTableId()+" SET "+SQLiteManager.COLUMN_MESSAGES_READ+" = 1 WHERE "+SQLiteManager.COLUMN_MESSAGES_READ+ "= 0");
-
     }
 
     public ArrayList<Message> getAllMessageFromChat(Chat chat) {

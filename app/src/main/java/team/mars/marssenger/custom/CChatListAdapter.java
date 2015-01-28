@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.TreeSet;
 
 import team.mars.marssenger.R;
+import team.mars.marssenger.database.DatabaseWrapper;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.Message;
@@ -49,10 +50,10 @@ public class CChatListAdapter extends RecyclerView.Adapter<CChatListAdapter.View
 
     private Context context;
 
-    public CChatListAdapter(MessageDatabase database, Chat chat, Context context){
+    public CChatListAdapter(DatabaseWrapper database, Chat chat, Context context){
         this.context=context;
         this.chat=chat;
-        mData=database.getAllMessageFromChat(chat);
+        mData=database.getMessagesFormChat(chat);
         mSentIndex=new TreeSet <>();
         mPictureIndex=new TreeSet <>();
 

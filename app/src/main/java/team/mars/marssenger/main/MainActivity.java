@@ -83,13 +83,35 @@ public class MainActivity extends ActionBarActivity implements
         }
 
 
-
+        mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
         //save mainInteractor in static reference so it can be accessed in other parts of the code
         MainActivity.MAIN_INTERACTOR=this.mainInteractor;
 
-        Marssenger marssenger = (Marssenger) getApplicationContext();
-        marssenger.mainInteractor = mainInteractor;
 
+
+        /*if(mainInteractor.checkPlayServices()){
+            if(!isSerivceRunning(HttpsBackgroundService.class)){
+                Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
+                serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
+                serviceIntent.putExtra("phoneNumber", ma);
+                serviceIntent.putExtra("email", "hurensohn@squad.com");
+                serviceIntent.putExtra("digitCode", "010101"); //TODO Maybe / Maybe not
+                startService(serviceIntent);
+            }
+        }else{
+            Log.d("GCMundso", "Cry a lot!");
+        }
+        //TODO figure this out*/
+        /*final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if(isBound) {
+                    mService.sendMessage("0157712345", String.valueOf(new Random().nextInt(100)), "123456");
+                    handler.postDelayed(this, 30000);
+                }
+            }
+        }, 0);*/
 
 
         MainFragment mainFragment = MainFragment.getInstance(this);//this -> MainPresenter
@@ -102,7 +124,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onStart(){
         super.onStart();
-        //mainInteractor.cancelNotification();
+        ((Marssenger)Marssenger.getInstance()).setUserActive(true);
         if(isRegistered) {
             if(mainInteractor.checkPlayServices()){
                 if(!isSerivceRunning(HttpsBackgroundService.class)){
@@ -122,6 +144,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     protected void onStop() {
         super.onStop();
+        ((Marssenger)Marssenger.getInstance()).setUserActive(false);
         mainInteractor.stopBind();
     }
 
@@ -169,9 +192,7 @@ public class MainActivity extends ActionBarActivity implements
     @Override
     public void onResume(){
         super.onResume();
-        if(isRegistered) {
-            cListAdapter.updateCardView();
-        }
+        cListAdapter.updateCardView();
     }
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
@@ -184,40 +205,6 @@ public class MainActivity extends ActionBarActivity implements
             case R.id.action_new_message:
                 return true;
             case R.id.action_read:
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(this)
-                                .setSmallIcon(R.drawable.ic_launcher)
-                                .setContentTitle("test:")
-                                .setContentText("5 nachrichten");
-
-                NotificationCompat.InboxStyle inboxStyle =
-                        new NotificationCompat.InboxStyle();
-                String[] events ={"zeile1","2","drei","test","nice"};
-
-                inboxStyle.setBigContentTitle("test:");
-
-
-                for (int i=0; i < events.length; i++) {
-
-                    inboxStyle.addLine(events[i]);
-                }
-                mBuilder.setStyle(inboxStyle);
-                Intent resultIntent = new Intent(this,MainActivity.class);
-                TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-                stackBuilder.addParentStack(MainActivity.class);
-                stackBuilder.addNextIntent(resultIntent);
-
-                PendingIntent resultPendingIntent =
-                        stackBuilder.getPendingIntent(
-                                0,
-                                PendingIntent.FLAG_UPDATE_CURRENT
-                        );
-                mBuilder.addAction(R.drawable.ic_action_read, "Read", resultPendingIntent);
-                mBuilder.addAction(R.drawable.ic_launcher, "Fast Re", resultPendingIntent);
-                mBuilder.setContentIntent(resultPendingIntent);
-                NotificationManager mNotificationManager =(NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                int mId= 1;
-                mNotificationManager.notify(mId, mBuilder.build());
                 return true;
             default:break;
         }
@@ -226,7 +213,7 @@ public class MainActivity extends ActionBarActivity implements
 
     @Override
     public CListAdapter getAdapter(){
-        cListAdapter=new CListAdapter(mainInteractor.getChatDatabase());
+        cListAdapter=new CListAdapter();
         return cListAdapter;
     }
 

@@ -10,18 +10,8 @@ import team.mars.marssenger.datatype.Chat;
  * Created by root on 03.12.14.
  */
 public interface MainInteractor{
-    //Methoden für den Zugriff auf die Daten
-    public ArrayList<Chat> getChatsList();
-
     public boolean connectionEstablished();
-    public ChatDatabase getChatDatabase();
     public void buildConnection();
-
-    public void openChatDB();
-
-    public void openMessageDB();
-    public void closeMessageDB();
-    public void closeChatDB();
 
     public void bindService();
     public void stopBind();
@@ -36,7 +26,6 @@ public interface MainInteractor{
     public String getMyEMail();
     public void storePhoneNumber(String number);
 
-    public MessageDatabase getMessageDataBase();
 
     public MainInteractorImpl get();
 }

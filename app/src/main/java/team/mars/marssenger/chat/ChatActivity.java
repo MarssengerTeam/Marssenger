@@ -50,7 +50,7 @@ public class ChatActivity extends ActionBarActivity implements
 
     //mvc
     public static CChatListAdapter cChatListAdapter;
-    private MainInteractor mainInteractor;
+    //private MainInteractor mainInteractor;
 
     private Chat chat;
     private Toolbar toolbar;
@@ -79,7 +79,7 @@ public class ChatActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
 
         this.chat= (Chat) getIntent().getSerializableExtra(Chat.CHAT);
-        this.mainInteractor= MainActivity.MAIN_INTERACTOR;
+
 
         setContentView(R.layout.activity_chat);
 
@@ -99,7 +99,7 @@ public class ChatActivity extends ActionBarActivity implements
             colorActionBar();
         }
 
-        mainInteractor.getMessageDataBase().setAllMessagesRead(chat);
+        ((Marssenger)Marssenger.getInstance()).getDatabase().setMessagesRead(chat);
 
         //TODO SEND TO SERVER MESSAGES READ
 
@@ -217,9 +217,9 @@ public class ChatActivity extends ActionBarActivity implements
     //ChatView methods
     @Override
     public void chatButtonSendPressed(String message) {
-        mainInteractor.getMessageDataBase().createMessage(message,1,chat.getId()-1,1,0);
-        ArrayList<Message> messages = mainInteractor.getMessageDataBase().getAllMessageFromChat(chat);
-        cChatListAdapter.addMessage(messages.get(messages.size()-1));
+        ((Marssenger)Marssenger.getInstance()).getDatabase().addMessageToDB(chat.getId()-1,message,1,0,0);
+
+        cChatListAdapter.addMessage(((Marssenger)Marssenger.getInstance()).getDatabase().getMessagesFormChat(chat).get(((Marssenger)Marssenger.getInstance()).getDatabase().getMessagesFormChat(chat).size()-1));
                                                        //TODO generate messageId
         try {
             if(mService == null){
@@ -240,7 +240,7 @@ public class ChatActivity extends ActionBarActivity implements
 
     @Override
     public CChatListAdapter getChatAdapter() {
-        cChatListAdapter=new CChatListAdapter(mainInteractor.getMessageDataBase(),this.chat, getApplicationContext());
+        cChatListAdapter=new CChatListAdapter(((Marssenger)Marssenger.getInstance()).getDatabase(),this.chat, getApplicationContext());
         return cChatListAdapter;
     }
 

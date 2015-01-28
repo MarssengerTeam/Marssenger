@@ -19,8 +19,10 @@ import java.util.Date;
 
 import team.mars.marssenger.R;
 import team.mars.marssenger.database.ChatDatabase;
+import team.mars.marssenger.database.DatabaseWrapper;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.datatype.TextMessage;
+import team.mars.marssenger.main.Marssenger;
 
 /**
  * Created by root on 03.12.14.
@@ -29,13 +31,14 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
     private ChatDatabase chats;
     private ArrayList<Chat> chatlist;
+    private DatabaseWrapper database;
 
     //layout-attr
     private RelativeLayout layout;
 
-    public CListAdapter (ChatDatabase list){
-        this.chats=list;
-        chatlist = chats.getAllChatByTime();
+    public CListAdapter (){
+        chatlist =  ((Marssenger)Marssenger.getInstance()).getDatabase().getChatsByTime();
+        database =  ((Marssenger)Marssenger.getInstance()).getDatabase();
     }
 
     public Chat getItem(int position){
@@ -53,18 +56,18 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int i) {
-        switch (chats.getLastMessage(chatlist.get(i)).getType()){
+        switch (database.getLastMessageFromChat(chatlist.get(i)).getType()){
             case 0:
                 String prefix;
-                if(chats.getLastMessage(chatlist.get(i)).isSender()){
+                if(database.getLastMessageFromChat(chatlist.get(i)).isSender()){
                     prefix=">> ";
                 }else {
                     prefix="<< ";
                 }
-                holder.text.setText(prefix+chats.getLastMessage(chatlist.get(i)).getMessage());
+                holder.text.setText(prefix+database.getLastMessageFromChat(chatlist.get(i)).getMessage());
                 break;
             case 1:
-                if(chats.getLastMessage(chatlist.get(i)).isSender()){
+                if(database.getLastMessageFromChat(chatlist.get(i)).isSender()){
                     prefix=">> ";
                 }else {
                     prefix="<< ";
@@ -78,14 +81,14 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
 
         }
         holder.name.setText(chatlist.get(i).getName());
-        if (chats.getUnreadMessages(chatlist.get(i))>0){
-            holder.counter.setText(String.valueOf(chats.getUnreadMessages(chatlist.get(i))));
+        if (database.getUnreadMessages(chatlist.get(i))>0){
+            holder.counter.setText(String.valueOf(database.getUnreadMessages(chatlist.get(i))));
         } else {
             holder.counter.setVisibility(View.GONE);
         }
-        holder.timestamp.setText(convertTime(chats.getLastMessage(chatlist.get(i)).getTimestamp()));
+        holder.timestamp.setText(convertTime(database.getLastMessageFromChat(chatlist.get(i)).getTimestamp()));
 
-        holder.counter.setText(chats.getUnreadMessages(chatlist.get(i))+"");
+        holder.counter.setText(database.getUnreadMessages(chatlist.get(i))+"");
     }
 
     public String convertTime(long time){
@@ -95,7 +98,7 @@ public class CListAdapter extends RecyclerView.Adapter<CListAdapter.ViewHolder> 
     }
 
     public void updateCardView(){
-        chatlist = chats.getAllChatByTime();
+        chatlist = ((Marssenger)Marssenger.getInstance()).getDatabase().getChatsByTime();
         notifyDataSetChanged();
     }
     @Override

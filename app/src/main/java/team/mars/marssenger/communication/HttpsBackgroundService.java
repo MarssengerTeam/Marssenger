@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Vibrator;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -42,6 +43,7 @@ import java.util.List;
 import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.database.ChatDatabase;
 import team.mars.marssenger.R;
+import team.mars.marssenger.database.DatabaseWrapper;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.main.MainActivity;
@@ -63,7 +65,7 @@ import team.mars.marssenger.main.Marssenger;
 public class HttpsBackgroundService extends Service {
     //Service specific
     int StartMode = START_REDELIVER_INTENT;
-    private final IBinder mBinder  = new myBinder();
+    private final IBinder mBinder = new myBinder();
     boolean mAllowRebind = true;
     //
 
@@ -81,27 +83,29 @@ public class HttpsBackgroundService extends Service {
     //
     //to Indentify
     private String senderID;
-    private String myRegID="";
+    private String myRegID = "";
     private String myPhoneNumber;
     private String myEmail;
     private String myDigitCode;
     //
     //Controlling
-    private boolean isVerified=false;
-    private boolean isBound=false;
-    //
-
+    private boolean isVerified = false;
+    private boolean isBound = false;
     //Notification
     private NotificationManager mNotificationManager;
     private int NOTIFICATION_ID = 627777777;
     private ArrayList<String> notItems = new ArrayList<String>();
+    private DatabaseWrapper database;
+    private boolean isUserActive;
 
     //Service Methods
     @Override
     public void onCreate() {
         //Gets Called when Service starts
         super.onCreate();
-
+        Marssenger mars = ((Marssenger)Marssenger.getInstance());
+        database=mars.getDatabase();
+        isUserActive=mars.isUserActive();
         httpClient = new DefaultHttpClient();
     }
 
@@ -113,17 +117,17 @@ public class HttpsBackgroundService extends Service {
         myEmail = intent.getStringExtra("email");
         myDigitCode = intent.getStringExtra("digitCode");
 
-        if(!isVerified){
+        if (!isVerified) {
             //first run
-            if(myRegID.isEmpty()){
+            if (myRegID.isEmpty()) {
                 //when regId not initialized
                 String unverifiedId = getRegistrationId(getBaseContext());
                 Log.d("ConnectionHandler", "got reg id");
-                if(unverifiedId.isEmpty()){
+                if (unverifiedId.isEmpty()) {
                     //either appVersion old or no Id stored
                     Log.d("ConnectionHandler", "either appVersion old or no Id stored");
                     registerInBackground();
-                }else{
+                } else {
                     //id found but needs to check
                     Log.d("ConnectionHandler", "id found but needs to check");
                     checkRegistrationId(unverifiedId);
@@ -136,9 +140,9 @@ public class HttpsBackgroundService extends Service {
         myHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(isVerified) {
+                if (isVerified) {
                     controlConnection();
-                }else{
+                } else {
                     //TODO check weather connection verified
                     //Toast.makeText(getBaseContext(), "Verifed", Toast.LENGTH_LONG).show();
                     Log.d("ConnectionHandler", "Not verified");
@@ -149,7 +153,7 @@ public class HttpsBackgroundService extends Service {
         return StartMode;
     }
 
-    private void controlConnection(){
+    private void controlConnection() {
         //Toast.makeText(getBaseContext(), "BackgroundService: Controlling", Toast.LENGTH_SHORT).show();
         //TODO controlling Connection
 
@@ -179,8 +183,8 @@ public class HttpsBackgroundService extends Service {
         super.onDestroy();
     }
 
-    public class myBinder extends Binder{
-        public HttpsBackgroundService getService(){
+    public class myBinder extends Binder {
+        public HttpsBackgroundService getService() {
             return HttpsBackgroundService.this;
         }
     }
@@ -188,11 +192,11 @@ public class HttpsBackgroundService extends Service {
 
     //Communication functions
     public void registerInBackground() { //TODO Complete this codesection
-        AsyncTask at = new AsyncTask(){
+        AsyncTask at = new AsyncTask() {
 
             @Override
             protected void onPostExecute(Object msg) {
-                String message=String.valueOf(msg);
+                String message = String.valueOf(msg);
                 //TODO mDisplay.append(message + "\n");
             }
 
@@ -233,7 +237,7 @@ public class HttpsBackgroundService extends Service {
         at.execute();
     }
 
-    public void registerAtServer(String phoneNumber, String email, String GCMCode, String digitCode){
+    public void registerAtServer(String phoneNumber, String email, String GCMCode, String digitCode) {
         new AsyncTask<String, String, JSONObject>() {
             @Override
             protected JSONObject doInBackground(String... params) {
@@ -256,7 +260,7 @@ public class HttpsBackgroundService extends Service {
                     Log.d("SendingService", "Nach senden");
 
                     HttpEntity entity = response.getEntity();
-                    if(entity != null){
+                    if (entity != null) {
                         InputStream inputStream = entity.getContent();
 
                         BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -276,7 +280,7 @@ public class HttpsBackgroundService extends Service {
                                 e.printStackTrace();
                             }
                         }
-                        String resultString = sb.toString().substring(1, sb.length()-1);
+                        String resultString = sb.toString().substring(1, sb.length() - 1);
 
                         JSONObject jsonObject = new JSONObject(resultString);
                         Log.i("SendingService", jsonObject.toString());
@@ -295,20 +299,20 @@ public class HttpsBackgroundService extends Service {
             @Override
             protected void onPostExecute(JSONObject result) {
                 try {
-                    if(result.toString()!="") {
+                    if (result.toString() != "") {
                         Log.i("SendingService", result.toString());
                     }
-                    if(result.getString("error")=="1"){
+                    if (result.getString("error") == "1") {
                         Toast.makeText(getBaseContext(), "Phonenumber already in use", Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
-        }.execute(phoneNumber, GCMCode,digitCode, email);
+        }.execute(phoneNumber, GCMCode, digitCode, email);
     }
 
-    public void storeRegistrationId(Context context, String regid){
+    public void storeRegistrationId(Context context, String regid) {
         final SharedPreferences prefs = getGCMPreferences(context);
         int appVersion = getAppVersion(context);
         Log.i("BackgroundService", "Saving regId on app version " + appVersion);
@@ -322,12 +326,12 @@ public class HttpsBackgroundService extends Service {
         new AsyncTask<String, String, JSONArray>() {
             @Override
             protected JSONArray doInBackground(String... params) {
-                String result11="123";
+                String result11 = "123";
                 try {
 
                     HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/user/isVerified");
 
-                    Log.d("SendingService", params[1]+" : "+params[0]);
+                    Log.d("SendingService", params[1] + " : " + params[0]);
 
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
@@ -360,13 +364,13 @@ public class HttpsBackgroundService extends Service {
             @Override
             protected void onPostExecute(JSONArray result) {
                 //TODO replace with real code
-                try{
+                try {
                     /*if(result.getJSONObject(0).getString("regID") == regID){
                         setVerified(true);
                     }*/
                     Log.d("What", result.toString());
                     isVerified = true;
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.toString();
                 }
 
@@ -374,11 +378,11 @@ public class HttpsBackgroundService extends Service {
         }.execute(regID, myPhoneNumber);
     }
 
-    private void setVerified(boolean b){
+    private void setVerified(boolean b) {
         isVerified = b;
     }
 
-    public void sendMessage(String receiver, String message, String messageID){
+    public void sendMessage(String receiver, String message, String messageID) {
         Log.d("SendingService", message);
 
         new AsyncTask<String, String, JSONArray>() {
@@ -392,10 +396,10 @@ public class HttpsBackgroundService extends Service {
 
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-                    nameValuePairs.add(new BasicNameValuePair("sender",params[0]));
+                    nameValuePairs.add(new BasicNameValuePair("sender", params[0]));
                     nameValuePairs.add(new BasicNameValuePair("receiver", params[1]));
                     nameValuePairs.add(new BasicNameValuePair("data", params[2]));
-                    nameValuePairs.add(new BasicNameValuePair("messageID",params[3]));
+                    nameValuePairs.add(new BasicNameValuePair("messageID", params[3]));
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                     // Execute HTTP Post Request
@@ -426,10 +430,10 @@ public class HttpsBackgroundService extends Service {
             protected void onPostExecute(JSONArray result) {
 
             }
-        }.execute(myPhoneNumber,receiver,message, messageID);
+        }.execute(myPhoneNumber, receiver, message, messageID);
     }
 
-    public void getMessages(){
+    public void getMessages() {
         new AsyncTask<String, String, JSONArray>() {
             @Override
             protected JSONArray doInBackground(String... params) {
@@ -437,11 +441,9 @@ public class HttpsBackgroundService extends Service {
                 try {
                     //Now using existing client
                     HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/messages/getMessages");
-
-
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(4);
-                    nameValuePairs.add(new BasicNameValuePair("number",params[0]));
+                    nameValuePairs.add(new BasicNameValuePair("number", params[0]));
                     httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
                     // Execute HTTP Post Request
@@ -468,7 +470,7 @@ public class HttpsBackgroundService extends Service {
             @Override
             protected void onPostExecute(JSONArray result) {
                 Log.d("SendingService", result.toString());
-                if(!isBound){
+                if (!isBound) {
                     sendNotification(result);
                 }
                 addToDB(result);
@@ -476,48 +478,26 @@ public class HttpsBackgroundService extends Service {
         }.execute(myPhoneNumber);
     }
 
-    public void addToDB(JSONArray result){
-        boolean isDBOpen=false;
-        MessageDatabase messageDatabase;
-        ChatDatabase chatDatabase;
-        if(MainActivity.MAIN_INTERACTOR==null){
-            messageDatabase = new MessageDatabase(getBaseContext());
-            chatDatabase = new ChatDatabase(getBaseContext(),messageDatabase);
-            messageDatabase.open();
-            chatDatabase.open();
-            isDBOpen=true;
-        }else{
-            messageDatabase = MainActivity.MAIN_INTERACTOR.getMessageDataBase();
-            chatDatabase = MainActivity.MAIN_INTERACTOR.getChatDatabase();
-        }
-
+    public void addToDB(JSONArray result) {
         try {
             Chat senderChat = null;
-            ArrayList<Chat> chats = chatDatabase.getAllChat();
-            for(int i=0;i<result.length();i++) {
-
-                for (Chat c : chats) {
-
+            for (int i = 0; i < result.length(); i++) {
+                for (Chat c : database.getChats()) {
                     if (result.getJSONObject(i).getString("sender").equals(c.getReceiver())) {
-                        Log.e("addToDB",result.getJSONObject(i).getString("sender")+"=="+c.getReceiver());
                         senderChat = c;
                     }
                 }
-                if(senderChat==null){
-                    Log.e("addToDB","NEW CHAT FOR NUMMBER "+result.getJSONObject(i).getString("sender"));
-                    chatDatabase.createChat(result.getJSONObject(i).getString("sender"),result.getJSONObject(i).getString("sender"),0);
-                    senderChat = chatDatabase.getAllChat().get(chatDatabase.getAllChat().size()-1);
+                if (senderChat == null) {
+
+                    database.addChatToDB(result.getJSONObject(i).getString("sender"), result.getJSONObject(i).getString("sender"), false);
                 }
-                messageDatabase.createMessage(result.getJSONObject(i).getString("data"), 0,senderChat.getId()-1, 0, 0);//TODO TYPE
-                ChatActivity.cChatListAdapter.addMessage(chatDatabase.getLastMessage(senderChat));
+                database.addMessageToDB(senderChat.getId()-1,result.getJSONObject(i).getString("data"),0,0,0);
+                if(isUserActive) {
+                    ChatActivity.cChatListAdapter.addMessage(database.getLastMessageFromChat(senderChat));
+                }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        if(isDBOpen){
-            messageDatabase.close();
-            chatDatabase.close();
-            isDBOpen=!isDBOpen;
         }
     }
 
@@ -528,26 +508,26 @@ public class HttpsBackgroundService extends Service {
 
         convertJsonIntoArrayList(result);
 
-        mNotificationManager =(NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_launcher);//TODO ic_stat_gcm
 
-        if(notItems.size()>1) {
+        if (notItems.size() > 1) {
             NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle("Marssenger: " +notItems.size()+ " Messages");
+            inboxStyle.setBigContentTitle("Marssenger: " + notItems.size() + " Messages");
             mBuilder.setContentTitle("Marssenger: " + notItems.size() + " Messages");
             mBuilder.setContentText(notItems.get(0));
             for (int i = 0; i < notItems.size(); i++) {
                 inboxStyle.addLine(notItems.get(i));
             }
             mBuilder.setStyle(inboxStyle);
-        }else if(notItems.size()==1){
+        } else if (notItems.size() == 1) {
             mBuilder.setContentTitle("Marssenger");
             mBuilder.setContentText(notItems.get(0));
-        }else{
-            Log.e("HttpsBackgroundService","line 531 dunno whats happening");
+        } else {
+            Log.e("HttpsBackgroundService", "line 531 dunno whats happening");
         }
 
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(getBaseContext());
@@ -559,22 +539,40 @@ public class HttpsBackgroundService extends Service {
                         0,
                         PendingIntent.FLAG_UPDATE_CURRENT
                 );
+        mBuilder.addAction(R.drawable.ic_action_send_now, "Quick Reply", resultPendingIntent);
         mBuilder.addAction(R.drawable.ic_action_read, "Read", resultPendingIntent);
-        mBuilder.addAction(R.drawable.ic_launcher, "Fast Re", resultPendingIntent);
         mBuilder.setContentIntent(resultPendingIntent);
 
-        mBuilder.setLights(Color.GREEN, 100, 500);
-        long[] pattern = {500, 100, 100};
-        mBuilder.setVibrate(pattern);
-        mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
-
+        mBuilder.setLights(Color.GREEN, 300, 2000);
+        long[] pattern = {500, 100, 100, 200};
+        Vibrator v = (Vibrator) getBaseContext().getSystemService(Context.VIBRATOR_SERVICE);
+        v.vibrate(pattern,0);
     }
+
+
+
+
+
+
+
+
 
     private void convertJsonIntoArrayList(JSONArray items){
         String result = "";
         try{
+
             for(int i = 0; i<items.length(); i++){
-                notItems.add(items.getJSONObject(i).getString("sender")+": "+ items.getJSONObject(i).getString("data"));
+                String nametag=null;//TODO GROUPS TO NAMTEAG
+
+                for(int a = 0;a<database.getChats().size();i++){
+                    if(database.getChats().get(a).getReceiver().equals(items.getJSONObject(i).getString("sender"))){
+                    nametag = database.getChats().get(a).getName();
+                    }
+                }
+                if(nametag==null){
+                    nametag=items.getJSONObject(i).getString("sender");
+                }
+                notItems.add(nametag+": "+ items.getJSONObject(i).getString("data"));
             }
         }catch (Exception e){
             e.printStackTrace();

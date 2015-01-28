@@ -1,5 +1,6 @@
 package team.mars.marssenger.main;
 
+import android.app.Application;
 import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -21,6 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import team.mars.marssenger.communication.HttpsBackgroundService;
 import team.mars.marssenger.database.ChatDatabase;
+import team.mars.marssenger.database.DatabaseWrapper;
 import team.mars.marssenger.database.MessageDatabase;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.util.Constants;
@@ -52,13 +54,15 @@ public class MainInteractorImpl implements MainInteractor {
 
     //attr
     private boolean connected=false;
-    private ChatDatabase chatDatabase;
-    private MessageDatabase messageDatabase;
     private Context context;
 
     //HttpsService
     private HttpsBackgroundService mService;
     private boolean isBound = false;
+
+    private DatabaseWrapper database;
+
+
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -76,12 +80,11 @@ public class MainInteractorImpl implements MainInteractor {
 
 
     public MainInteractorImpl(Context context){
-        this.context= context;
+        this.context = context;
+        Marssenger mars = ((Marssenger)Marssenger.getInstance());
+        database=mars.getDatabase();
 
-        messageDatabase = new MessageDatabase(context);
-        chatDatabase = new ChatDatabase(context,messageDatabase);
-        openChatDB();
-        openMessageDB();
+
 
         boolean success;
         if (!pictureFolder.exists()) {
@@ -122,19 +125,20 @@ public class MainInteractorImpl implements MainInteractor {
 
 
     private void createTestChats(){
-        int sender =(int) (Math.random()*3);
-        if(chatDatabase.getAllChat().size()<1) {
-            chatDatabase.createChat("Timo", "0157700000",0);
-            messageDatabase.createMessage("1st Message", 1, 0, 0,0);
 
-            chatDatabase.createChat("Jan Niklas", "0157712345",0);
-            messageDatabase.createMessage("1st Message", 1, 1, 0,0);
 
-            chatDatabase.createChat("Torres", "01234567",0);
-            messageDatabase.createMessage("Torres", 1, 2, 0,0);
+        if(!database.isChatDBExisting()) {
+            database.addChatToDB("Timo","+491774964208",false);
+            database.addChatToDB("Jan Niklas", "+49017647736901",false);
+            database.addChatToDB("Nicolas", "+49017661354169",false);
+            database.addChatToDB("Noli", "+49017682541133",false);
+            database.addChatToDB("Nils","+4901727500917",false);
+            database.addChatToDB("Marssenger Gruppe","54a1cf3958a438f71421d4ef",true);
+            for(Chat chat : database.getChats()){
+                database.addMessageToDB(chat.getMessageTableId(),".msg",0,0,0);
+            }
 
-            chatDatabase.createChat("1st Group","54a1cf3958a438f71421d4ef",1);
-            messageDatabase.createMessage("ImageMessage", 1, 3, 0,1);
+
         }
 
 
@@ -218,16 +222,6 @@ public class MainInteractorImpl implements MainInteractor {
 
 
 
-    @Override
-    public ArrayList<Chat> getChatsList() {
-       return chatDatabase.getAllChat();
-    }
-
-    @Override
-    public ChatDatabase getChatDatabase(){return chatDatabase;}
-
-    @Override
-    public MessageDatabase getMessageDataBase(){return messageDatabase;}
 
     @Override
     public MainInteractorImpl get() {
@@ -244,25 +238,7 @@ public class MainInteractorImpl implements MainInteractor {
         connected=false;
     }
 
-    @Override
-    public void openChatDB() {
-        chatDatabase.open();
-    }
 
-    @Override
-    public void openMessageDB() {
-        messageDatabase.open();
-    }
-
-    @Override
-    public void closeMessageDB() {
-        messageDatabase.close();
-    }
-
-    @Override
-    public void closeChatDB() {
-        chatDatabase.close();
-    }
 
     private void test(CharSequence charSequence){
         Toast.makeText(context,charSequence,Toast.LENGTH_SHORT).show();
