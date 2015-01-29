@@ -94,7 +94,7 @@ public class DatabaseWrapper {
 
     public void addMessageToDB(long chatID,String msg,int isSender,int type, int read){
        hasMessageChanged=true;
-       mDB.createMessage(msg,isSender,chatID,type,read);
+       mDB.createMessage(msg,isSender,chatID,read,type);
     }
     public void setMessagesRead(Chat chat){
         hasMessageChanged=true;
