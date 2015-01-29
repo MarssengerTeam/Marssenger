@@ -3,6 +3,7 @@ package team.mars.marssenger.main;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.NotificationManager;
@@ -28,6 +29,7 @@ import team.mars.marssenger.R;
 import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.communication.HttpsBackgroundService;
 import team.mars.marssenger.custom.CListAdapter;
+import team.mars.marssenger.custom.NewChatDialog;
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.register.RegisterActivity;
 import team.mars.marssenger.settings.SettingsActivity;
@@ -203,12 +205,18 @@ public class MainActivity extends ActionBarActivity implements
                 startActivity(new Intent(this, SettingsActivity.class));
                 return true;
             case R.id.action_new_message:
+                showNewChatDialog();
                 return true;
             case R.id.action_read:
                 return true;
             default:break;
         }
         return false;
+    }
+
+    public void showNewChatDialog(){
+        DialogFragment newFragment = new NewChatDialog();
+        newFragment.show(getFragmentManager(), "missiles");
     }
 
     @Override
