@@ -145,7 +145,7 @@ public class HttpsBackgroundService extends Service {
                 } else {
                     //TODO check weather connection verified
                     //Toast.makeText(getBaseContext(), "Verifed", Toast.LENGTH_LONG).show();
-                    Log.d("ConnectionHandler", "Not verified");
+                    //Log.d("ConnectionHandler", "Not verified");
                 }
                 myHandler.postDelayed(this, 1000);
             }
