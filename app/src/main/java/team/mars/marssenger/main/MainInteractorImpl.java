@@ -132,8 +132,8 @@ public class MainInteractorImpl implements MainInteractor {
             database.addChatToDB("Jan Niklas", "+49017647736901",false);
             database.addChatToDB("Nicolas", "+49017661354169",false);
             database.addChatToDB("Noli", "+49017682541133",false);
-            database.addChatToDB("Nils","+4901727500917",false);
-            database.addChatToDB("Marssenger Gruppe","54a1cf3958a438f71421d4ef",true);
+            database.addChatToDB("Nils","+491727500917",false);
+            database.addChatToDB("Marssenger Gruppe","54ca753b294895fe6abcfd4e",true);
             for(Chat chat : database.getChats()){
                 database.addMessageToDB(chat.getMessageTableId(),".msg",0,0,0);
             }

@@ -200,6 +200,9 @@ public class MainActivity extends ActionBarActivity implements
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.action_search:
+                ((Marssenger)Marssenger.getInstance()).getDatabase().deleteAllMessages();
+                ((Marssenger)Marssenger.getInstance()).getDatabase().deleteAllChats();
+
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(this, SettingsActivity.class));

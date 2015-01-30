@@ -100,6 +100,20 @@ public class DatabaseWrapper {
         hasMessageChanged=true;
         mDB.setAllMessagesRead(chat);
     }
+    public void deleteAllChats(){
+        hasChatChanged=true;
+        for (Chat chat:getChats()){
+            cDB.deleteChat(chat);
+        }
+        hasChatChanged=true;
+    }
+    public void deleteAllMessages(){
+        hasMessageChanged=true;
+        for (Chat chat:getChats()){
+            mDB.deleteMessage(chat);
+        }
+        hasMessageChanged=true;
+    }
 
 
     public void openDB() {

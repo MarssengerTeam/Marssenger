@@ -329,7 +329,7 @@ public class HttpsBackgroundService extends Service {
                 String result11 = "123";
                 try {
 
-                    HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/user/isVerified");
+                    HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/user/getAuthTokenByPhonenumberAndGCMCode");
 
                     Log.d("SendingService", params[1] + " : " + params[0]);
 
@@ -396,6 +396,7 @@ public class HttpsBackgroundService extends Service {
 
                     // Add your data
                     List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
+                    Log.e("PARAMS0",params[0]);
                     nameValuePairs.add(new BasicNameValuePair("sender", params[0]));
                     nameValuePairs.add(new BasicNameValuePair("receiver", params[1]));
                     nameValuePairs.add(new BasicNameValuePair("data", params[2]));
@@ -458,8 +459,10 @@ public class HttpsBackgroundService extends Service {
                     }
                     reader.close();
                     result11 = sb.toString();
+                    Log.e("RECIVELOGGER","test"+result11.toString());
                     return new JSONArray(result11);
                     // parsing data
+
                 } catch (Exception e) {
                     Log.d("SendingService", e.toString());
                     e.printStackTrace();
@@ -485,15 +488,23 @@ public class HttpsBackgroundService extends Service {
     public void addToDB(JSONArray result) {
         try {
             Chat senderChat = null;
-            for (int i = 0; i < result.length(); i++) {
+            for (int i = 0; i < result.length(); i++) { //alle empfangenen Nachrichten
+                boolean groupchat=false;
                 for (Chat c : database.getChats()) {
+                    if(result.getJSONObject(i).getString("sender").contains(":")){
+                        groupchat = true;
+                        if(result.getJSONObject(i).getString("sender").contains(c.getReceiver())){
+                            Log.e("Chatlog addtodb","Name: "+c.getName()+" is Single Chat: "+c.isSingleChat());
+                            senderChat=c;
+                        }
+                    }else
                     if (result.getJSONObject(i).getString("sender").equals(c.getReceiver())) {
                         senderChat = c;
                     }
                 }
                 if (senderChat == null) {
-
-                    database.addChatToDB(result.getJSONObject(i).getString("sender"), result.getJSONObject(i).getString("sender"), false);
+                    database.addChatToDB(result.getJSONObject(i).getString("sender"), result.getJSONObject(i).getString("sender"), groupchat);
+                    senderChat=database.getChats().get(database.getChats().size()-1);
                 }
                 database.addMessageToDB(senderChat.getId()-1,result.getJSONObject(i).getString("data"),0,0,0);
                 if(isUserActive) {
