@@ -262,4 +262,10 @@ public class ChatActivity extends ActionBarActivity implements
         }
         return onOptionsItemSelected(menuItem);
     }
+
+    public HttpsBackgroundService getmService() {
+        return mService;
+    }
+
+
 }

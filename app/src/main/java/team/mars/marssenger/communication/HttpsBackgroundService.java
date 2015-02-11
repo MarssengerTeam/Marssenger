@@ -13,7 +13,7 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.Vibrator;
+
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
@@ -21,33 +21,44 @@ import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import team.mars.marssenger.chat.ChatActivity;
-import team.mars.marssenger.database.ChatDatabase;
+
 import team.mars.marssenger.R;
 import team.mars.marssenger.database.DatabaseWrapper;
-import team.mars.marssenger.database.MessageDatabase;
+
 import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.main.MainActivity;
-import team.mars.marssenger.main.MainInteractor;
+
 import team.mars.marssenger.main.MainInteractorImpl;
 import team.mars.marssenger.main.Marssenger;
 
@@ -97,6 +108,8 @@ public class HttpsBackgroundService extends Service {
     private ArrayList<String> notItems = new ArrayList<String>();
     private DatabaseWrapper database;
     private boolean isUserActive;
+
+    long totalSize=0;
 
     //Service Methods
     @Override
@@ -432,6 +445,175 @@ public class HttpsBackgroundService extends Service {
 
             }
         }.execute(myPhoneNumber, receiver, message, messageID);
+    }
+
+    public void sendFile(String receiver, String filePath) {
+
+        new AsyncTask<String, Integer, String>() {
+            @Override
+            protected String doInBackground(String... params) {
+
+                //TODO rework this thing
+
+                HttpURLConnection conn = null;
+                DataOutputStream dos = null;
+                String lineEnd = "\r\n";
+                String twoHyphens = "--";
+                String boundary = "*****";
+                int bytesRead, bytesAvailable, bufferSize;
+                byte[] buffer;
+                int maxBufferSize = 1 * 1024 * 1024;
+                File sourceFile = new File(params[2]);
+
+                if (!sourceFile.isFile()) {
+
+                    return "File does not Exist!";
+                }else{
+                    try{
+                        FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                        URL url = new URL("HTTP://185.38.45.42:3000/files/upload");
+
+                        // Open a HTTP  connection to  the URL
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setDoInput(true); // Allow Inputs
+                        conn.setDoOutput(true); // Allow Outputs
+                        conn.setUseCaches(false); // Don't use a Cached Copy
+                        conn.setRequestMethod("POST");
+                        conn.setRequestProperty("Connection", "Keep-Alive");
+                        conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+                        conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+                        conn.setRequestProperty("uploaded_file", params[2]);
+
+                        dos = new DataOutputStream(conn.getOutputStream());
+
+
+
+                        // create a buffer of  maximum size
+                        bytesAvailable = fileInputStream.available();
+
+                        bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                        buffer = new byte[bufferSize];
+
+                        // read file and write it into form...
+                        bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                        while (bytesRead > 0) {
+
+                            dos.write(buffer, 0, bufferSize);
+                            bytesAvailable = fileInputStream.available();
+                            bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+                        }
+
+                        // send multipart form data necesssary after file data...
+                        dos.writeBytes(lineEnd);
+                        dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+
+                        // Responses from the server (code and message)
+                        int serverResponseCode = conn.getResponseCode();
+                        String serverResponseMessage = conn.getResponseMessage();
+
+                        Log.i("uploadFile", "HTTP Response is : "
+                                + serverResponseMessage + ": " + serverResponseCode);
+
+
+                        //close the streams //
+                        fileInputStream.close();
+                        dos.flush();
+                        dos.close();
+
+                    } catch (MalformedURLException ex) {
+
+
+                    } catch (Exception e) {
+
+
+                    }
+
+                }
+
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(String result) {
+                Log.d("fileUpload", result);
+            }
+
+            @Override
+            protected void onProgressUpdate(Integer... values) {
+                Log.d("fileUpload", "Progress: "+String.valueOf(values[0]));
+            }
+        }.execute(myPhoneNumber, receiver, filePath);
+    }
+
+    public void createGroup(final String groupName, String[] member) {
+
+        JSONObject jsonObject = new JSONObject();
+        for(int i = 0; i<member.length;i++){
+            try {
+                jsonObject.put("member", member[i]);
+            } catch (JSONException e) {
+
+                Log.e("JSONParsing",  e.toString());
+            }
+        }
+
+        new AsyncTask<String, String, JSONArray>() {
+            @Override
+            protected JSONArray doInBackground(String... params) {
+                String result11;
+                try {
+                    //Now using existing client
+                    HttpPost httppost = new HttpPost("HTTP://185.38.45.42:3000/groups/createGroup");
+
+
+                    // Add your data
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(5);
+                    Log.e("PARAMS0",params[0]);
+                    nameValuePairs.add(new BasicNameValuePair("groupName", params[1]));
+                    nameValuePairs.add(new BasicNameValuePair("member", params[2]));
+                    httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+
+
+                    // Execute HTTP Post Request
+                    Log.d("SendingService", "Vor senden");
+                    HttpResponse response = httpClient.execute(httppost);
+                    Log.d("SendingService", "Nach senden");
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent(), "iso-8859-1"), 8);
+                    StringBuilder sb = new StringBuilder();
+                    sb.append(reader.readLine() + "\n");
+                    String line = "0";
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    reader.close();
+                    Log.d("Sending", "Sendet daten!");
+                    result11 = sb.toString();
+                    return new JSONArray(result11);
+                    // parsing data
+                } catch (Exception e) {
+                    Log.d("SendingService", e.toString());
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(JSONArray result) {
+                Log.d("createChat", result.toString());
+
+                try {
+                    database.addChatToDB(groupName, result.getJSONObject(0).getString("_id") , true);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }.execute(myPhoneNumber, groupName, jsonObject.toString());
     }
 
     public void getMessages() {

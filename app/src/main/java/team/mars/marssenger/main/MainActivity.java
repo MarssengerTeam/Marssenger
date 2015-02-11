@@ -248,4 +248,10 @@ public class MainActivity extends ActionBarActivity implements
             }
         }
     }
+
+    public MainInteractor getMainInteractor() {
+        return mainInteractor;
+    }
+
+
 }

@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="New Chat"
-        android:id="@+id/tv_Titel"
+        android:id="@+id/newchatdialog_tv_Titel"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -20,17 +20,17 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Phone Number:"
-        android:id="@+id/textView"
-        android:layout_below="@+id/tv_Titel"
+        android:id="@+id/newchatdialog_textView"
+        android:layout_below="@+id/newchatdialog_sw_groupChat"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="30dp" />
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/et_phoneNumber"
-        android:layout_below="@+id/textView"
+        android:id="@+id/newchatdialog_et_phoneNumber"
+        android:layout_below="@+id/newchatdialog_textView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -41,8 +41,8 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Name:"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/et_phoneNumber"
+        android:id="@+id/newchatdialog_textView2"
+        android:layout_below="@+id/newchatdialog_tv_Titel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="20dp" />
@@ -50,30 +50,35 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/et_name"
-        android:layout_below="@+id/textView2"
+        android:id="@+id/newchatdialog_et_name"
+        android:layout_below="@+id/newchatdialog_textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_alignRight="@+id/et_phoneNumber"
-        android:layout_alignEnd="@+id/et_phoneNumber" />
+        android:layout_alignRight="@+id/newchatdialog_et_phoneNumber"
+        android:layout_alignEnd="@+id/newchatdialog_et_phoneNumber"
+        android:elegantTextHeight="false"
+        android:inputType="text"
+        android:lines="1"
+        android:maxLines="1" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Group Chat"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/et_name"
+        android:id="@+id/newchatdialog_textView3"
+        android:layout_below="@+id/newchatdialog_et_name"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="10dp" />
 
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/sw_groupChat"
-        android:layout_alignTop="@+id/textView3"
-        android:layout_alignRight="@+id/et_name"
-        android:layout_alignEnd="@+id/et_name" />
+        android:id="@+id/newchatdialog_sw_groupChat"
+        android:layout_alignTop="@+id/newchatdialog_textView3"
+        android:layout_alignRight="@+id/newchatdialog_et_name"
+        android:layout_alignEnd="@+id/newchatdialog_et_name"
+        android:checked="false" />
 
 </RelativeLayout>
