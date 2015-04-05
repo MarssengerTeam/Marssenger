@@ -750,13 +750,6 @@ public class HttpsBackgroundService extends Service {
     }
 
 
-
-
-
-
-
-
-
     private void convertJsonIntoArrayList(JSONArray items){
         String result = "";
         try{

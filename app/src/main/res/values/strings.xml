@@ -30,5 +30,6 @@
     <string name="title_setting_detail">Setting Detail</string>
     <string name="action_read">Mark as read</string>
     <string name="picture">Picture</string>
+    <string name="title_activity_contact_listing">Contacts</string>
 
 </resources>

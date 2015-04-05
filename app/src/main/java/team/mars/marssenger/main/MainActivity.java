@@ -211,6 +211,7 @@ public class MainActivity extends ActionBarActivity implements
                 showNewChatDialog();
                 return true;
             case R.id.action_read:
+                startActivity(new Intent(this, ContactListingActivity.class));
                 return true;
             default:break;
         }
