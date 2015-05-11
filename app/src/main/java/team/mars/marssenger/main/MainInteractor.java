@@ -1,5 +1,7 @@
 package team.mars.marssenger.main;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 
 import team.mars.marssenger.database.ChatDatabase;
@@ -16,7 +18,7 @@ public interface MainInteractor{
     public void bindService();
     public void stopBind();
 
-    public boolean checkPlayServices();
+    public boolean checkPlayServices(Context c);
 
     public void cancelNotification();
 
@@ -25,6 +27,7 @@ public interface MainInteractor{
     public String getMyNumber();
     public String getMyEMail();
     public void storePhoneNumber(String number);
+    public void _Toast(Context c, String mess);
 
 
     public MainInteractorImpl get();

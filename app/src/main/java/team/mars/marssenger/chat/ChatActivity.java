@@ -65,7 +65,7 @@ public class ChatActivity extends ActionBarActivity implements
             HttpsBackgroundService.myBinder binder = (HttpsBackgroundService.myBinder) service;
             mService = binder.getService();
             isBound = true;
-            mService.clearNotification();
+            //mService.clearNotification();
         }
 
         @Override

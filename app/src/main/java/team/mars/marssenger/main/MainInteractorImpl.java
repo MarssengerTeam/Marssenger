@@ -1,5 +1,6 @@
 package team.mars.marssenger.main;
 
+import android.app.Activity;
 import android.app.Application;
 import android.app.NotificationManager;
 import android.content.ComponentName;
@@ -108,6 +109,21 @@ public class MainInteractorImpl implements MainInteractor {
         regid = null;
     }
 
+    @Override
+    public boolean checkPlayServices(Context c) {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(c);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, (Activity) c,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+            }
+            return false;
+        }
+        return true;
+    }
+
     public void bindService(){
         if(!isBound){
             Intent intent2 = new Intent(context, HttpsBackgroundService.class);
@@ -125,14 +141,12 @@ public class MainInteractorImpl implements MainInteractor {
 
 
     private void createTestChats(){
-
-
         if(!database.isChatDBExisting()) {
             database.addChatToDB("Timo","+491774964208",false);
             database.addChatToDB("Jan Niklas", "+49017647736901",false);
             database.addChatToDB("Nicolas", "+49017661354169",false);
             database.addChatToDB("Noli", "+49017682541133",false);
-            database.addChatToDB("Nils","+491727500917",false);
+            database.addChatToDB("Nils", "+491727500917", false);
             database.addChatToDB("Marssenger Gruppe","54ca753b294895fe6abcfd4e",true);
             for(Chat chat : database.getChats()){
                 database.addMessageToDB(chat.getMessageTableId(),".msg",0,0,0);
@@ -140,13 +154,6 @@ public class MainInteractorImpl implements MainInteractor {
 
 
         }
-
-
-
-
-
-
-
     }
 
     @Override
@@ -200,22 +207,13 @@ public class MainInteractorImpl implements MainInteractor {
         //if there is a Notification from GCM, cancel.
         NotificationManager nm = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
         nm.cancel(NOTIFICATION_ID);
-        mService.clearNotification();
+        //mService.clearNotification();
     }
 
-    @Override
-    public boolean checkPlayServices() {
-        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
-        if (resultCode != ConnectionResult.SUCCESS) {
-            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
-                GooglePlayServicesUtil.getErrorDialog(resultCode, (android.app.Activity) context,
-                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
-            } else {
-                Log.i(TAG, "This device is not supported.");
-            }
-            return false;
-        }
-        return true;
+
+    public void _Toast(Context c, String mess){
+        Toast.makeText(c, "Marssenger: "+mess, Toast.LENGTH_SHORT).show();
+
     }
 
 

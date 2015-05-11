@@ -25,7 +25,10 @@ public class ContactListingActivity extends ListActivity {
         setContentView(R.layout.activity_contact_listing);
 
         Cursor mCursor = this.getContentResolver().query(Contacts.People.CONTENT_URI, null, null, null, null);
-        startManagingCursor(mCursor);
+
+        if(mCursor.moveToFirst()){
+
+        }
 
         ListAdapter adapter = new SimpleCursorAdapter(this, R.layout.contacts_item, mCursor, new String[]{Contacts.People.NAME, Contacts.People.NUMBER},  new int[] {R.id.text1, R.id.text2});
         setListAdapter(adapter);

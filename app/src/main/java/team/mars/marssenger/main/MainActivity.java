@@ -58,14 +58,23 @@ public class MainActivity extends ActionBarActivity implements
         super.onCreate(savedInstanceState);
 
         mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
+
+
         if(!mainInteractor.isRegistered()){
-            Intent regIntent = new Intent(this, RegisterActivity.class);
-            startActivityForResult(regIntent,REGISTER_REQUEST_CODE);
+            if(mainInteractor.checkPlayServices(this)){
+                Intent regIntent = new Intent(this, RegisterActivity.class);
+                startActivityForResult(regIntent,REGISTER_REQUEST_CODE);
+            }else{
+                mainInteractor._Toast(this, "No valid Google Play Services APK found.");
+                finish();
+            }
         }else {
             isRegistered = true;
         }
         setContentView(R.layout.activity_main);
 
+
+        //LAYOUT
         if (Build.VERSION.SDK_INT >=Build.VERSION_CODES.LOLLIPOP) {
             colorActionBar();
         }
@@ -84,38 +93,6 @@ public class MainActivity extends ActionBarActivity implements
             getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         }
 
-
-        mainInteractor=new MainInteractorImpl(this); //this -> MainPresenter
-        //save mainInteractor in static reference so it can be accessed in other parts of the code
-        //MainActivity.MAIN_INTERACTOR=this.mainInteractor;
-
-
-
-        /*if(mainInteractor.checkPlayServices()){
-            if(!isSerivceRunning(HttpsBackgroundService.class)){
-                Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
-                serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
-                serviceIntent.putExtra("phoneNumber", ma);
-                serviceIntent.putExtra("email", "hurensohn@squad.com");
-                serviceIntent.putExtra("digitCode", "010101"); //TODO Maybe / Maybe not
-                startService(serviceIntent);
-            }
-        }else{
-            Log.d("GCMundso", "Cry a lot!");
-        }
-        //TODO figure this out*/
-        /*final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if(isBound) {
-                    mService.sendMessage("0157712345", String.valueOf(new Random().nextInt(100)), "123456");
-                    handler.postDelayed(this, 30000);
-                }
-            }
-        }, 0);*/
-
-
         MainFragment mainFragment = MainFragment.getInstance(this);//this -> MainPresenter
 
         replaceContainer(mainFragment);
@@ -128,7 +105,7 @@ public class MainActivity extends ActionBarActivity implements
         super.onStart();
         ((Marssenger)Marssenger.getInstance()).setUserActive(true);
         if(isRegistered) {
-            if(mainInteractor.checkPlayServices()){
+            if(mainInteractor.checkPlayServices(this)){
                 if(!isSerivceRunning(HttpsBackgroundService.class)){
                     Intent serviceIntent = new Intent(this, HttpsBackgroundService.class);
                     serviceIntent.putExtra("senderID", Constants.PROJECT_ID);
@@ -243,6 +220,7 @@ public class MainActivity extends ActionBarActivity implements
             if (resultCode == Activity.RESULT_OK) {
                 Log.d("Register", "is Registered");
                 isRegistered=true;
+
                 String number = data.getStringExtra("number");
                 Log.d("Register", number);
                 mainInteractor.storePhoneNumber(number);
