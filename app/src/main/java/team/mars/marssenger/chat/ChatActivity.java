@@ -117,6 +117,7 @@ public class ChatActivity extends ActionBarActivity implements
         super.onStart();
         Intent intent = new Intent(this, HttpsBackgroundService.class);
         bindService(intent, mConnection, getBaseContext().BIND_AUTO_CREATE);
+
     }
 
     @Override
@@ -165,6 +166,8 @@ public class ChatActivity extends ActionBarActivity implements
         String sourcePath = getRealPathFromURI(selectedImageUri);
         if(sourcePath!=null){
         Log.e("ChatActivity", selectedImageUri.getPath());
+        //try to send to server
+
         try {
             File sd = Environment.getExternalStorageDirectory();
             File data2 = Environment.getDataDirectory();
@@ -234,6 +237,19 @@ public class ChatActivity extends ActionBarActivity implements
             e.printStackTrace();
         }
 
+    }
+
+    public void imageSendToServer(File file){
+        try {
+            if(mService == null){
+                Log.e ("Help me!", "No Connection");
+            }else {
+
+                mService.fileUpload(new File("/storage/emulated/0/Download/bewel2.gif"));
+            }
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     @Override

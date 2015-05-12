@@ -2,16 +2,20 @@ package team.mars.marssenger.communication;
 
 
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -23,6 +27,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.InputStreamEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
@@ -30,13 +35,19 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
+import team.mars.marssenger.R;
+import team.mars.marssenger.chat.ChatActivity;
 import team.mars.marssenger.database.DatabaseWrapper;
+import team.mars.marssenger.datatype.Chat;
 import team.mars.marssenger.main.MainActivity;
 import team.mars.marssenger.main.Marssenger;
 
@@ -64,6 +75,7 @@ public class HttpsBackgroundService extends Service {
     private static final String SERVER_GET_MESSAGES = "SERVER_GET_MESSAGES";
     private static final String SERVER_CHECK_REG_ID = "SERVER_CHECK_REG_ID";
     private static final String SERVER_CREATE_GROUP = "SERVER_CREATE_GROUP";
+    private static final String SERVER_UPLOAD_FILE  = "SERVER_UPLOAD_FILE";
 
     private NotificationManager mNotificationManager;
     private static final int NOTIFICATION_ID = 627777777;
@@ -90,6 +102,8 @@ public class HttpsBackgroundService extends Service {
     private String myEmail;
     private String myDigitCode;
     //
+
+    private ArrayList<String> notItems = new ArrayList<String>();
 
 
     GoogleCloudMessaging gcm = null;
@@ -171,7 +185,7 @@ public class HttpsBackgroundService extends Service {
 
     private void checkRegistrationId(String regID) {
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        nameValuePairs.add(new BasicNameValuePair("regID", regID));
+        nameValuePairs.add(new BasicNameValuePair("GCMCode", regID));
         nameValuePairs.add(new BasicNameValuePair("phoneNumber", myPhoneNumber));
 
         new Networking().execute(SERVER_POST, SERVER_CHECK_REG_ID, nameValuePairs);
@@ -203,14 +217,26 @@ public class HttpsBackgroundService extends Service {
         nameValuePairs.add(new BasicNameValuePair("groupName", groupName));
         nameValuePairs.add(new BasicNameValuePair("member", jsonObject.toString()));
 
-        mNetwork.execute(SERVER_POST, SERVER_CREATE_GROUP, nameValuePairs);
+        new Networking().execute(SERVER_POST, SERVER_CREATE_GROUP, nameValuePairs);
     }
 
     public void getMessages(){
         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
         nameValuePairs.add(new BasicNameValuePair("number", myPhoneNumber));
 
-        mNetwork.execute(SERVER_POST, SERVER_GET_MESSAGES, nameValuePairs);
+        new Networking().execute(SERVER_POST, SERVER_GET_MESSAGES, nameValuePairs);
+    }
+
+    public void fileUpload(File file){
+        InputStreamEntity reqEntity=null;
+        try{
+        reqEntity = new InputStreamEntity (new FileInputStream(file), -1);
+        }catch(FileNotFoundException fnfe){
+            fnfe.printStackTrace();
+        }
+        reqEntity.setContentType("binary/octet-stream");
+        reqEntity.setChunked(false); // Send in multiple parts if needed
+        new Networking().execute(SERVER_POST, SERVER_UPLOAD_FILE, reqEntity);
     }
 
     public String getRegistrationId(Context context) {
@@ -251,11 +277,11 @@ public class HttpsBackgroundService extends Service {
     }
 
 
-    private class Networking extends AsyncTask<Object, Void, JSONObject>{
+    private class Networking extends AsyncTask<Object, Void, JSONArray>{
 
         @Override
-        protected JSONObject doInBackground(Object[] params) {
-            JSONObject result = new JSONObject();
+        protected JSONArray doInBackground(Object[] params) {
+            JSONArray result = null;
             //Generic
             switch ((String)params[0]){
                 case GCM_CONNECTION:
@@ -273,7 +299,7 @@ public class HttpsBackgroundService extends Service {
             return result;
         }
 
-        private JSONObject GCMregister(){
+        private JSONArray GCMregister(){
             JSONObject msg = new JSONObject();
             try {
                 msg.put("case", GCM_CONNECTION);
@@ -304,7 +330,7 @@ public class HttpsBackgroundService extends Service {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            return msg;
+            return new JSONArray().put(msg);
         }
         public void storeRegistrationId(Context context, String regid) {
             final SharedPreferences prefs = getGCMPreferences(context);
@@ -322,7 +348,7 @@ public class HttpsBackgroundService extends Service {
         private void sendRegistrationIdToBackend() {
         }
 
-        private JSONObject serverPost(final Object[] params){
+        private JSONArray serverPost(final Object[] params){
             String resultString;
             try{
                 HttpClient httpClient = new DefaultHttpClient();
@@ -349,14 +375,26 @@ public class HttpsBackgroundService extends Service {
                         httpPost = new HttpPost("HTTP://185.38.45.42:3000/messages/getMessages");
                         currentCase = SERVER_GET_MESSAGES;
                         break;
+                    case SERVER_UPLOAD_FILE:
+                        httpPost = new HttpPost("HTTP://185.38.45.42:3000/files/upload");
+                        currentCase = SERVER_UPLOAD_FILE;
+                        break;
                     default:
                         currentCase = "error";
                         break;
                 }
 
-                ArrayList<NameValuePair> items = (ArrayList<NameValuePair>) params[2];
+                ArrayList<NameValuePair> items=null;
+                if(currentCase.equals(SERVER_UPLOAD_FILE)){
+                    InputStreamEntity fileEntity = (InputStreamEntity)params[2];
+                    httpPost.setEntity(fileEntity);
+                }else{
+                    items = (ArrayList<NameValuePair>) params[2];
+                    httpPost.setEntity(new UrlEncodedFormEntity(items));
+                }
 
-                httpPost.setEntity(new UrlEncodedFormEntity(items));
+
+
 
                 HttpResponse response = httpClient.execute(httpPost);
 
@@ -369,7 +407,6 @@ public class HttpsBackgroundService extends Service {
                     sb.append(line + "\n");
                     counter++;
                 }
-                Log.d(LOG, String.valueOf(counter));
                 reader.close();
                 resultString = sb.toString();
                 Log.d(LOG, resultString);
@@ -377,14 +414,19 @@ public class HttpsBackgroundService extends Service {
                 JSONObject resultObject;
                 if(resultString.startsWith("{")){
                     resultObject = new JSONObject(resultString);
+                    resultObject.put("case", currentCase);
+                    return new JSONArray().put(resultObject);
                 }else{
-                    JSONArray resultArray = new JSONArray(resultString);
-                    resultObject = resultArray.getJSONObject(0);
+                    if(resultString.startsWith("[")){
+                        JSONArray resultArray = new JSONArray(resultString);
+                        resultArray.getJSONObject(0).put("case", currentCase);
+                        return resultArray;
+                    }else{
+                        resultObject = new JSONObject().put("data", resultString);
+                        resultObject.put("case", currentCase);
+                        return new JSONArray().put(resultObject);
+                    }
                 }
-
-                resultObject.put("case", currentCase);
-                return resultObject;
-
             }catch(UnsupportedEncodingException e){
                 e.printStackTrace();
             } catch (ClientProtocolException e) {
@@ -398,19 +440,19 @@ public class HttpsBackgroundService extends Service {
         }
 
         @Override
-        protected void onPostExecute(JSONObject result) {
+        protected void onPostExecute(JSONArray result) {
             try {
-                String currentCase = result.getString("case");
+                String currentCase = result.getJSONObject(0).getString("case");
                 switch (currentCase){
                     case GCM_CONNECTION:
-                        Log.d(LOG, result.getString("msg"));
+                        Log.d(LOG, result.getJSONObject(0).getString("msg"));
                         break;
                     case SERVER_REGISTER:
-                        if(result.getString("error").isEmpty()){
-                            Log.d(LOG, "Register worked fine!");
-                        }else{
-                            Log.d(LOG, result.getString("error"));
+                        if(result.getJSONObject(0).get("error") instanceof String){
+                            Log.d(LOG, result.getJSONObject(0).getString("error"));
                             //TODO tell user what went wrong
+                        }else{
+                            Log.d(LOG, "Register worked fine!");
                         }
                         break;
                     case SERVER_CHECK_REG_ID:
@@ -421,8 +463,20 @@ public class HttpsBackgroundService extends Service {
                         break;
                     case SERVER_GET_MESSAGES:
                         Log.d(LOG, result.toString());
+                        if(!isUserActive()){
+                            sendNotification(result);
+                        }
+                        addToDB(result);
                         break;
                     case SERVER_CREATE_GROUP:
+                        Log.d(LOG, result.toString());
+                        try {
+                            database.addChatToDB(result.getJSONObject(0).getString("groupName"), result.getJSONObject(0).getString("_id") , true);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        break;
+                    case SERVER_UPLOAD_FILE:
                         Log.d(LOG, result.toString());
                         break;
                 }
@@ -454,5 +508,124 @@ public class HttpsBackgroundService extends Service {
         public HttpsBackgroundService getService() {
             return HttpsBackgroundService.this;
         }
+    }
+
+    public boolean isUserActive(){
+        if (!((Marssenger)Marssenger.getInstance()).isUserActive()) {
+            Log.w("Nofification", "User is not active");
+            return false;
+        }else {
+            Log.w("Nofification", "User is active");
+            return true;
+        }
+    }
+
+    public void addToDB(JSONArray result) {
+        try {
+            Chat senderChat = null;
+            for (int i = 0; i < result.length(); i++) { //alle empfangenen Nachrichten
+                boolean groupchat=false;
+                for (Chat c : database.getChats()) {
+                    if(result.getJSONObject(i).getString("sender").contains(":")){
+                        groupchat = true;
+                        if(result.getJSONObject(i).getString("sender").contains(c.getReceiver())){
+                            Log.e("Chatlog addtodb","Name: "+c.getName()+" is Single Chat: "+c.isSingleChat());
+                            senderChat=c;
+                        }
+                    }else
+                    if (result.getJSONObject(i).getString("sender").equals(c.getReceiver())) {
+                        senderChat = c;
+                    }
+                }
+                if (senderChat == null) {
+                    database.addChatToDB(result.getJSONObject(i).getString("sender"), result.getJSONObject(i).getString("sender"), groupchat);
+                    senderChat=database.getChats().get(database.getChats().size()-1);
+                }
+                database.addMessageToDB(senderChat.getId()-1,result.getJSONObject(i).getString("data"),0,0,0);
+                if(isUserActive) {
+                    if(((Marssenger)Marssenger.getInstance()).getActiveChat()!=null){
+                        if(((Marssenger)Marssenger.getInstance()).getActiveChat().getId()==senderChat.getId()){
+                            ChatActivity.cChatListAdapter.addMessage(database.getLastMessageFromChat(senderChat));
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void sendNotification(JSONArray result) {
+
+        Intent notIntent = new Intent(this, MainActivity.class);
+        notIntent.putExtra("StartMode", "Notification");
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notIntent, 0);
+
+        convertJsonIntoArrayList(result);
+
+        mNotificationManager = (NotificationManager) getBaseContext().getSystemService(Context.NOTIFICATION_SERVICE);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this)
+                        .setSmallIcon(R.drawable.ic_launcher);//TODO ic_stat_gcm
+
+        if (notItems.size() > 1) {
+            NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
+            inboxStyle.setBigContentTitle("Marssenger: " + notItems.size() + " Messages");
+            mBuilder.setContentTitle("Marssenger: " + notItems.size() + " Messages");
+            mBuilder.setContentText(notItems.get(0));
+            for (int i = 0; i < notItems.size(); i++) {
+                inboxStyle.addLine(notItems.get(i));
+            }
+            mBuilder.setStyle(inboxStyle);
+        } else if (notItems.size() == 1) {
+            mBuilder.setContentTitle("Marssenger");
+            mBuilder.setContentText(notItems.get(0));
+        }
+
+        TaskStackBuilder stackBuilder = TaskStackBuilder.create(getBaseContext());
+        stackBuilder.addParentStack(MainActivity.class);
+        stackBuilder.addNextIntent(notIntent);
+
+        PendingIntent resultPendingIntent =
+                stackBuilder.getPendingIntent(
+                        0,
+                        PendingIntent.FLAG_UPDATE_CURRENT
+                );
+        mBuilder.addAction(R.drawable.ic_action_send_now, "Quick Reply", resultPendingIntent);
+        mBuilder.addAction(R.drawable.ic_action_read, "Mark As Read", resultPendingIntent);
+        mBuilder.setContentIntent(resultPendingIntent);
+
+        mBuilder.setLights(Color.argb(255, 255, 102, 0), 500, 3000);
+        long[] pattern = {500, 100, 100, 200};
+        mBuilder.setVibrate(pattern);
+        mNotificationManager.notify(NOTIFICATION_ID,mBuilder.build());
+    }
+
+
+    private void convertJsonIntoArrayList(JSONArray items){
+        String result = "";
+        try{
+
+            for(int i = 0; i<items.length(); i++){
+                String nametag=null;//TODO GROUPS TO NAMTEAG
+
+                for(int a = 0;a<database.getChats().size();a++){
+                    if(database.getChats().get(a).getReceiver().equals(items.getJSONObject(i).getString("sender"))){
+                        nametag = database.getChats().get(a).getName();
+                    }
+                }
+                if(nametag==null){
+                    nametag=items.getJSONObject(i).getString("sender");
+                }
+                notItems.add(nametag+": "+ items.getJSONObject(i).getString("data"));
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void clearNotification(){
+        this.notItems.clear();
     }
 }
