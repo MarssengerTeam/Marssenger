@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Switch;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class NewChatDialog extends DialogFragment {
     private EditText et_phoneNumber;
     private EditText et_name;
     private Switch sw_groupChat;
+    private ImageButton ib_plus;
 
     private HttpsBackgroundService mService;
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -66,6 +68,13 @@ public class NewChatDialog extends DialogFragment {
         et_phoneNumber = (EditText) dialogView.findViewById(R.id.newchatdialog_et_phoneNumber);
         et_name = (EditText) dialogView.findViewById(R.id.newchatdialog_et_name);
         sw_groupChat = (Switch) dialogView.findViewById(R.id.newchatdialog_sw_groupChat);
+        ib_plus = (ImageButton) dialogView.findViewById(R.id.newchatdialog_ib_plus);
+        ib_plus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         builder.setView(dialogView)
                 // Add action buttons
